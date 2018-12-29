@@ -1,0 +1,18 @@
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold",
+  fig.width = 6,
+  out.width = "70%"
+)

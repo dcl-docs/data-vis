@@ -1,0 +1,10 @@
+bookdown::gitbook:
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><strong><a href="./">Vis Wisdom</a></strong></li>
+    edit:
+      link: https://github.com/dcl-docs/vis-wisdom/edit/master/%s
+    download: null
+    sharing: null
