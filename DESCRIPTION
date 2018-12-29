@@ -3,4 +3,5 @@ Imports:
   ggrepel,
   hexbin,
   knitr,
+  rmarkdown,
   tidyverse

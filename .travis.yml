@@ -1,19 +1,18 @@
 language: r
+sudo: false
 
 cache:
   directories:
+    - $HOME/.npm
     - _book
   packages: true
-  
-apt_packages:
-  - libxml2-dev
-
-before_install:
-  - nvm install stable
-  - npm install netlify-cli -g
 
 script:
   - Rscript -e 'bookdown::render_book("index.Rmd")'
+
+after_success:
+  - nvm install stable
+  - npm install netlify-cli -g
 
 deploy:
   provider: script
