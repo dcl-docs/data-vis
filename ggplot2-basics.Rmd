@@ -1,0 +1,94 @@
+# The basics of ggplot2
+
+```{r, include=FALSE}
+library(tidyverse)
+```
+
+The following sections from the data visualization chapter of _R for Data Science (R4DS)_ will introduce you to the basics of plotting with ggplot2. 
+
+* [Introduction](https://r4ds.had.co.nz/data-visualisation.html#introduction-1)
+* [First steps](https://r4ds.had.co.nz/data-visualisation.html#first-steps)
+* [Aesthetic mappings](https://r4ds.had.co.nz/data-visualisation.html#aesthetic-mappings)
+* [Common problems](https://r4ds.had.co.nz/data-visualisation.html#common-problems)
+* [Facets](https://r4ds.had.co.nz/data-visualisation.html#facets)
+* [Geometric objects](https://r4ds.had.co.nz/data-visualisation.html#geometric-objects)
+
+Clear labelling is crucial when presenting your plots to others. The following section in _R4DS_ introduces you to the `labs()` function, which allows you to edit the title, subtitle, caption, axes labels, and legend labels of your plots.
+
+* [Label](https://r4ds.had.co.nz/graphics-for-communication.html#label)
+
+ggplot2 and the Tidyverse consist of many functions. [Cheat sheets](https://www.rstudio.com/resources/cheatsheets/) are an excellent resource for understanding the different purposes of the most-used functions and for finding the right ones for a given task. As you learn new functions, it's a good idea to locate them on the relevant cheat sheet to see how they fit in. This will help you to find them later. The functions covered above can be found on
+
+* [Data Visualization with ggplot2](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
+
+in the sections
+
+* Basics
+* Geoms
+* Faceting
+* Labels
+
+## Additional information
+
+### Pipes and aesthetics
+
+The above sections of _R4DS_ create plots with code that looks like this:
+
+```{r, eval=FALSE}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+We instead recommend creating this plot with the following code.
+
+```{r, eval=FALSE}
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point()
+```
+
+There are two differences. First, we've used `%>%`, which is called a *pipe*. The pipe takes the dataset `mpg` and provides it to the first argument of `ggplot()`, which is `data`. The concept of pipes is covered later in _R4DS_, but is useful enough to introduce here. Pipes make it easier to see which dataset is being plotted. They also allow you to easily manipulate the data before plotting. For example, you might want to apply `filter()` to the data before plotting. 
+
+Second, we've moved the aesthetics from `geom_point()` into `ggplot()`. In general, your plots will contain more than one geom. We recommend specifying the aesthetics that are shared by all of the plot's geoms in `ggplot()` and specifying the aesthetics unique to a single geom in that geom call.
+
+### Facet syntax
+
+As you saw in _R4DS_, you can use `facet_grid()` and `facet_wrap()` to split a single plot into many.
+
+```{r}
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_wrap(~ class)
+```
+
+The syntax for `facet_grid()` and `facet_wrap()` has been updated, however. Instead of using `~`, you specify the faceting variable inside the helper function `vars()`.
+
+For `facet_wrap()`, all you have to do is replace `~` with `vars()`.
+
+```{r}
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_wrap(vars(class))
+```
+
+You still use the `nrow` and `ncol` arguments of `facet_wrap()` to control the number of rows and columns.
+
+```{r}
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_wrap(vars(class), nrow = 2)
+```
+
+`facet_grid()` now has two arguments,`rows` and `cols`, that define the rows and columns of the grid.
+
+```{r}
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_grid(rows = vars(year), cols = vars(class))
+```
+
+Again, you need to wrap the variable names in the helper function `vars()`.
