@@ -1,6 +1,7 @@
 ---
 title: "Vis Wisdom"
 author: "Sara Altman, Bill Behrman"
+date: "`r Sys.Date()`"
 description: "Description"
 url: 'https\://datalab.stanford.edu/dcl-docs/vis-wisdom'
 github-repo: dcl-docs/vis-wisdom

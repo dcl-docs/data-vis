@@ -12,7 +12,5 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.align = 'center',
   fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold",
-  fig.width = 6,
-  out.width = "70%"
+  fig.show = "hold"
 )
