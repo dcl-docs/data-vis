@@ -81,13 +81,13 @@ Consider the following plot.
 
 ```{r}
 r <- rep_len(c(100 , 100 * sin(pi / 10) / cos(pi / 5)), length.out = 11)
-points <- 
+star <- 
   tibble(
     x = r * sin(seq(0, 2 * pi, length.out = 11)),
     y = r * cos(seq(0, 2 * pi, length.out = 11))
   )
 
-points %>% 
+star %>% 
   ggplot(mapping = aes(x = x, y = y)) +
   geom_path() +
   geom_point()
@@ -96,7 +96,7 @@ points %>%
 By default, `coord_cartesian()` fills the available plot area. Sometimes, however, you'll want to override the default. With `coord_fixed()`, you can use the `ratio` argument to specify the aspect ratio of your plot, with a default of 1.
 
 ```{r}
-points %>% 
+star %>% 
   ggplot(mapping = aes(x = x, y = y)) +
   geom_path() +
   geom_point() +
@@ -108,7 +108,7 @@ points %>%
 Now, let's say that you want to zoom in on the above plot to the points with y less than or equal to 50 and x greater than or equal to -50. `coord_cartesian()` and `coord_fixed()` have the arguments `xlim` and `ylim` to set the bounds of what will be visible in your plot.
 
 ```{r}
-points %>% 
+star %>% 
   ggplot(mapping = aes(x = x, y = y)) +
   geom_path() +
   geom_point() +
@@ -118,7 +118,7 @@ points %>%
 Note that zooming is _not_ the same as removing values and then plotting. The following plot is the result of first removing all values outside the bounds and then plotting.
 
 ```{r}
-points %>% 
+star %>% 
   filter(x >= -50, y <= 50) %>% 
   ggplot(mapping = aes(x = x, y = y)) +
   geom_path() +
