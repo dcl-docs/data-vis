@@ -1,7 +1,7 @@
 # Download ACS data on non-English languages spoken at home for US and states
 
 # Authors: Sara Altman, Bill Behrman
-# Version: 2018-10-11
+# Version: 2018-12-31
 
 # Libraries
 library(tidyverse)
@@ -15,11 +15,11 @@ api_query <-
   set_names() %>%
   map_chr(~ str_c(api_base, ., ":*&LAN="))
   # Output file for non-English languages spoken at home for the US
-file_us <- "non-english_languages_us.rds"
+file_us <- "non-english_us.rds"
   # Output file for non-English languages spoken at home for the states
-file_states <- "non-english_languages_states.rds"
+file_states <- "non-english_states.rds"
   # Output file for non-English/Spanish languages spoken at home in Utah
-file_utah <- "non-english-spanish_languages_utah.rds"
+file_utah <- "non-english-spanish_utah.rds"
 
 #===============================================================================
 
@@ -87,25 +87,3 @@ get_languages("state") %>%
   select(language, speakers) %>%
   arrange(desc(speakers)) %>%
   write_rds(file_utah)
-
-# get_languages("state") %>%
-#   filter(
-#     name %in% c("Massachusetts", "Tennessee"),
-#     language != "Spanish",
-#     lan > 0,
-#     speakers > 0
-#   ) %>%
-#   group_by(language) %>% 
-#   mutate(total = sum(speakers, na.rm = TRUE)) %>% 
-#   ungroup() %>% 
-#   top_n(n = 40, wt = total) %>%
-#   select(
-#     state = name, 
-#     language, 
-#     speakers
-#   ) -> x
-#   arrange(language, desc(speakers)) %>% 
-#   write_rds(file_virginias)
-
-
- 

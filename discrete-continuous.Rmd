@@ -2,50 +2,53 @@
 
 ## Introduction
 
-In this chapter, we'll use the `tidyverse` package and the following data sets.
+In this chapter, we'll use the tidyverse package and the following data sets.
 
 ```{r, message=FALSE}
 # Libraries
 library(tidyverse)
 
 # Data
-utah_languages <- 
-  read_rds("data/us-languages/non-english-spanish_languages_utah.rds")
 
-sprint_times <- 
-  read_rds("data/olympics-2016/times_mens_100m.rds")
+  # Languages other than English and Spanish spoken at home in Utah
+utah_languages <- 
+  read_rds("data/us-languages/non-english-spanish_utah.rds")
+
+  # Times for 2016 Olympics men's 100 meter final
+sprint_times <- read_rds("data/olympics-2016/100m_men.rds")
 ```
 
-Before reading this chapter, take a look at the following sections from the [ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) before reading this section.
+Before reading this chapter, take a look at the following sections from the [Data Visualization with ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
 
 * Coordinate systems
-* Geoms: `geom_bar()`, `geom_col()`, `geom_point()`, and `geom_count()`
+* Geoms: `geom_col()`, `geom_bar()`, and `geom_point()`
 
-You'll often want to visualize the number or amount of something across different categories. For example, you might be interested in the the number of sheep that reside in each US state, the milligrams of caffeine in different coffee drinks, or the number of distinct items exported by various countries. 
+You'll often want to visualize the number or amount of something across different categories. For example, you might be interested in the the number of sheep that reside in each US state, the milligrams of caffeine in different coffee drinks, or the gross income of films. 
 
-We'll call this class of visualizations "discrete-continuous" because they involve plotting a continuous variable against a discrete one. In the above examples, the states, coffee drinks, and countries are the discrete variables. The associated numbers of sheep, milligrams of caffeine, and exports are the continuous variables.
+We'll call this class of visualizations _discrete-continuous_ because they involve plotting a continuous variable against a discrete one. In the above examples, the states, coffee drinks, and films are the discrete variables. The associated numbers of sheep, milligrams of caffeine, and gross income are the continuous variables.
 
 You might argue that number of sheep is not a continuous variable, as you can't really have a fractional sheep. However, ggplot2 treats integers and doubles as continuous variables, and treats only factors, characters, and logicals as discrete. 
 
-For example, in the tibble `v`, `y` is an integer variable (the `L`'s create integers).
+For example, in the tibble `x`, `count` is an integer variable (the `L`s create integers).
 
 ```{r}
-v <-
+x <-
   tibble(
-    x = c("a", "b"),
-    y = c(1L, 2L)
+    category = c("a", "b"),
+    count = c(1L, 2L)
   ) 
 
-v
+x
 ```
 
-However, ggplot creates a continuous scale for `y`.
+However, ggplot creates a continuous scale for `count`.
 
 ```{r}
-v %>% 
-  ggplot(aes(x, y)) +
+x %>% 
+  ggplot(aes(x = category, y = count)) + 
   geom_col()
 ```
+
 
 As you'll see later, it's useful to understand how ggplot2 treats different types of variables. 
 
@@ -53,52 +56,77 @@ In this chapter, you'll first learn about the mechanics of coordinate systems in
 
 ## Coordinate systems
 
-```{r, include=FALSE}
-library(tidyverse)
-```
-
-Every ggplot2 plot has a coordinate system. ggplot2's default coordinate system is the Cartesian coordinate system.
-
-To add a Cartesian coordinate system to a plot, you call the function `coord_cartesian()`.
+Every ggplot2 plot has a coordinate system. ggplot2's default coordinate system is the Cartesian coordinate system, which is used in the following plot.
 
 ```{r}
 mpg %>% 
-  ggplot(mapping = aes(displ, hwy)) +
+  ggplot(mapping = aes(x = displ, y = hwy)) +
+  geom_point() 
+```
+
+This plot is the same as the following, since `ggplot()` implicitly calls `coord_cartesian()`.
+
+```{r}
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) +
   geom_point() +
   coord_cartesian()
 ```
 
-`ggplot()` actually calls `coord_cartesian()` for you. Notice that if we take away `coord_cartesian()` nothing changes. 
+Much of the time, you won't need to think about the coordinate system. However, as you'll see below, you'll sometimes want to change its default settings.
+
+### `coord_fixed()`
+
+Consider the following plot.
 
 ```{r}
-mpg %>% 
-  ggplot(mapping = aes(displ, hwy)) +
-  geom_point() 
+r <- rep_len(c(100 , 100 * sin(pi / 10) / cos(pi / 5)), length.out = 11)
+points <- 
+  tibble(
+    x = r * sin(seq(0, 2 * pi, length.out = 11)),
+    y = r * cos(seq(0, 2 * pi, length.out = 11))
+  )
+
+points %>% 
+  ggplot(mapping = aes(x = x, y = y)) +
+  geom_path() +
+  geom_point()
 ```
 
-Much of the time, you won't need to think about `coord_cartesian()`. However, as you'll see in the next section, you'll sometimes want to change `coord_cartesian()`'s default settings.
+By default, `coord_cartesian()` fills the available plot area. Sometimes, however, you'll want to override the default. With `coord_fixed()`, you can use the `ratio` argument to specify the aspect ratio of your plot, with a default of 1.
+
+```{r}
+points %>% 
+  ggplot(mapping = aes(x = x, y = y)) +
+  geom_path() +
+  geom_point() +
+  coord_fixed()
+```
 
 ### Zooming
 
-`coord_cartesian()` contains the arguments `xlim` and `ylim`. These arguments control the limits for the x- and y-axes and allow you to zoom in or out of your plot.
-
-For example, say we want to change the above plot to zoom in on just the cars with an engine displacement value of between 3 and 5 liters. `xlim` and `ylim` each take a vector with two values: a lower bound and an upper bound. To zoom in on 3-5 liters, we'll set `xlim = c(3, 5)`.
+Now, let's say that you want to zoom in on the above plot to the points with y less than or equal to 50 and x greater than or equal to -50. `coord_cartesian()` and `coord_fixed()` have the arguments `xlim` and `ylim` to set the bounds of what will be visible in your plot.
 
 ```{r}
-mpg %>% 
-  ggplot(mapping = aes(displ, hwy)) +
+points %>% 
+  ggplot(mapping = aes(x = x, y = y)) +
+  geom_path() +
   geom_point() +
-  coord_cartesian(xlim = c(3, 5))
+  coord_fixed(xlim = c(-50, 100), ylim = c(-85, 50))
 ```
 
-Note that zooming is *not* the same as removing values and then plotting. The following plot is the result of first removing all values outside our bounds, and then plotting.
+Note that zooming is _not_ the same as removing values and then plotting. The following plot is the result of first removing all values outside the bounds and then plotting.
 
 ```{r}
-mpg %>% 
-  filter(displ >= 3, displ <= 5) %>% 
-  ggplot(mapping = aes(x = displ, y = hwy)) +
-  geom_point()
+points %>% 
+  filter(x >= -50, y <= 50) %>% 
+  ggplot(mapping = aes(x = x, y = y)) +
+  geom_path() +
+  geom_point() +
+  coord_fixed()
 ```
+
+To zoom, we recommend using the `xlim` and `ylim` arguments of `coord_cartesian()` and `coord_fixed()` instead of other methods that delete data outside of the area to be plotted. The deletion of data can often affect the plot of the remaining data.
 
 ### `coord_flip()`
 
@@ -120,17 +148,6 @@ mpg %>%
 ```
 
 As you'll see later, `coord_flip()` is useful when visualizing discrete-continuous relationships. 
-
-### `coord_fixed()`
-
-`coord_fixed()` creates a coordinate system with a specified aspect ratio. Most of the time, you'll use `coord_fixed()` to ensure that one unit on the x-axis is the same length as one unit on the y-axis, which is important if both your axes use the same units. 
-
-```{r}
-mpg %>% 
-  ggplot(mapping = aes(x = cty, y = hwy)) +
-  geom_point() + 
-  coord_fixed(ratio = 1)
-```
 
 ## One discrete category
 
@@ -184,23 +201,23 @@ Comparing numbers of speakers across languages, however, is still difficult. We 
 utah_languages %>% head()
 ```
 
-Notice that the languages in `utah_languages` appear in order of descending speakers, but, in the plot, they appear in alphabetical order. ggplot2 plots character variables in alphabetical order, disregarding row order. You have to change a character variable to a factor if you want ggplot2 to plot the variable in an order other than alphabetical.
+Notice that the languages in `utah_languages` appear in order of descending speakers, but, in the plot, they appear in alphabetical order. ggplot2 plots character variables in alphabetical order from bottom to top, disregarding row order. You have to change a character variable to a factor if you want ggplot2 to plot the variable in an order other than alphabetical.
 
-(A factor is a categorical variables with a fixed number of ordered values, called *levels*. If you want to read more about factors, see the [Factors](https://r4ds.had.co.nz/factors.html) chapter from *R4DS* ). 
+A factor is a categorical variable with a fixed number of values, called _levels_. If you want to read more about factors, see the [Factors](https://r4ds.had.co.nz/factors.html) chapter from _R4DS_. 
 
 To order `language` by number of speakers, we'll first turn `language` into a factor with levels ordered by number of speakers. The function `fct_reorder()` can do this for us.
 
 ```{r}
-x <-
+df <-  
   utah_languages %>% 
-  mutate(language = fct_reorder(language, speakers)) 
+  mutate(language = fct_reorder(language, speakers))
 
-x %>% head()
+df %>% head()
+
+levels(df$language) %>% head()
 ```
 
-`language` is now a factor. If we try to plot again, the languages will appear in order of number of speakers. 
-
-(Note that even though the languages in the tibble still appear in order of descending speakers, ggplot2 plots them in ascending order. `fct_reorder()` does not rearrange rows, so the tibble order remains unchanged. However, under the hood, `fct_reorder()` orders the factor levels so that the languages with the fewest speakers come first.)
+`fct_reorder()` has changed `language` from a character vector to a factor. The levels of the factor are just the languages themselves in the order of increasing number of speakers (Laotian has the fewest speakers). With a factor, ggplot2 will use the order of the factor levels instead of alphabetical order.
 
 ```{r}
 utah_languages %>% 
@@ -212,13 +229,13 @@ utah_languages %>%
 
 Now, it's obvious which of the languages has the most speakers and which has the fewest. Try comparing Vietnamese with French again. French now clearly has more speakers. You don't need to move your eyes back and forth several times to determine which value is greater, and you can easily estimate the magnitude of differences between adjacent categories. It's now also obvious that Laotian has the fewest speakers. 
 
-Reordering a character variable before plotting is almost always a good idea. You'll rarely want to plot in alphabetical order. Typically, you'll want to reorder according to the amount plotted on the other axis. Sometimes, however, you'll want to match an intrinsic ordering of the variables (e.g., if the categories are "low", "medium", and "high").
+Reordering a character variable before plotting is almost always a good idea. You'll rarely want to plot in alphabetical order. Typically, you'll want to reorder according to the amount plotted on the other axis. Sometimes, however, you'll want to match an intrinsic ordering of the variables, such as the `clarity` variable in diamonds, which is an ordered factor.
 
 ### `geom_bar()`
 
-In the previous section, we used `geom_col()` to plot number of speakers versus language. `geom_col()` takes two variables: one to map to the x-axis and one to map to the y. Sometimes, however, the amounts you wish to plot will be implicit in the data.
+In the previous section, we used `geom_col()` to plot number of speakers versus language. `geom_col()` takes two variables: one to map to the x-axis and one to map to the y-axis. Sometimes, however, the amounts you wish to plot will be implicit in the data.
 
-For example, say you want to determine the number of cars with each drivetrain type in the `mpg` data set. Each row in `mpg` represents a single car, and we so can use `geom_bar()` to visualize the number of cars with each drivetrain.
+For example, say you want to determine the number of cars with each drivetrain type in the `mpg` data set. Each row in `mpg` represents a single car, so we can use `geom_bar()` to visualize the number of cars with each drivetrain.
 
 ```{r}
 mpg %>% 
@@ -226,7 +243,7 @@ mpg %>%
   geom_bar()
 ```
 
-Unlike `geom_col()`, `geom_bar()` takes only a `x` aesthetic. The y-value is the count of items in each `x` category. `geom_bar()` is therefore like a special case of the more general `geom_col()`. 
+Unlike `geom_col()`, `geom_bar()` takes only the `x` aesthetic. The y-value is the count of items in each `x` category. `geom_bar()` is therefore like a special case of the more general `geom_col()`. 
 
 If you want to order a variable like `drv` by count, the function `fct_infreq()` is useful. Like `fct_reorder()`, `fct_infreq()` creates an ordered factor. However, instead of ordering the levels by another variable, `fct_infreq()` orders them by the number of times each value appears in the data.
 
@@ -259,11 +276,11 @@ ggplot2 requires that the numerical axis of a bar plots starts at 0. To demonstr
 x <-
   tibble(
     category = c("a", "b", "c"),
-    number = c(2, 4, 8)
+    amount = c(2, 4, 8)
   ) 
 
 x %>% 
-  ggplot(mapping = aes(x = category, y = number)) +
+  ggplot(mapping = aes(x = category, y = amount)) +
   geom_col()
 ```
 
@@ -271,23 +288,24 @@ However, imagine if the y-axis started at 1, marked by the red line.
 
 ```{r}
 x %>% 
-  ggplot(mapping = aes(x = category, y = number)) +
+  ggplot(mapping = aes(x = category, y = amount)) +
   geom_col() +
   geom_hline(yintercept = 1, color = "red", size = 1)
 ```
 
 "a"'s bar would have length 1, but "b"'s would have length 3. The 1:2 relationships between the variables would be lost. 
 
-When you estimate values in bar plots, you judge and compare the *lengths* of the bars. These lengths must therefore accurately encode the values. They can only do so if the y-axis starts at 0.
+When you estimate values in bar plots, you judge and compare the _lengths_ of the bars. These lengths must therefore accurately encode the values. They can only do so if the axis starts at 0.
 
-`geom_point()`, however, encodes values with *position*. The relative positions of the dots will accurately encode the data no matter where the y-axis begins. Therefore, it's okay for `geom_point()` to start the y-axis at a value other than 0. 
+`geom_point()`, however, encodes values with _position_. The relative positions of the dots will accurately encode the data no matter where the axis begins. Therefore, it's okay for `geom_point()` to start the axis at a value other than 0. 
 
 The choice between points and bars is largely a choice between comparing values to 0 or comparing values to each other. 
 
-For example, the following plot shows the times from the men's 100-meter dash final in the 2016 Olympics. The times are all very close together, and the bars fill up most of the plot.
+For example, the following plot shows the times from the men's 100 meter final in the 2016 Olympics. The times are all very close together, and the bars fill up most of the plot.
 
 ```{r}
 sprint_times %>% 
+  mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_col() +
   coord_flip()
@@ -295,14 +313,15 @@ sprint_times %>%
 
 The main conclusion you can take away from this plot is that all the sprinters ran the race in around 10 seconds. If you knew nothing about sprinting, the 2016 Olympics, or Usain Bolt, however, this information is largely useless. Is 10 seconds slow or fast? 
 
-In the *Visual Display of Quantitative Information*, Edward Tufte gives the following directive:
+In the _Visual Display of Quantitative Information_, Edward Tufte gives the following directive:
 
-> To be truthful and revealing, data graphics must bear on the question at the heart of quantitative thinking: "Compared to what?" [-@Tufte2001, p. 74]
+> To be truthful and revealing, data graphics must bear on the question at the heart of quantitative thinking: "Compared to what?" [@tufte-2001, 74]
 
-"Compared to what?" is a useful question to ask yourself when creating visualizations. Our bar plot above seems to say the important comparison is between the race times and 0. However, the interesting comparisons aren't to 0, but to the other contests. `geom_point()` allows us to highlights these comparisons. 
+"Compared to what?" is a useful question to ask yourself when creating visualizations. Our bar plot above seems to say the important comparison is between the race times and 0. However, the interesting time comparisons aren't to 0, but among the runners. `geom_point()` allows us to highlight these comparisons. 
 
 ```{r}
 sprint_times %>% 
+  mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_point() +
   coord_flip()
@@ -314,7 +333,7 @@ We now get a much better sense of the race. There's a couple runners in the back
 
 ### Color and facets
 
-Previously, we visualized continuous amounts in a single discrete category. In the language plot, language was the single discrete category. In the race plot, runner was the single discrete category. Often, however, your data will contain multiple categories, and you'll want to visualize all these categories at once.
+Previously, we visualized continuous amounts in a single discrete category. In the language plot, `language` was the single discrete category. In the race plot, `name` was the single discrete category. Often, however, your data will contain multiple categories, and you'll want to visualize all these categories at once.
 
 For example, earlier we visualized the number of cars in each drivetrain category. What if we want to add `year` to our plot? One option is to encode `year` using a fill color.
 
@@ -344,7 +363,7 @@ mpg %>%
   geom_bar(position = "dodge")
 ```
 
-Notice that it's now much easier to compare the pink bars to each other, as they now all begin at 0.
+Notice that it's now much easier to compare the red bars to each other, as they now all begin at 0.
 
 `year` is a pretty simple variable. It contains only two values. What if we wanted to encode a variable with more values? For example, `trans` contains 10 different values. 
 
@@ -360,7 +379,7 @@ The second goal states that it should be easy to compare numbers. Comparing bars
 
 ```{r}
 mpg %>% 
-  ggplot(mapping = aes(drv)) +
+  ggplot(mapping = aes(x = drv)) +
   geom_bar() +
   facet_wrap(vars(trans))
 ```
@@ -376,6 +395,4 @@ mpg %>%
 
 This plot has some additional advantages over the previous faceted plot. First, it's generally a good idea to put the variable with more values on the axis, and facet by the variable with fewer values. As we said above, it's easier to compare values in a single facet than it is to compare values across facets.
 
-Second, because there are fewer facets, we can use `facet_grid()` to align the facets vertically. This vertical alignment makes it easier to compare the distributions of values because of all facets now share a x-axis. 
-
-
+Second, because there are fewer facets, we can use `facet_grid()` to align the facets vertically. This vertical alignment makes it easier to compare the distributions of values because of all facets now share a common x-axis. 
