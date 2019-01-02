@@ -49,7 +49,6 @@ x %>%
   geom_col()
 ```
 
-
 As you'll see later, it's useful to understand how ggplot2 treats different types of variables. 
 
 In this chapter, you'll first learn about the mechanics of coordinate systems in ggplot2. Sometimes, you'll want to change the default settings of a coordinate system to create a more effective visualization. You'll need these mechanics in the "wisdom" section of the reading, where you'll learn about common visualization strategies for discrete-continuous relationships. 
@@ -93,7 +92,9 @@ star %>%
   geom_point()
 ```
 
-By default, `coord_cartesian()` fills the available plot area. Sometimes, however, you'll want to override the default. With `coord_fixed()`, you can use the `ratio` argument to specify the aspect ratio of your plot, with a default of 1.
+By default, `coord_cartesian()` fills the space available for plotting. This space is wider than it is tall, which causes the space between 0 and 50 on the x-axis to be longer than the space between 0 and 50 on the y-axis, distorting the star. 
+
+In this situation and others, you'll want to override the default. With `coord_fixed()`, you can use the `ratio` argument to specify the aspect ratio of your plot, with a default of 1.
 
 ```{r}
 star %>% 
