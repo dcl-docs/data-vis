@@ -45,7 +45,7 @@ However, ggplot creates a continuous scale for `count`.
 
 ```{r}
 x %>% 
-  ggplot(aes(x = category, y = count)) + 
+  ggplot(mapping = aes(x = category, y = count)) + 
   geom_col()
 ```
 
