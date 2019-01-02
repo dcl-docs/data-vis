@@ -1,4 +1,4 @@
-# Discrete-Continuous
+# Discrete-continuous relationships
 
 ## Introduction
 
@@ -160,16 +160,16 @@ In this section, we'll use data collected by the [American Community Survey (ACS
 head(utah_languages)
 ```
 
-`utah_languages` contains one discrete variable (`language`) and one continuous variable (`speakers`). In the next section, we'll visualize the number of speakers of each language, a discrete-continuous relationship.
+`utah_languages` contains one discrete variable (`language`) and one continuous variable (`speakers`). In the next section, we'll visualize the number of speakers of each language, a discrete-continuous relationship. 
 
-Before we discuss strategies for visualizing this relationship, however, here are two general goals of discrete-continuous relationships. We'll use these goals to evaluate the various plots that we make. 
+Before we get started with these visualizations, however, here are two general goals of visualizing discrete-continuous relationships. We'll use these goals to evaluate the various plots we make in the next section.
 
 A discrete-continuous visualization should make it easy to:
 
 * Connect categories with their associated numbers (e.g., German to the number of German speakers)
 * Compare numbers to each other (e.g., the number of German speakers to the number of Navajo speakers)
 
-Keep in mind that the visualization strategies we discuss aren't the final word on visualizations for discrete-continuous relationships. There are many other ways not discussed here that you might find useful. Instead, treat these strategies as a starting point.
+Keep in mind that the visualization strategies we discuss aren't the final word on visualizations for discrete-continuous relationships. There are many other ways not discussed here that you might find useful and you should therefore treat these strategies only as a starting point.
 
 ### Effective bar plots
 

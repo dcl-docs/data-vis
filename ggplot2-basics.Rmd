@@ -1,4 +1,4 @@
-# The basics of ggplot2
+# ggplot2 basics
 
 ```{r, include=FALSE}
 library(tidyverse)
