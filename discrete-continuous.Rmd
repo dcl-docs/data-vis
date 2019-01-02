@@ -94,7 +94,7 @@ star %>%
 
 By default, `coord_cartesian()` fills the space available for plotting. This space is wider than it is tall, which causes the space between 0 and 50 on the x-axis to be longer than the space between 0 and 50 on the y-axis, distorting the star. 
 
-In this situation and others, you'll want to override the default. With `coord_fixed()`, you can use the `ratio` argument to specify the aspect ratio of your plot, with a default of 1.
+To override the default aspect ratio, you can use `coord_fixed()`. `coord_fixed()` contains a `ratio` argument that allows you to specify an aspect ratio. By default, `ratio` is 1, which creates a square plot.
 
 ```{r}
 star %>% 
@@ -106,7 +106,9 @@ star %>%
 
 ### Zooming
 
-Now, let's say that you want to zoom in on the above plot to the points with y less than or equal to 50 and x greater than or equal to -50. `coord_cartesian()` and `coord_fixed()` have the arguments `xlim` and `ylim` to set the bounds of what will be visible in your plot.
+Say you want to get a closer look at the lower portion of the star. `coord_cartesian()` and `coord_fixed()` both contain the arguments `xlim` and `ylim` that allow you to zoom in or out of your plot, controlling the bounds of what's visible. 
+
+Here, we'll set the boundaries so that only points with y less than or equal to 50 and x greater than or equal to -50 are visible.
 
 ```{r}
 star %>% 
@@ -127,7 +129,7 @@ star %>%
   coord_fixed()
 ```
 
-To zoom, we recommend using the `xlim` and `ylim` arguments of `coord_cartesian()` and `coord_fixed()` instead of other methods that delete data outside of the area to be plotted. The deletion of data can often affect the plot of the remaining data.
+The above plot no longer looks like a start. Instead of just zooming in, we've changed what's plotted. Therefore, to zoom, we recommend using the `xlim` and `ylim` arguments of `coord_cartesian()` and `coord_fixed()` instead of other methods that delete data before plotting. 
 
 ### `coord_flip()`
 
