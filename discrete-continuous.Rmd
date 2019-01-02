@@ -254,10 +254,17 @@ If you want to order a variable like `drv` by count, the function `fct_infreq()`
 mpg %>% 
   mutate(drv = fct_infreq(drv)) %>% 
   ggplot(mapping = aes(x = drv)) +
-  geom_bar()
+  geom_bar() 
 ```
 
-The bars now appear in order of count.
+The bars now appear in order of count, from highest to lowest. However, you'll often want the bars to appear from low to high, especially if you use `coord_flip()`. To change the order, we'll have to use another function, `fct_rev()`, after `fct_infreq()`. `fct_rev()`  reverses factor levels.
+
+```{r}
+mpg %>% 
+  mutate(drv = fct_infreq(drv) %>% fct_rev()) %>% 
+  ggplot(mapping = aes(x = drv)) +
+  geom_bar() 
+```
 
 ### Bars vs. dots
 
