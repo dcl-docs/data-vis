@@ -1,9 +1,9 @@
 ---
-knit: bookdown::render_book
+knitr: bookdown::render_book
 title: "Vis Wisdom"
 author: "Sara Altman, Bill Behrman"
 date: "`r Sys.Date()`"
-description: "Description"
+description: "This book is intended as a practical introduction to creating effective visualizations using ggplot2."
 url: 'https\://datalab.stanford.edu/dcl-docs/vis-wisdom'
 github-repo: dcl-docs/vis-wisdom
 site: bookdown::bookdown_site
@@ -16,28 +16,28 @@ link-citations: true
 
 This book is intended as a practical introduction to creating effective visualizations using ggplot2. There are many excellent resources for learning ggplot2, including the following:
 
-* Hadley Wickham and Garrett Grolemund's [R for Data Science (R4DS)](https://r4ds.had.co.nz/)
-* RStudio's [Data visualization with ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
+* Hadley Wickham and Garrett Grolemund's [R for Data Science](https://r4ds.had.co.nz/) (R4DS)
+* The [ggplot2 website](https://ggplot2.tidyverse.org/)
+* RStudio's [Data visualization with ggplot2](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) cheat sheet
 
-We intend this book as a _complement_ to these resources, building on what they teach about ggplot2. We often link to these resources in this book, instead of rewriting what are already carefully crafted explanations. 
+We intend this book as a _complement_ to these resources, building on what they teach about ggplot2, and we will link to them often.
 
-Both _R4DS_ and the cheat sheets, however, are intended mostly as introductions to the _mechanics_ of ggplot2. They teach you how to build plots in ggplot2, but it is generally outside their scope to discuss the practice of creating effective visualizations. There is also a wealth of resources devoted to teaching effective visualization, which we call visualization _wisdom_. These resources include:
+_R4DS_, the website, and the cheat sheet mostly cover the _mechanics_ of ggplot2. They teach you how to build plots in ggplot2, but it is generally outside their scope to discuss the practice of creating effective visualizations. There is also a wealth of resources devoted to teaching effective visualization, which we call visualization _wisdom_. These resources include:
 
-* William S. Cleveland's books and papers, including [The Elements of Graphing Data](https://books.google.com/books/about/The_Elements_of_Graphing_Data.html?id=KMsZAQAAIAAJ&source=kp_cover)
-* Claus O. Wilke's [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
-* Edward R. Tufte's books, including [The Visual Display of Quantitative Information](https://books.google.com/books/about/The_Visual_Display_of_Quantitative_Infor.html?id=qmjNngEACAAJ&source=kp_cover)
+* William Cleveland's books and papers, including [The Elements of Graphing Data](https://books.google.com/books?id=KMsZAQAAIAAJ)
+* Edward Tufte's books, including [The Visual Display of Quantitative Information](https://books.google.com/books?id=GTd5oQEACAAJ)
+* Claus Wilke's [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
 
-Our goal is to combine the ggplot2 mechanics and visualization wisdom into a single book. We hope readers come away with a solid grounding in ggplot2 and the ability to create effective visualizations for common situations. We can't cover all types of visualizations, or all possible strategies for visualizing a given relationship. Instead, we hope to introduce readers to a way of thinking about data visualization that will help them construct clear visualizations in any situation they encounter in the future. 
+Our goal is to combine ggplot2 mechanics and visualization wisdom into a single book. We hope readers come away with a solid grounding in ggplot2 and the ability to create effective visualizations for common situations. We can't cover all types of visualizations, or all possible strategies for visualizing a given relationship. Instead, we hope to introduce readers to a way of thinking about data visualization that will help them approach and construct effective visualizations in situations they may encounter. 
 
-## How to read this book
+## How to read this book {-}
 
-This book is organized thematically, but each chapter builds upon the previous ones. Therefore, the book chapters should be read in order. 
-For the most part, each chapter in this book discusses a category of visualization (e.g., time series, distributions) and contains both ggplot2 mechanics and visualization wisdom. There is a lot to know about ggplot2, however, and the various features don't necessarily fit neatly into these different categories. Coordinate systems, for example, are relevant to all types of plots, not just discrete-continuous ones. However, we introduce coordinate systems in the "Discrete-continuous relationships" chapter. We've woven ggplot2 mechanics through the book so that readers learn the most important parts of ggplot2, and then learn more as those skills become relevant to the category of visualization. 
+This book is organized thematically, with each chapter building upon the previous ones, and we recommend reading the chapters in order. For the most part, each chapter discusses a category of visualization (e.g., time series, distributions) and contains both ggplot2 mechanics and visualization wisdom. We've woven ggplot2 mechanics through the book so that readers quickly learn the most important parts, and then learn more as those skills become relevant to the visualization task at hand. 
 
-An advantage of the thematic approach is that readers just starting out with both ggplot2 and data visualization can learn how to create plots in ggplot2 and how to make those plots effective at the same time. A disadvantage, however, is that the book does not function well as a ggplot2 mechanics look-up reference (e.g., if you forget how scales work and try to look that up later). However, we think the ggplot2 cheat sheet is a great mechanics look-up reference, and mention relevant sections often with the hope that readers will familiarize themselves with the cheat sheet and be able to use it as a reference. Additionally, organizing the book thematically means that it does function well as a look-up reference by visualization category. For example, if you know you're visualizing a distribution, you can easily navigate to the "Distributions" chapter and remind yourself about the various strategies for visualization distributions. 
+An advantage of the thematic approach is that readers just starting out with both ggplot2 and data visualization can learn how to create plots in ggplot2 and how to make those plots effective at the same time. A disadvantage is that the book does not function well as a reference for looking up ggplot2 mechanics (e.g., if you forget how scales work and try to look this up later). We think the ggplot2 cheat sheet is a good reference for looking up mechanics, and we mention relevant sections so that readers will familiarize themselves with them for later use. The thematic organization of the book will help it serve as a reference by visualization category. For example, if you know you want to visualize a distribution, you can go to the _Distributions_ chapter and remind yourself of the various strategies. 
 
-## An evolving book
+## An evolving book {-}
 
-This book is not intended to be static. Starting in January 2019, we use this book to teach data visualization in the [Data Challenge Lab (DCL)](https://datalab.stanford.edu/challenge-lab). The DCL functions as a testing ground for educational materials, as our students give us routine feedback on everything they read and do in the course. We use this feedback to constantly improve our materials, and intend to do the same with this book. 
+This book is not intended to be static. Starting in January 2019, we use this book to teach data visualization in the Stanford [Data Challenge Lab](https://datalab.stanford.edu/challenge-lab) (DCL) course. The DCL functions as a testing ground for educational materials, as our students give us routine feedback on what they read and do in the course. We use this feedback to constantly improve our materials, including this book. The [source for the book](https://github.com/dcl-docs/vis-wisdom) is available on GitHub where we welcome suggestions for improvements.
 
-Additionally, this work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/). The [source](https://github.com/dcl-docs/vis-wisdom) is available on GitHub where we welcome suggestions for improvements.
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/). 
