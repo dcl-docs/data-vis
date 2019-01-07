@@ -116,8 +116,9 @@ To construct a "determiner noun verb" sentence, you choose a determiner, a noun,
 Although each ggplot2 plot contains all of the eight elements, you've seen that you won't always need to specify each of the eight. The following plot only specifies three (data, geom, aesthetic mappings).
 
 ```{r}
-ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy))
+mpg %>% 
+  ggplot(mapping = aes(x = displ, y = hwy)) + 
+  geom_point()
 ```
 
 `ggplot()` helpfully takes care of the remaining five elements by using defaults (default coordinate system, scales, faceting scheme, etc.). 
@@ -135,15 +136,13 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
 
 ```{eval=FALSE}
 <DATA> %>% 
-  ggplot(mapping = aes(<MAPPINGS>), position = <POSITION>, stat = <STAT>) + 
-  <GEOM(S)> +
-  <SCALE_FUNCTION> + 
+  ggplot(mapping = aes(<MAPPINGS>)) + 
+  <GEOM(s)> +
+  <SCALE_FUNCTION(s)> + 
+  <COORDINATE_FUNCTION(s)> +
   <FACET_FUNCTION> + 
-  <COORDINATE_FUNCTION> + 
   <THEME> +
   <LABELS>
 ```
 
-
-
-
+We recommend putting the mappings that are common to all geoms in `ggplot()` and those unique to a geom with the geom. When used, position adjustment and statistical transformation are usually unique to a geom and thus specified there.
