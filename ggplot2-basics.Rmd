@@ -141,7 +141,7 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
   <FACET_FUNCTION> + 
   <COORDINATE_FUNCTION> + 
   <THEME> +
-  labs()
+  <LABELS>
 ```
 
 
