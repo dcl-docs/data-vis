@@ -145,4 +145,5 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
   <LABELS>
 ```
 
-We recommend putting the mappings that are common to all geoms in `ggplot()` and those unique to a geom with the geom. When used, position adjustment and statistical transformation are usually unique to a geom and thus specified there.
+As we said earlier, we recommend putting the mappings that are common to all geoms in `ggplot()` and those unique to a single geom in that geom call. Position adjustments and statistical transformations are usually unique to a geom. When you need to use them, specify them in the geom call. You'll see an example of a position adjustments in the next chapter. 
+
