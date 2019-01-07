@@ -135,7 +135,7 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
 
 ```{eval=FALSE}
 <DATA> %>% 
-  ggplot(mapping = aes(<MAPPINGS>)) + 
+  ggplot(mapping = aes(<MAPPINGS>), position = <POSITION>, stat = <STAT>) + 
   <GEOM(S)> +
   <SCALE_FUNCTION> + 
   <FACET_FUNCTION> + 
