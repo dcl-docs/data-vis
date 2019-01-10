@@ -5,6 +5,7 @@ rmd_files: [
   "index.Rmd",
   "ggplot2-basics.Rmd",
   "discrete-continuous.Rmd",
+  "general-strategy.Rmd",
   "references.Rmd"
 ]
 

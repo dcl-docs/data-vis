@@ -1,3 +1,21 @@
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+```
 # General strategy
 
 ```{r}
@@ -94,14 +112,16 @@ Brainstorming many different plot ideas can free you from the trap of committing
 
 If you're new to visualization, it can sometimes be difficult to think of many different ideas, because you don't have a stock of ideas to draw from. One way to speed up this process, besides just making a lot of visualizations, is to _consume_ a lot of visualizations. Scanning the geoms section of the ggplot2 cheat sheet can also spark ideas for new visualizations. 
 
-_Look at your plots_ Look at your plots and try to notice your reactions to them. Ask yourself, "What's easy to see? What patterns jump out? What information is obscured?" 
+### Look at your plots 
+
+Look at your plots and try to notice your reactions to them. Ask yourself, "What's easy to see? What patterns jump out? What information is obscured?" 
 
 Learning how to notice which features are obvious and what are not takes practice, and knowing how to fix problems you find can be difficult. Try to notice weaknesses of your plots even if you're unsure how to fix those weaknesses, or even if fixes are possible. 
 
 Sometimes, your visual system will immediately let you know when decoding is failing (e.g., with the overlapping labels). In other cases, the decoding process may succeed for you, but fail for others new to the data. For example, the following is an attempt to show that China has a lot of tall buildings. If you've been staring at this plot all day, it might become obvious to you that China has the most buildings in the data, followed by the United Arab Emirates.
 
 ```{r}
-all %>% 
+buildings %>% 
   ggplot(mapping = aes(x = country, y = height_ft)) +
   geom_point() +
   coord_flip()
@@ -112,7 +132,7 @@ However, these discoveries aren't that obvious to first time viewers. Try to ima
 If you really want to highlight the _number_ of buildings in each country, it would be better to eliminate `height_ft` and just plot the number of buildings. 
 
 ```{r}
-all %>% 
+buildings %>% 
   count(country) %>% 
   mutate(country = fct_reorder(country, n)) %>% 
   ggplot(mapping = aes(x = country, y = n)) +
@@ -122,13 +142,15 @@ all %>%
 
 It's now much more obvious that China has more tall buildings than any other country in the data. 
 
-_Iterate_ Your first attempt at a visualization will almost never be your best attempt. You shouldn't expect to know, before plotting, the best way to visualize a given data set, and so iteration is critical. Once you have your goals in mind and have carefully looked at your visualizations, you can begin to iterate, fixing problems and emphasizing the relationships you wish to show.
+### Iterate
+
+Your first attempt at a visualization will almost never be your best attempt. You shouldn't expect to know, before plotting, the best way to visualize a given data set, and so iteration is critical. Once you have your goals in mind and have carefully looked at your visualizations, you can begin to iterate, fixing problems and emphasizing the relationships you wish to show.
 
 Keep in mind that iteration can take time. You may not be able to come up with a better alternative to a plot immediately. It's often helpful to take a break from a difficult visualization problem, allow your mind time to work on the problem in the background, and return later on.
 
-# Perception
+## Perception
 
-## Encodings
+### Encodings
 
 Earlier, we discussed the process of encoding information into visual elements. We've also already discussed a couple of encodings: length (e.g., the length of bar plot bars) and position (e.g., the position of points along an axis). 
 
