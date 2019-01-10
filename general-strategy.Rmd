@@ -1,0 +1,223 @@
+# General strategy
+
+```{r}
+# Libraries
+library(tidyverse)
+
+# Data
+  # 10 tallest buildings in the world
+buildings_10 <-
+  read_rds("data/tallest-buildings/tallest_buildings_10.rds")
+  # All 63 tallest buildings
+buildings <-
+  read_rds("data/tallest-buildings/tallest_buildings.rds")
+```
+
+## The goals of visualization
+
+### Two types of plots
+
+You will often create visualizations as a way to explore data you know little about. For example, `buildings_10` contains data on the 10 tallest buildings in the world. You might be curious which buildings are the tallest, and by how much.
+
+```{r}
+buildings_10 %>% 
+  head()
+```
+
+It's difficult to extract meaningful insights from the data just by looking at it. Visualizing the data will be more helpful.
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = height_ft)) +
+  geom_point() +
+  coord_flip()
+```
+
+You can now identify that Burj Khalifa is the tallest by several hundred feet. No other buildings come close. We'll call plots you make for yourself to learn about the data _Exploratory data analysis (EDA) plots_. 
+
+Now, you might want to share this plot with someone else. This person might be new to the `buildings_10` data, so a title and better axis labels would be useful. We'll call plots you make in order share information with others _presentation plots_. 
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = height_ft)) +
+  geom_point() +
+  coord_flip() +
+  labs(
+    x = "Building name",
+    y = "Height (feet)",
+    title = "Heights of the world's 10 tallest buildings"
+  )
+```
+
+EDA plots and presentation plots differ in quality. Polishing touches like labels, titles, legend position, etc. matter more for presentation than EDA. The purpose and creation processes EDA plots are also different from those of presentation plots. When you create an EDA plot (or at least your first iteration of an EDA plot), you're generally not sure what you'll find, and so the job of an EDA plot is to accurately reveal the nature of the data to you. When you create a presentation plot, you've already found some interesting feature in the data. Your work is then to construct a visualization that can effectively transfer an idea about the data from your own mind to the minds of others.  
+
+### Encoding and decoding
+
+Whether you're creating an EDA or presentation plot, you have to decide how to represent the data. Above, we chose to represent the height of a building using the position of a dot along the x-axis, and to represent different buildings with labels spaced along the y-axis. 
+
+William Cleveland called these representations _encodings_. He characterized the process of visualization as a process of encoding and decoding. When you construct a visualization, you encode information into visual elements. Then, to interpret the visualization, you or others have to _decode_ these visual elements [@cleveland-1985]. Decoding involves estimating and comparing values, connecting physical elements like dots and bars with labels, identifying groups, spotting patterns, and other processes. 
+
+To create a successful visualization, you have to choose encodings such that the decoding process goes well. You and others should be able to easily and accurately translate visual information into insights about the data. When the decoding process goes poorly in EDA, you might miss important features of your data, or be unable to learn anything at all. When the decoding process goes poorly with a presentation plot, the visualization fails to successfully transmit your ideas about the data to the minds of others.
+
+You've already seen plenty of examples of plot in which decoding goes poorly, and learned some remedies for common problems. For example, decoding labels fails when those labels overlap, which is why you learned about `coord_flip()` in the previous chapter.
+
+```{r}
+buildings %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = height_ft)) +
+  geom_point() 
+```
+
+The overlapping labels prevent you from easily and accurately separating the names of the buildings, and so can't translate the visual elements (the labels) back into the realm of the data.  
+
+Any visualization you create will involve choices about encodings. Later on in this chapter, we'll talk about some useful findings from the study of perception that can help you choose encodings. First, we'll talk about some general strategies for creating effective visualizations.
+
+## Strategies
+
+Here are some strategies to keep in mind when creating visualizations. In the relationship-specific chapters, we'll talk about strategies for specific types of plots. The following strategies apply to _all_ visualizations. 
+
+### Have clear goals or questions in mind  
+
+Setting goals for your visualizations forces you to clarify your thinking around the purpose of a visualization. If you have clear ideas about the purpose of a visualization, you can then evaluate how well the visualization does. Recall how, in the _Discrete-continuous relationships_ chapter, we started off with two goals for our Utah languages visualization and then used those goals to evaluate various plots. For EDA plots, it might be helpful to formulate these goals as specific questions about the data.
+
+Goals or questions can also help you focus and highlight what's most important. A data set may have many different interesting features, but you likely won't want to show all of them in a single plot. Having a clear goal for your plot can help you eliminate unecessary features and highlight only the features that you want to show in that particular plot. 
+
+### Go for quantity
+
+Once you have some goals in mind, make a bunch of plots that try to meet those goals. Don't worry too much about whether or not the plots are very good. Just focus on quantity.
+
+(This is probably especially helpful for presentation plots where you have a specific idea you want to communicate and are trying to determine the best way to communicate it.)
+
+Brainstorming many different plot ideas can free you from the trap of committing too early to a single idea. Having a lot of plots also allows you to compare strengths and weaknesses of various approaches.
+
+If you're new to visualization, it can sometimes be difficult to think of many different ideas, because you don't have a stock of ideas to draw from. One way to speed up this process, besides just making a lot of visualizations, is to _consume_ a lot of visualizations. Scanning the geoms section of the ggplot2 cheat sheet can also spark ideas for new visualizations. 
+
+_Look at your plots_ Look at your plots and try to notice your reactions to them. Ask yourself, "What's easy to see? What patterns jump out? What information is obscured?" 
+
+Learning how to notice which features are obvious and what are not takes practice, and knowing how to fix problems you find can be difficult. Try to notice weaknesses of your plots even if you're unsure how to fix those weaknesses, or even if fixes are possible. 
+
+Sometimes, your visual system will immediately let you know when decoding is failing (e.g., with the overlapping labels). In other cases, the decoding process may succeed for you, but fail for others new to the data. For example, the following is an attempt to show that China has a lot of tall buildings. If you've been staring at this plot all day, it might become obvious to you that China has the most buildings in the data, followed by the United Arab Emirates.
+
+```{r}
+all %>% 
+  ggplot(mapping = aes(x = country, y = height_ft)) +
+  geom_point() +
+  coord_flip()
+```
+
+However, these discoveries aren't that obvious to first time viewers. Try to imagine seeing your plot for the first time, without knowledge of what you should be looking for. Take a step back, determine which features immediately pop out, and ask yourself if those features are really the ones you wish to highlight.
+
+If you really want to highlight the _number_ of buildings in each country, it would be better to eliminate `height_ft` and just plot the number of buildings. 
+
+```{r}
+all %>% 
+  count(country) %>% 
+  mutate(country = fct_reorder(country, n)) %>% 
+  ggplot(mapping = aes(x = country, y = n)) +
+  geom_col() +
+  coord_flip()
+```
+
+It's now much more obvious that China has more tall buildings than any other country in the data. 
+
+_Iterate_ Your first attempt at a visualization will almost never be your best attempt. You shouldn't expect to know, before plotting, the best way to visualize a given data set, and so iteration is critical. Once you have your goals in mind and have carefully looked at your visualizations, you can begin to iterate, fixing problems and emphasizing the relationships you wish to show.
+
+Keep in mind that iteration can take time. You may not be able to come up with a better alternative to a plot immediately. It's often helpful to take a break from a difficult visualization problem, allow your mind time to work on the problem in the background, and return later on.
+
+# Perception
+
+## Encodings
+
+Earlier, we discussed the process of encoding information into visual elements. We've also already discussed a couple of encodings: length (e.g., the length of bar plot bars) and position (e.g., the position of points along an axis). 
+
+When you encode a continuous variable (like building height), it's important to be able to both estimate magnitudes and judge differences. Humans are good at estimating and comparing values encoded by length and position. 
+
+`geom_point()` encodes height with position.
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = height_ft)) +
+  geom_point() +
+  coord_flip()
+```
+
+`geom_col()` encodes height with length.
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = height_ft)) +
+  geom_col() +
+  coord_flip()
+```
+
+Notice how much harder the task becomes if we encode height with color.
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = 1, color = height_ft)) +
+  geom_point(size = 10) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  ) +
+  labs(y = NULL) +
+  coord_flip()
+``` 
+
+You can still tell that Burj Khalifa is the tallest, but its exact height is difficult to estimate. Encoding with color also makes it much harder to compare buildings. If you didn't know that the buildings were ordered, for example, it would be almost impossible to tell whether or not Lotte World Tower was taller than One World Trade Center.
+
+Encoding height with size causes similar problems.
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = 1, size = height_ft)) +
+  geom_point() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  ) +
+  labs(y = NULL) +
+  coord_flip()
+```
+
+To quantify these observations, Cleveland and McGill (@cleveland-1985) designed an experiment to test how accurately humans can decode different encodings of continuous data. The results of their experiment led the following ranking (best to worst) of encodings:
+
+1. Position along a common scale (i.e., placing elements along a common axis)
+2. Position along identical but nonaligned scales (i.e., placing elements along a common axis, but on different facets)
+3. Length
+4. Angle
+5. Slope
+6. Area
+7. Volume
+8. Density
+9. Color saturation (the intensity/purity of a color)
+10. Color hue (blue, green, red, etc.) [@cleveland-1985]
+
+You will often have to use multiple encodings. Loosely rank the variables you wish to visualize from most important to least important. Encode the most important variables with encodings from the top of the list, moving to less accurate encodings only when necessary.
+
+For example, above you saw how size is not a good choice for encoding height. However, if we want to visualize `building`, `height_ft`, and `floors` on the same plot, we'll need to use three encodings. 
+
+There are two axes, so we can encode two variables using position. The most important variables are probably `building` and `height_ft`, so we'll save position for them. We now need a way to encode `floors`. It doesn't make sense to facet by any of the variables (`height_ft` and `floors` are both continuous and faceting by a continuous variable is rarely a good idea. If we faceted by `building`, there would only be one point per facet). Length and angle don't make sense in this scenario, but we could use area. (The `size` argument of `geom_point()`, by default, scales the _areas_ of the circles according to the data, not the radii.)
+
+```{r}
+buildings_10 %>% 
+  mutate(building = fct_reorder(building, height_ft)) %>% 
+  ggplot(mapping = aes(x = building, y = height_ft, size = floors)) +
+  geom_point() +
+  coord_flip()
+```
+
+You may not be able to determine exactly how many floors each building has, but you can clearly see that Tianjin CTF Finance Center has fewer floors than you would expect for a building of its height.
+
+Note that Cleveland and McGill's ranking is only for _continuous_ variables (again, we're using continuous in the ggplot2 sense, not the mathematical one). Color hue may not be a very good way to encode a continuous variable, but it can, as you've already seen, be very useful for discrete ones.
+
+It's helpful to understand which visual tasks are easy for humans and which are difficult. Understanding these basics can help you construct more effective visualizations. We'll discuss other relevant findings from the study of perception in subsequent chapters. 
+
+
+
