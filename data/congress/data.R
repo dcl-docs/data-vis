@@ -15,10 +15,25 @@ url_current_data <-
 # URL for current data
 url_historical_data <-
   "https://theunitedstates.io/congress-legislators/legislators-historical.json"
-
+# US Census divisions
+# Source: https://en.wikipedia.org/wiki/List_of_regions_of_the_United_States#Census_Bureau-designated_regions_and_divisions
+divisions <-
+  list(
+    `East North Central` = c("IL", "IN", "MI", "OH", "WI"),
+    `East South Central` = c("AL", "KY", "MS", "TN"),
+    `Middle Atlantic` =	c("NJ", "NY", "PA"),
+    `Mountain` = c("AZ", "CO", "ID", "MT", "NM", "NV", "UT", "WY"),
+    `New England` = c("CT", "MA", "ME", "NH", "RI", "VT"),
+    `Pacific` =	c("AK", "CA", "HI", "OR", "WA"),
+    `South Atlantic` = c("DC", "DE", "FL", "GA", "MD", "NC", "SC", "VA", "WV"),
+    `West North Central` = c("IA", "KS", "MN", "MO", "ND", "NE", "SD"),
+    `West South Central` = c("AR", "LA", "OK", "TX")
+  ) %>% 
+  enframe(name = "division", value = "state") %>% 
+  unnest()
+  
 # Output file
-file_out <- "congress_ages.rds"
-
+file_out <- "congress_2019.rds"
 #===============================================================================
 
 congress_pull <- function(category, var, default = NA) {
@@ -37,8 +52,8 @@ all <-
 v <-
   tibble(
     id = congress_pull("id", "bioguide"),
-    first_name = congress_pull("name", "first"),
-    last_name = congress_pull("name", "last"),
+    first = congress_pull("name", "first"),
+    last = congress_pull("name", "last"),
     birthday = congress_pull("bio", "birthday") %>% as_date(),
     gender = congress_pull("bio", "gender"),
     terms_data = map(all, "terms")
@@ -51,35 +66,28 @@ v <-
     chamber = map_chr(terms_data, "type", .default = NA),
     state = map_chr(terms_data, "state", .default = NA)
   ) %>%  
+  select(-terms_data) %>% 
   mutate(
-    age = decimal_date(start_date) - decimal_date(birthday),
+    name = str_c(first, last, sep = " "),
+    age = round(decimal_date(start_date) - decimal_date(birthday), 2),
     chamber = 
       recode(
         chamber, 
         rep = "house", 
         sen = "senate", 
         .default = NA_character_
-      )
+      ),
+    party = if_else(party %in% c("Republican", "Democrat"), party, "Other")
   ) %>% 
-  filter(!is.na(birthday), age > 24) %>% 
-  select(
-    id, 
-    first_name, 
-    last_name, 
-    birthday,
-    age, 
-    gender, 
-    chamber, 
-    state, 
-    party, 
-    start_date, 
-    end_date
+  left_join(divisions, by = "state") 
+
+# right now there are only 524 because there is one vacancy in North Carolina due to election fraud
+v %>% 
+  filter(
+    year(end_date) > 2019, 
+    !is.na(division) # exclude non-voting members from territories
   ) %>% 
+  mutate(party = str_extract(party, "\\w{1}")) %>% 
+  select(name, age, chamber, state, division, party) %>% 
+  arrange(division, state, chamber, party) %>% 
   write_rds(file_out)
-  
-
-# some birthdays are wrong
-# check if the birthday is the same for each person
-# fix party names
-
-
