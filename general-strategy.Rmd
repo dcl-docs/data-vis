@@ -5,14 +5,14 @@
 library(tidyverse)
 
 # Data
- # Times for 2016 Olympics men's 100 meter final
+  # Times for 2016 Olympics men's 100 meter final
 sprint_times <- read_rds("data/olympics-2016/100m_men.rds")
 
   # Data on world's tallest buildings
 buildings <-
   read_rds("data/tallest-buildings/tallest_buildings.rds")
 
-# The ten tallest buildings
+  # The ten tallest buildings
 buildings_10 <-
   buildings %>% 
   top_n(n = 10, wt = height_ft)
@@ -160,12 +160,12 @@ buildings_10 %>%
   mutate(building = fct_reorder(building, height_ft)) %>% 
   ggplot(mapping = aes(x = building, y = 1, color = height_ft)) +
   geom_point(size = 10) +
+  coord_flip() +
   theme(
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
   ) +
-  labs(y = NULL) +
-  coord_flip()
+  labs(y = NULL)
 ``` 
 
 You can still tell that Burj Khalifa is the tallest, but its exact height is difficult to estimate. Encoding with color also makes it much harder to compare buildings. Lotte World Tower and One World Trade Center appear almost identical.
@@ -177,12 +177,12 @@ buildings_10 %>%
   mutate(building = fct_reorder(building, height_ft)) %>% 
   ggplot(mapping = aes(x = building, y = 1, size = height_ft)) +
   geom_point() +
+  coord_flip() +
   theme(
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
   ) +
-  labs(y = NULL) +
-  coord_flip()
+  labs(y = NULL)
 ```
 
 To quantify these observations, Cleveland and McGill (@cleveland-1985) designed an experiment to test how accurately humans can decode different encodings of _continuous data_. The results of their experiment led the following ranking (from best to worst) of encodings:
@@ -226,7 +226,7 @@ buildings_10 %>%
   coord_flip()
 ```
 
-This plot is ok. You may not be able to tell exactly how many floors each building has, but you can immediately see that Tianjin CTF Finance Centre is an outlier. 
+This plot is OK. You may not be able to tell exactly how many floors each building has, but you can immediately see that Tianjin CTF Finance Centre is an outlier. 
 
 If this were an EDA plot, you might further investigate this discovery about Tianjin CTF Finance Centre by directly plotting the `height_ft` to `floors` ratio. 
 
@@ -238,7 +238,7 @@ buildings_10 %>%
   coord_flip()
 ```
 
-If the goal is to show the `height_ft` to `floors` ratio, this plot is much better. By encoding the ratio with position only, instead of position and size, it's nownclear that both Tianjin CTF Finance Centre _and_ Lotte World Tower are unusual. Lotte World Tower has very short floors and Tianjin CTF Finance Center has very tall floors. 
+If the goal is to show the `height_ft` to `floors` ratio, this plot is much better. By encoding the ratio with position only, instead of position and size, it's now clear that both Tianjin CTF Finance Centre _and_ Lotte World Tower are unusual. Lotte World Tower has very short floors and Tianjin CTF Finance Center has very tall floors. 
 
 Creating new variables can often lead to better insights than plotting several variables at once. If your plot uses several continuous variables, ask yourself if there's a more direct way to measure the relationship that you're curious about.
 
@@ -266,7 +266,7 @@ In EDA, creating multiple plots allows you to more fully explore a question. Eac
 
 If you're creating a presentation plot, thinking of many different plots can free you from the common trap of committing too early to a single idea. It also allows you to compare the strengths and weaknesses of various approaches.
 
-If you're new to visualization, it can be difficult to come up with multiple ideas for a single goal. Your stockpile of visualization ideas is likely still small. One way to grow this stockpile, besides creating visualizations, is to _consume_ a lot of visaulizations. Scanning the geoms section of the ggplot2 cheat sheet can also help spark new ideas. 
+If you're new to visualization, it can be difficult to come up with multiple ideas for a single goal. Your stockpile of visualization ideas is likely still small. One way to grow this stockpile, besides creating visualizations, is to _consume_ a lot of visualizations. Scanning the geoms section of the ggplot2 cheat sheet can also help spark new ideas. 
 
 ### Look at your plots 
 
