@@ -77,7 +77,7 @@ v <-
         sen = "senate", 
         .default = NA_character_
       ),
-    party = if_else(party %in% c("Republican", "Democrat"), party, "Other")
+    party = fct_lump(party, n = 2)
   ) %>% 
   left_join(divisions, by = "state") 
 
@@ -87,7 +87,6 @@ v %>%
     year(end_date) > 2019, 
     !is.na(division) # exclude non-voting members from territories
   ) %>% 
-  mutate(party = str_extract(party, "\\w{1}")) %>% 
   select(name, age, chamber, state, division, party) %>% 
-  arrange(division, state, chamber, party) %>% 
+  arrange(state, division, chamber, party) %>% 
   write_rds(file_out)
