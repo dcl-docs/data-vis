@@ -98,43 +98,51 @@ In this chapter, we'll use the `tidyverse` package and the following data.
 # Libraries
 library(tidyverse)
 
-congress_2019 <-
-  read_rds("data/congress/congress_2019.rds")
+# Age data for just 2019 Congress
+congress_2019 <- read_rds("data/congress/congress_2019.rds")
 ```
 
 Take a look at the following [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) sections before reading this chapter.
 
-* Geoms: `geom_histogram()`, `geom_freqpoly()`, `geom_density()`, `geom_boxplot()`, `geom_violin()`, `geom_vline()`, `geom_hline()`
+* Geoms: 
+  * `geom_histogram()`
+  * `geom_freqpoly()`
+  * `geom_density()`
+  * `geom_boxplot()`
+  * `geom_violin()`
+  * `geom_vline()`
+  * `geom_hline()`
+  
+A common first step when carrying out exploratory data analysis is examining distributions of continuous variables. For example, in this chapter, we'll explore the ages of Congress members. To get a sense of what distributions can show, here are some possible hypotheses about the ages of Congress members (some more likely than others).
 
-You'll often want to understand how a continuous value is distributed. For example, in this chapter, we'll explore the ages of Congress members. To get a sense of what distributions can show, here are some possible hypotheses about the ages of Congress members (some more likely than others).
-
-* Every single Congress member is 52.
-* Almost all Congress people are between 30 and 40.
 * There is no age bracket more populous than any another.
-* Most Congress members are around 60. 
+* The average age is around 60. 
 * There are a lot of Congress members who are around 30, and a lot who around 70. 
-
 Before we dive into the Congress data, however, we'll introduce some mechanics. In the following sections, you'll learn about layering geoms and the basics of `theme()`.
 
-## Layering
+## Mechanics
+
+### Layering
 
 The following plot shows the relationship of `class` to `hwy` using boxplots. 
 
 ```{r}
 mpg %>% 
   mutate(class = fct_reorder(class, hwy)) %>% 
-  ggplot(mapping = aes(class, hwy)) +
+  ggplot(aes(class, hwy)) +
   geom_boxplot()
 ```
 
-It would be helpful to know the median `hwy` value across all car classes. To display this on our plot, we'll add a _reference line_ using `geom_hline()`. `geom_hline()` creates horizontal lines. `geom_vline()`, which creates vertical lines, and `geom_abline()`, which creates lines with a given slope and intercept, are also useful for creating reference lines.
+We'll explain the specifics of boxplots later on in this chapter. 
+
+The black line in the middle of each box represents the median value for that class. It would also be helpful to see the median `hwy` value across all car classes. To display this on our plot, we'll add a _reference line_ using `geom_hline()`. `geom_hline()` creates horizontal lines. `geom_vline()`, which creates vertical lines, and `geom_abline()`, which creates lines with a given slope and intercept, are also useful for creating reference lines.
 
 In `geom_hline()`, the `yintercept` argument controls the position of the horizontal line. In this case, we want a horizontal line indicating the median `hwy` value, so we'll set `yintercept` equal to `median(hwy, na.rm = TRUE)`.
 
 ```{r}
 mpg %>% 
   mutate(class = fct_reorder(class, hwy)) %>% 
-  ggplot(mapping = aes(class, hwy)) +
+  ggplot(aes(class, hwy)) +
   geom_boxplot() +
   geom_hline(aes(yintercept = median(hwy, na.rm = TRUE)), color = "red")
 ```
@@ -156,9 +164,10 @@ You can add as many layers to a gpplot2 plot as you'd like. The different layers
 ```{r}
 # Source: https://en.wikipedia.org/wiki/Corporate_average_fuel_economy
 cafe_standards_2008 <-
-  tibble(
-    class = c("passenger", "truck"),
-    mpg = c(27.5, 22.4)
+  tribble(
+    ~ class,     ~ mpg,
+    "passenger", 27.5,
+    "truck",     22.4
   )
 
 mpg %>% 
@@ -169,14 +178,14 @@ mpg %>%
     aes(yintercept = mpg, color = class)
   ) +
   geom_boxplot(aes(class, hwy)) +
-  labs(color = "2008 CAFE standard class")
+  labs(color = "2008 CAFE\nstandard class")
 ```
 
-## `theme()`
+### `theme()`
 
 Just like every ggplot2 plot has a coordinate system, every ggplot2 plot also has a _theme_. The theme controls the parts of the plot unrelated to the data, like the plot background color, tick mark length, and the color, size, and angle of the labeling text. 
 
-You can edit your plot's theme with the `theme()` function. Themes have many components, and so `theme()` takes many arguments. Take a look at `?theme()` to get a sense of what's possible to change.
+You can edit your plot's theme with the `theme()` function. Themes have many components, and so `theme()` takes many arguments. Take a look at [tidyverse page on themes](https://ggplot2.tidyverse.org/reference/theme.html) to get a sense of what's possible to change.
 
 Two `theme()` arguments you'll commonly use are `axis.text.x` and `axis.text.y`. These arguments control the appearance of the axis tick mark labels. Next, we'll show you how to angle the x-axis tick mark labels to reduce overlap.
 
@@ -201,7 +210,7 @@ mpg %>%
   theme(axis.text.x = element_text(angle = -45))
 ```
 
-Take a look at the code. Notice that we had to use the function `element_text()`. `element_text()` is an _element function_. You'll need element functions to change most of `theme()`'s arguments. If you look at `?theme()`, you'll see that the arguments are arranged into chunks. At the beginning of each chunk, there's a reference to the appropriate element function. `axis.text.x` controls text, and uses `element_text()`, but `axis.line` controls the appearance of a line, and so uses `element_line()`. Like `theme()`, `element_text()` has many arguments. To change the angle of the text, we only needed one: `angle`.
+Take a look at the code. Notice that we had to use the function `element_text()`. `element_text()` is an _element function_. You'll need element functions to change most of `theme()`'s arguments. If you look at [`themes()`'s documentation](https://ggplot2.tidyverse.org/reference/theme.html), you'll see that the arguments are arranged into groups. At the beginning of each chunk, there's a reference to the appropriate element function. `axis.text.x` controls text, and uses `element_text()`, but `axis.line` controls the appearance of a line, and so uses `element_line()`. Like `theme()`, `element_text()` has many arguments. To change the angle of the text, we only needed one: `angle`.
 
 Angling makes the axis text easier to read, but the text is now far away from the x-axis. The plot would be better if the labels were closer to the boxplots they represent. We can adjust the text justification with `element_text()`'s `hjust` argument. 
 
@@ -213,8 +222,8 @@ mpg %>%
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
 ```
 
-By setting `hjust` to 0, we push the labels closer to the x-axis. Setting `hjust` to 1 would have pushed the labels even further away.
-
+Setting `hjust` to 0 aligns text to the left, which causes our labels to move closer to x-axis. `hjust = 1` aligns text right.
+ 
 You'll learn about the other element functions, and other useful `theme()` changes, later on.
 
 ## One distribution
@@ -225,14 +234,48 @@ In this section, we'll use data on Congress members serving in 2019.
 head(congress_2019)
 ```
 
-As you might expect, the median age for all Congress members is around 60.
+One of our hypotheses from the introduction was that the average age Congress was around 60. "Average" is ambiguous, however. Do we mean the median or the mean?
+
+For some data, the mean and median are close together, but they often won't be. Means are sensitive to outliers, while medians are more robust. As an example, here's a vector `x`. 
+
+```{r}
+x <- c(1, 2, 10, 15)
+
+mean(x) 
+```
+
+The mean is the result of summing the elements of `x` and dividing by the length of `x`.
+
+```{r}
+median(x)
+```
+
+The median represents the midpoint of `x`. Half of the data is greater than 6, and half is less than 60. 
+
+Right now, the mean and median of `x` are close together. If we add in an outlier, though, the mean explodes, but the median only increases by a small amount.
+
+```{r}
+x <- c(1, 2, 10, 15, 1e6)
+
+mean(x)
+```
+
+```{r}
+median(x)
+```
+
+We'll typically use medians instead of means for averages and references lines because of this behavior.
+
+`summary()` will tell us the mean and median age in Congress, as well as a summary of other variables. 
 
 ```{r}
 congress_2019 %>% 
-  summarize(median_age = median(age))
+  summary()
 ```
 
-And the House is marginally younger than the Senate.
+The mean and median are close together, and are both around 58. Our hypothesis that the average age is 60 was pretty close.
+
+Another interesting finding is that the House is marginally younger than the Senate.
 
 ```{r}
 congress_2019 %>% 
@@ -240,7 +283,7 @@ congress_2019 %>%
   summarize(median_age = median(age))
 ```
 
-There are some very young Congress members,
+There are also some very young Congress members,
 
 ```{r}
 congress_2019 %>% 
@@ -262,7 +305,7 @@ In this section, we'll focus just on visualizing the distribution of ages for al
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
-  geom_histogram()
+  geom_histogram() 
 ```
 
 There's a message above our plot telling us that `geom_histogram()` is using `bins = 30`, but we should choose a better value of `binwidth`. Both the `bins` and `binwidth` arguments of `geom_histogram()` control the width of the bars you see on the plot. `bins` controls the number of bars. By default, `geom_histogram()` creates 30 bins/bars, and then divides up the data so that each bar spans the same number of whatever units are plotted along the x-axis. Here, those units are years, and each bar represents around 2 years. The `binwidth` argument of `geom_histogram()` allows you to set the width of the bars directly. 
@@ -274,7 +317,8 @@ Let's try some different binwidths.
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
-  geom_histogram(binwidth = .1)
+  geom_histogram(binwidth = .1) +
+  stamp()
 ```
 
 A binwidth of 0.1 years is too small. Notice how it's difficult to see the overall shape of the distribution and the plot appears very "peaky." Also, many of the bars only represent a single person.
@@ -283,18 +327,19 @@ If we swing too far in the opposite direction, however, we'll lose information.
 
 ```{r}
 congress_2019 %>% 
-  ggplot(mapping = aes(x = age)) +
-  geom_histogram(binwidth = 20) 
+  ggplot(aes(x = age)) +
+  geom_histogram(binwidth = 20) +
+  stamp()
 ```
 
 20 years is too large of a chunk to be meaningful in this context. 
 
-In this case, the original 30 bins wasn't too far off from ideal. We'll make a minor adjustment so that each bin represents 2 years.
+In this case, the original 30 bins wasn't too far off from ideal. We'll make a minor adjustment so that each bin represents 5 years.
 
 ```{r}
 congress_2019 %>% 
-  ggplot(mapping = aes(x = age)) +
-  geom_histogram(binwidth = 3)
+  ggplot(aes(x = age)) +
+  geom_histogram(binwidth = 5)
 ```
 
 We can improve this histogram by adding a reference line at the median. 
@@ -302,7 +347,7 @@ We can improve this histogram by adding a reference line at the median.
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
-  geom_histogram(binwidth = 3) +
+  geom_histogram(binwidth = 5) +
   geom_vline(aes(xintercept = median(age)), color = "red")
 ```
 
@@ -313,7 +358,7 @@ However, there are other ways to visualize a single distribution. `geom_freqpoly
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
-  geom_freqpoly(binwidth = 3) +
+  geom_freqpoly(binwidth = 5) +
   geom_vline(aes(xintercept = median(age)), color = "red")
 ```
 
@@ -321,7 +366,17 @@ You can think of frequency polygons as "histograms with lines." Just as you have
 
 If you're just visualizing a single distribution, a histogram is probably better. The bars make it easier to connect counts with ages, as well as see the overall shape of the distribution. However, as you'll see later, frequency polygons can be useful for visualizing multiple distributions at once.
 
-`geom_density()` creates a density plot and is another option for visualizing a single distribution. Density plots are essentially smoothed histograms, and so are most useful if your data comes from a smooth distribution. For example, if you're visualizing simulated data, `geom_density()` could be a good idea.
+`geom_density()` creates a density plot and is another option for visualizing a single distribution. Density plots are essentially smoothed histograms.
+
+```{r}
+congress_2019 %>% 
+  ggplot(aes(age)) +
+  geom_density()
+```
+
+Density plots lack the fine-grained detail of frequency polygons. Sometimes, you'll want to lose detail and focus on the overall trend, but, other times, density plots will hide important information. You should also avoid using density plots if you don't have very much data. We therefore recommend using density plots only in specific scenarios. 
+
+One such scenario visualizing simulated data. 
 
 ```{r}
 set.seed(10)
@@ -336,16 +391,19 @@ sim %>%
   geom_density() 
 ```
 
+We'll introduce a second scenario in the next section.
+
 ## Multiple distributions
 
 You'll often want to visualize more than one distribution. For example, we might want to compare the age distributions for the different political parties in `congress_2019`.
 
-A first pass at a plot might involve using a histogram with a color aesthetic to represent the different parties.
+A first pass at a plot might involve using a histogram with `fill` to represent the different parties.
 
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age, fill = party)) +
-  geom_histogram(binwidth = 3) 
+  geom_histogram(binwidth = 3) +
+  stamp()
 ```
 
 You already learned that stacked bar plots aren't a very good idea, and stacked histograms aren't either. Stacking makes it difficult to figure out how many Democrats are in each bin, and it's almost impossible to see the "Other" group.
@@ -356,29 +414,30 @@ One option is to facet.
 congress_2019 %>% 
   ggplot(aes(age)) +
   geom_histogram(binwidth = 3) +
-  facet_grid(rows = vars(party))
+  facet_grid(cols = vars(party)) +
+  stamp()
 ```
 
-Notice that stacking the facets vertically makes it easier to compare the distributions.
+The side-by-side histograms are difficult to compare. 
 
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
   geom_histogram(binwidth = 3) +
-  facet_grid(cols = vars(party)) 
+  facet_grid(rows = vars(party))
 ```
 
-Interestingly, there's a spike in numbers for both Democrats and Republicans in the early 40s. 
+Vertical facets are much better.
 
 Another option is overlaying frequency polygons. 
 
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age, color = party)) +
-  geom_freqpoly(binwidth = 4)
+  geom_freqpoly(binwidth = 5)
 ```
 
-The frequency polygons make it easier to see that the distributions of Democrats and Republicans are similar, but the Democrats appear a bit more spread out. You can also see that the early-40s spikes mentioned early are slightly offset, the age group with the most Congress members is older for Democrats than it is for Republicans, and the few members in the "Other" category are much older than the average Democrat or Republican. 
+The frequency polygons make it even easier to compare the three distributions. Democrats and Republicans are similar, but Democrats are more spread out, and are slightly older. The few members in the "Other" category are older than the average Democrat or Republican. 
 
 The same pattern works for visualizing the age distributions of the two chambers of Congress. 
 
@@ -398,19 +457,60 @@ congress_2019 %>%
   geom_freqpoly(binwidth = 5) 
 ``` 
 
-It's now clear that, although their shapes are similar, the House is a bit younger and more evenly distributed. In all the plots we've seen so far, there have been bumps around the mid-40s and then the late 50s-early 60s. This second bump begins around the age of the youngest baby boomers, which could help explain the pattern. 
+It's now clear that, although their shapes are similar, the House is a bit younger and more evenly distributed. 
 
-The variable `division` contains the US Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so if we try to use `geom_freqpoly()`, it is much harder to interpret.
+In the previous section, we mentioned another use case for `geom_density()`. One advantage of `geom_density()` is that you can fill in the curves, which makes them easier to see.
+
+```{r}
+congress_2019 %>% 
+  ggplot(aes(age, y = ..density.., color = chamber, fill = chamber )) +
+  geom_density(binwidth = 5) +
+  stamp()
+```
+
+However, in this case, the distributions overlap too much for this feature to be useful, even if we change the transparency with `alpha`.
+
+```{r}
+congress_2019 %>% 
+  ggplot(aes(age, y = ..density.., color = chamber, fill = chamber )) +
+  geom_density(binwidth = 5, alpha = 0.5) +
+  stamp()
+```
+
+However, this feature is useful if the distributions are relatively far apart from each other and you have sufficient data.
+
+```{r}
+set.seed(4)
+
+sim2 <-
+  sim %>% 
+  mutate(mean = "0") %>% 
+  bind_rows(
+    tibble(
+      x = rnorm(n = 1e4, mean = 4, sd = 1),
+      mean = "4"
+    )
+  )
+  
+sim2 %>% 
+  ggplot(aes(x, color = mean, fill = mean)) +
+  geom_density(alpha = 0.5) 
+```
+
+If we want to visualize more than 2 or 3 distributions at once, we'll need a new strategy. The variable `division` contains the US Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so if we try to use `geom_freqpoly()`, it is much harder to interpret.
 
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age, ..density.., color = division)) +
-  geom_freqpoly(binwidth = 5) 
+  geom_freqpoly(binwidth = 8) +
+  stamp()
 ```
 
 There are too many colors and the lines overlap too much for this visualization to be very useful.
 
 Instead of encoding `division` with color, we can encode with position along the x-axis by using boxplots. 
+
+Boxplots summarize data.
 
 ```{r, echo=FALSE}
 set.seed(200)
@@ -440,6 +540,22 @@ sim2 %>%
     hjust = 0
   ) +
   geom_text(
+    aes(y = quantile(x, .75) + IQR(x) * 1.5),
+    x = 1.05,
+    label = "Max value, excluding outliers",
+    hjust = 0,
+    vjust = 1.5,
+    color = "#B33A3A"
+  ) +
+  geom_text(
+    aes(y = min(x)),
+    x = 1.05,
+    label = "Min value, excluding outliers",
+    hjust = 0,
+    vjust = 0,
+    color = "#B33A3A"
+  ) +
+  geom_text(
     aes(y = median(x)), 
     x = 0.5, 
     label = "Median", 
@@ -455,15 +571,16 @@ sim2 %>%
   theme_void()
 ```
 
-Boxplots summarize data. Visual summaries are helpful because they can make visualizations easier to interpret. Like any summary, however, they don't provide the full picture of the data. Boxplots can't fully convey the shape of the distribution in the same way that a histogram or density plot does. Sometimes this trade-off will be worth it and sometimes it won't. 
+Visual summaries like boxplots are helpful because they highlight important features of the data. Like any summary, however, they don't provide a full picture of the data. Boxplots can't fully convey the shape of the distribution in the same way that a histogram or density plot does. Sometimes this trade-off will be worth it and sometimes it won't. 
 
-Because there are so many different divisions, boxplots are good strategy. Summarizing the data will allow us to see the differences between the divisions that were hidden in the `geom_freqpoly()` plot.
+Because there are so many different values in `division`, boxplots are a good strategy. Summarizing the data will allow us to see the differences between the divisions that were hidden in the `geom_freqpoly()` plot.
 
 ```{r}
 congress_2019 %>% 
   mutate(division = fct_reorder(division, age)) %>% 
   ggplot(aes(division, age)) +
-  geom_boxplot() 
+  geom_boxplot() +
+  stamp()
 ```  
 
 By now, you should be used to the overlapping labels problem. We could try using `coord_flip()`.
@@ -473,7 +590,8 @@ congress_2019 %>%
   mutate(division = fct_reorder(division, age)) %>% 
   ggplot(aes(division, age)) +
   geom_boxplot() +
-  coord_flip() 
+  coord_flip() +
+  stamp()
 ```
 
 However, flipping makes the median lines and box boundaries harder to compare, because it is more difficult to compare vertical line segments than horizontal ones.
@@ -499,7 +617,7 @@ congress_2019 %>%
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
 ```
 
-From this plot, you can see that the median ages don't vary much across division. The size of the boxes are also similar. If you look at where in each box the median lines fall, however, you'll notice that some are in the middle, some towards the top, and some towards the bottom. This suggests that the individual distribution are different shapes. 
+From this plot, you can see that the median ages don't vary much across division. The size of the boxes are also similar. If you look at where in each box the median lines fall, however, you'll notice that some are in the middle, some towards the top, and some towards the bottom. This suggests that the individual distributions are different shapes. 
 
 `geom_violin()` is a good alternative to `geom_boxplot()` if you care about distribution shape.
 
@@ -512,7 +630,7 @@ congress_2019 %>%
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
 ```
 
-Violin plots are mirrored and flipped density plots. The thickness of the "violin" indicates how many values are in that area. With the violin plots, you can now tell that the distribution of ages look slightly different for different divisions. 
+Violin plots are mirrored and flipped density plots. The thickness of the "violin" indicates how many values are in that area. With the violin plots, you can now tell that the distribution of ages look slightly different for different divisions. Note that, because violin plots are a form of density plot, they are also only a good idea if you have sufficient data. 
 
 By default, `geom_violin()` doesn't display the median of each group. You can add quantile lines using the `draw_quantiles` argument. To just draw median lines, set `draw_quantiles` to 0.5. 
 
@@ -527,8 +645,7 @@ congress_2019 %>%
 
 (`geom_violin()` calculates quantiles differently than `geom_boxplot()` or the `median()` and `quantile()` functions, which is why the 0.5 quantile lines aren't perfectly ordered.)
 
-Neither boxplots nor violin plots display the amount of data behind each plot. Neither the boxplots or violin plots show that New England has fewer representatives than the Pacific division. There are positives and negatives to every visualization decision you'll make, and so the best geom will depend on what you want your plot to show. 
-
+Neither boxplots nor violin plots display the amount of data behind each plot, and so you can't tell from the plots that New England has fewer representatives than the Pacific division. There are positives and negatives to every visualization decision you'll make, and so the best geom will depend on what you want your plot to show. 
 
 
 
