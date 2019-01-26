@@ -98,7 +98,7 @@ In this chapter, we'll use the `tidyverse` package and the following data.
 # Libraries
 library(tidyverse)
 
-# Age data for just 2019 Congress
+# Age data for 2019 Congress
 congress_2019 <- read_rds("data/congress/congress_2019.rds")
 ```
 
@@ -118,6 +118,7 @@ A common first step when carrying out exploratory data analysis is examining dis
 * There is no age bracket more populous than any another.
 * The average age is around 60. 
 * There are a lot of Congress members who are around 30, and a lot who around 70. 
+
 Before we dive into the Congress data, however, we'll introduce some mechanics. In the following sections, you'll learn about layering geoms and the basics of `theme()`.
 
 ## Mechanics
@@ -234,17 +235,19 @@ In this section, we'll use data on Congress members serving in 2019.
 head(congress_2019)
 ```
 
-One of our hypotheses from the introduction was that the average age Congress was around 60. "Average" is ambiguous, however. Do we mean the median or the mean?
+One of our hypotheses from the introduction was the average Congress members is around 60. "Average" is, however, ambiguous. Do we mean the median or the mean?
 
-For some data, the mean and median are close together, but they often won't be. Means are sensitive to outliers, while medians are more robust. As an example, here's a vector `x`. 
+For some data, the mean and median are close together, but that won't always be the case. Means are sensitive to outliers, while medians are more robust. As an example, here's a vector `x`. 
 
 ```{r}
 x <- c(1, 2, 10, 15)
-
-mean(x) 
 ```
 
 The mean is the result of summing the elements of `x` and dividing by the length of `x`.
+
+```{r}
+mean(x)
+```
 
 ```{r}
 median(x)
@@ -252,7 +255,7 @@ median(x)
 
 The median represents the midpoint of `x`. Half of the data is greater than 6, and half is less than 60. 
 
-Right now, the mean and median of `x` are close together. If we add in an outlier, though, the mean explodes, but the median only increases by a small amount.
+Right now, the mean and median of `x` are close together, but if we add an outlier the mean explodes, but the median only increases by a small amount.
 
 ```{r}
 x <- c(1, 2, 10, 15, 1e6)
@@ -374,9 +377,9 @@ congress_2019 %>%
   geom_density()
 ```
 
-Density plots lack the fine-grained detail of frequency polygons. Sometimes, you'll want to lose detail and focus on the overall trend, but, other times, density plots will hide important information. You should also avoid using density plots if you don't have very much data. We therefore recommend using density plots only in specific scenarios. 
+Density plots lack the fine-grained detail of frequency polygons. Sometimes, you'll want to lose detail and focus on the overall trend, but, in other situations, density plots will hide important information. You should also avoid using density plots if you don't have very much data. We therefore recommend using density plots only in specific scenarios. 
 
-One such scenario visualizing simulated data. 
+One such scenario is visualizing simulated data. 
 
 ```{r}
 set.seed(10)
@@ -406,7 +409,7 @@ congress_2019 %>%
   stamp()
 ```
 
-You already learned that stacked bar plots aren't a very good idea, and stacked histograms aren't either. Stacking makes it difficult to figure out how many Democrats are in each bin, and it's almost impossible to see the "Other" group.
+Like stacked bar plots, stacked histograms aren't a very good idea. Stacking makes it difficult to figure out how many Democrats are in each bin.
 
 One option is to facet.
 
@@ -437,7 +440,7 @@ congress_2019 %>%
   geom_freqpoly(binwidth = 5)
 ```
 
-The frequency polygons make it even easier to compare the three distributions. Democrats and Republicans are similar, but Democrats are more spread out, and are slightly older. The few members in the "Other" category are older than the average Democrat or Republican. 
+The frequency polygons make it even easier to compare the three distributions. Democrats and Republicans are similar, but Democrats are more spread out and are slightly older. The few members in the "Other" category are older than the average Democrat or Republican. 
 
 The same pattern works for visualizing the age distributions of the two chambers of Congress. 
 
@@ -477,7 +480,7 @@ congress_2019 %>%
   stamp()
 ```
 
-However, this feature is useful if the distributions are relatively far apart from each other and you have sufficient data.
+This feature is useful if the distributions are relatively far apart from each other and you have sufficient data.
 
 ```{r}
 set.seed(4)
@@ -497,7 +500,7 @@ sim2 %>%
   geom_density(alpha = 0.5) 
 ```
 
-If we want to visualize more than 2 or 3 distributions at once, we'll need a new strategy. The variable `division` contains the US Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so if we try to use `geom_freqpoly()`, it is much harder to interpret.
+If we want to visualize more than 2 or 3 distributions at once, we'll need a new strategy. The variable `division` contains the US Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so the `geom_freqpoly()` plus color combination doesn't work well.
 
 ```{r}
 congress_2019 %>% 
@@ -630,7 +633,7 @@ congress_2019 %>%
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
 ```
 
-Violin plots are mirrored and flipped density plots. The thickness of the "violin" indicates how many values are in that area. With the violin plots, you can now tell that the distribution of ages look slightly different for different divisions. Note that, because violin plots are a form of density plot, they are also only a good idea if you have sufficient data. 
+Violin plots are mirrored and flipped density plots. The thickness of the "violin" indicates how many values are in that area. With the violin plots, you can now tell that the distribution of ages look slightly different for different divisions. Note that, because violin plots are a form of density plot, they are only a good idea if you have sufficient data. 
 
 By default, `geom_violin()` doesn't display the median of each group. You can add quantile lines using the `draw_quantiles` argument. To just draw median lines, set `draw_quantiles` to 0.5. 
 
