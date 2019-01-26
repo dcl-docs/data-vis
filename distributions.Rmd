@@ -232,7 +232,7 @@ You'll learn about the other element functions, and other useful `theme()` chang
 In this section, we'll use data on Congress members serving in 2019. 
 
 ```{r}
-head(congress_2019)
+congress_2019
 ```
 
 One of our hypotheses from the introduction was the average Congress members is around 60. "Average" is, however, ambiguous. Do we mean the median or the mean?
