@@ -31,7 +31,7 @@ divisions <-
   ) %>% 
   enframe(name = "division", value = "state") %>% 
   unnest()
-  
+
 # Output file
 file_out <- "congress_2019.rds"
 #===============================================================================
@@ -77,16 +77,16 @@ v <-
         sen = "senate", 
         .default = NA_character_
       ),
-    party = fct_lump(party, n = 2)
+    party = fct_lump(party, n = 2) %>% as.character()
   ) %>% 
   left_join(divisions, by = "state") 
 
-# right now there are only 524 because there is one vacancy in North Carolina due to election fraud
+# right now there are only 534 because there is one vacancy in North Carolina due to election fraud
 v %>% 
   filter(
     year(end_date) > 2019, 
     !is.na(division) # exclude non-voting members from territories
   ) %>% 
-  select(name, age, chamber, state, division, party) %>% 
+  select(name, state, division, chamber, party, age, gender) %>% 
   arrange(state, division, chamber, party) %>% 
   write_rds(file_out)
