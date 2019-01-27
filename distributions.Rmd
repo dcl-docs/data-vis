@@ -1,93 +1,4 @@
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
 
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-# Stamps plots with a tag and line 
-# Idea from Claus Wilke's "Fundamentals of Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(tag = "bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1,
-                  line_color = "#B33A3A", line_size = 3)
-{
-  list(
-    # annotate(
-    #   geom = "segment",
-    #   x = Inf,
-    #   xend = Inf,
-    #   y = -Inf,
-    #   yend = Inf,
-    #   color = line_color,
-    #   size = line_size
-    # ),
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
-
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-# Stamps plots with a tag and line 
-# Idea from Claus Wilke's "Fundamentals of Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(tag = "bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1,
-                  line_color = "#B33A3A", line_size = 3)
-{
-  list(
-    # annotate(
-    #   geom = "segment",
-    #   x = Inf,
-    #   xend = Inf,
-    #   y = -Inf,
-    #   yend = Inf,
-    #   color = line_color,
-    #   size = line_size
-    # ),
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
 # Distributions
 
 ## Introduction
@@ -105,13 +16,13 @@ congress_2019 <- read_rds("data/congress/congress_2019.rds")
 Take a look at the following [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) sections before reading this chapter.
 
 * Geoms: 
-  * `geom_histogram()`
-  * `geom_freqpoly()`
-  * `geom_density()`
-  * `geom_boxplot()`
-  * `geom_violin()`
-  * `geom_vline()`
-  * `geom_hline()`
+    * `geom_histogram()`
+    * `geom_freqpoly()`
+    * `geom_density()`
+    * `geom_boxplot()`
+    * `geom_violin()`
+    * `geom_vline()`
+    * `geom_hline()`
   
 A common first step when carrying out exploratory data analysis is examining distributions of continuous variables. For example, in this chapter, we'll explore the ages of Congress members. To get a sense of what distributions can show, here are some possible hypotheses about the ages of Congress members (some more likely than others).
 
@@ -136,7 +47,7 @@ mpg %>%
 
 We'll explain the specifics of boxplots later on in this chapter. 
 
-The black line in the middle of each box represents the median value for that class. It would also be helpful to see the median `hwy` value across all car classes. To display this on our plot, we'll add a _reference line_ using `geom_hline()`. `geom_hline()` creates horizontal lines. `geom_vline()`, which creates vertical lines, and `geom_abline()`, which creates lines with a given slope and intercept, are also useful for creating reference lines.
+The black line in the middle of each box represents the median value for that class. It would also be helpful to see the median `hwy` value for all car classes. To display this on our plot, we'll add a _reference line_ using `geom_hline()`. `geom_hline()` creates horizontal lines. `geom_vline()`, which creates vertical lines, and `geom_abline()`, which creates lines with a given slope and intercept, are also useful for creating reference lines.
 
 In `geom_hline()`, the `yintercept` argument controls the position of the horizontal line. In this case, we want a horizontal line indicating the median `hwy` value, so we'll set `yintercept` equal to `median(hwy, na.rm = TRUE)`.
 
@@ -166,20 +77,20 @@ You can add as many layers to a gpplot2 plot as you'd like. The different layers
 # Source: https://en.wikipedia.org/wiki/Corporate_average_fuel_economy
 cafe_standards_2008 <-
   tribble(
-    ~ class,     ~ mpg,
-    "passenger", 27.5,
-    "truck",     22.4
+    ~class,      ~mpg,
+    "Passenger", 27.5,
+    "Truck",     22.4
   )
 
 mpg %>% 
   mutate(class = fct_reorder(class, hwy)) %>% 
   ggplot() +
   geom_hline(
-    data = cafe_standards_2008,
-    aes(yintercept = mpg, color = class)
+    aes(yintercept = mpg, color = class),
+    data = cafe_standards_2008
   ) +
   geom_boxplot(aes(class, hwy)) +
-  labs(color = "2008 CAFE\nstandard class")
+  labs(color = "2008 CAFE\nstandard")
 ```
 
 ### `theme()`
@@ -211,7 +122,7 @@ mpg %>%
   theme(axis.text.x = element_text(angle = -45))
 ```
 
-Take a look at the code. Notice that we had to use the function `element_text()`. `element_text()` is an _element function_. You'll need element functions to change most of `theme()`'s arguments. If you look at [`themes()`'s documentation](https://ggplot2.tidyverse.org/reference/theme.html), you'll see that the arguments are arranged into groups. At the beginning of each chunk, there's a reference to the appropriate element function. `axis.text.x` controls text, and uses `element_text()`, but `axis.line` controls the appearance of a line, and so uses `element_line()`. Like `theme()`, `element_text()` has many arguments. To change the angle of the text, we only needed one: `angle`.
+Take a look at the code. Notice that we had to use the function `element_text()`. `element_text()` is an _element function_. You'll need element functions to change most of `theme()`'s arguments. If you look at [`themes()`'s documentation](https://ggplot2.tidyverse.org/reference/theme.html), you'll see that the arguments are arranged into groups. At the beginning of each group, there's a reference to the appropriate element function. `axis.text.x` controls text, and uses `element_text()`, but `axis.line` controls the appearance of a line, and so uses `element_line()`. Like `theme()`, `element_text()` has many arguments. To change the angle of the text, we only needed one: `angle`.
 
 Angling makes the axis text easier to read, but the text is now far away from the x-axis. The plot would be better if the labels were closer to the boxplots they represent. We can adjust the text justification with `element_text()`'s `hjust` argument. 
 
@@ -253,7 +164,7 @@ mean(x)
 median(x)
 ```
 
-The median represents the midpoint of `x`. Half of the data is greater than 6, and half is less than 60. 
+The median represents the midpoint of `x`. Half of the data is greater than 6, and half is less than 6. 
 
 Right now, the mean and median of `x` are close together, but if we add an outlier the mean explodes, but the median only increases by a small amount.
 
@@ -269,14 +180,13 @@ median(x)
 
 We'll typically use medians instead of means for averages and references lines because of this behavior.
 
-`summary()` will tell us the mean and median age in Congress, as well as a summary of other variables. 
+`summary()` will tell us the mean and median age in Congress. 
 
 ```{r}
-congress_2019 %>% 
-  summary()
+summary(congress_2019$age)
 ```
 
-The mean and median are close together, and are both around 58. Our hypothesis that the average age is 60 was pretty close.
+The mean and median are close together, both between 58 and 59. Our hypothesis that the average age is 60 was pretty close.
 
 Another interesting finding is that the House is marginally younger than the Senate.
 
@@ -321,7 +231,7 @@ Let's try some different binwidths.
 congress_2019 %>% 
   ggplot(aes(age)) +
   geom_histogram(binwidth = .1) +
-  stamp()
+  stamp("Bad")
 ```
 
 A binwidth of 0.1 years is too small. Notice how it's difficult to see the overall shape of the distribution and the plot appears very "peaky." Also, many of the bars only represent a single person.
@@ -332,7 +242,7 @@ If we swing too far in the opposite direction, however, we'll lose information.
 congress_2019 %>% 
   ggplot(aes(x = age)) +
   geom_histogram(binwidth = 20) +
-  stamp()
+  stamp("Bad")
 ```
 
 20 years is too large of a chunk to be meaningful in this context. 
@@ -382,14 +292,11 @@ Density plots lack the fine-grained detail of frequency polygons. Sometimes, you
 One such scenario is visualizing simulated data. 
 
 ```{r}
-set.seed(10)
+set.seed(916)
 
-sim <-
-  tibble(
-    x = rnorm(n = 1e4)
-  )
+sim_1 <- tibble(x = rnorm(n = 1e4))
   
-sim %>% 
+sim_1 %>% 
   ggplot(aes(x)) +
   geom_density() 
 ```
@@ -405,8 +312,8 @@ A first pass at a plot might involve using a histogram with `fill` to represent 
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age, fill = party)) +
-  geom_histogram(binwidth = 3) +
-  stamp()
+  geom_histogram(binwidth = 5) +
+  stamp("Bad")
 ```
 
 Like stacked bar plots, stacked histograms aren't a very good idea. Stacking makes it difficult to figure out how many Democrats are in each bin.
@@ -416,9 +323,9 @@ One option is to facet.
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
-  geom_histogram(binwidth = 3) +
+  geom_histogram(binwidth = 5) +
   facet_grid(cols = vars(party)) +
-  stamp()
+  stamp("Bad")
 ```
 
 The side-by-side histograms are difficult to compare. 
@@ -426,7 +333,7 @@ The side-by-side histograms are difficult to compare.
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age)) +
-  geom_histogram(binwidth = 3) +
+  geom_histogram(binwidth = 5) +
   facet_grid(rows = vars(party))
 ```
 
@@ -467,35 +374,32 @@ In the previous section, we mentioned another use case for `geom_density()`. One
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age, y = ..density.., color = chamber, fill = chamber )) +
-  geom_density(binwidth = 5) +
-  stamp()
+  geom_density() +
+  stamp("Bad")
 ```
 
-However, in this case, the distributions overlap too much for this feature to be useful, even if we change the transparency with `alpha`.
+By default, the fill regions are opaque, so to be useful we need to change the transparency with `alpha`.
 
 ```{r}
 congress_2019 %>% 
   ggplot(aes(age, y = ..density.., color = chamber, fill = chamber )) +
-  geom_density(binwidth = 5, alpha = 0.5) +
-  stamp()
+  geom_density(alpha = 0.5)
 ```
 
-This feature is useful if the distributions are relatively far apart from each other and you have sufficient data.
+This approach may be appropriate if you have sufficient data and the distributions can be distinguished.
 
 ```{r}
-set.seed(4)
+set.seed(138)
 
-sim2 <-
-  sim %>% 
-  mutate(mean = "0") %>% 
-  bind_rows(
-    tibble(
-      x = rnorm(n = 1e4, mean = 4, sd = 1),
-      mean = "4"
-    )
-  )
+sim_2 <- 
+  tribble(
+    ~mean, ~x,
+    "0", rnorm(n = 1e4),
+    "5", rnorm(n = 1e4, mean = 5, sd = 2)
+  ) %>% 
+  unnest()
   
-sim2 %>% 
+sim_2 %>% 
   ggplot(aes(x, color = mean, fill = mean)) +
   geom_density(alpha = 0.5) 
 ```
@@ -506,7 +410,7 @@ If we want to visualize more than 2 or 3 distributions at once, we'll need a new
 congress_2019 %>% 
   ggplot(aes(age, ..density.., color = division)) +
   geom_freqpoly(binwidth = 8) +
-  stamp()
+  stamp("Bad")
 ```
 
 There are too many colors and the lines overlap too much for this visualization to be very useful.
@@ -518,12 +422,9 @@ Boxplots summarize data.
 ```{r, echo=FALSE}
 set.seed(200)
 
-sim2 <- 
-  tibble(
-    x = rnorm(100, 0, 10)
-  )
+sim_3 <- tibble(x = rnorm(100, 0, 10))
 
-sim2 %>%
+sim_3 %>%
   ggplot(aes(x = 1, x)) + 
   geom_boxplot() +
   geom_segment(
@@ -574,7 +475,7 @@ sim2 %>%
   theme_void()
 ```
 
-Visual summaries like boxplots are helpful because they highlight important features of the data. Like any summary, however, they don't provide a full picture of the data. Boxplots can't fully convey the shape of the distribution in the same way that a histogram or density plot does. Sometimes this trade-off will be worth it and sometimes it won't. 
+Visual summaries like boxplots are helpful because they highlight important features of the data. Like any summary, however, they don't provide a full picture of the data. Boxplots can't fully convey the shape of the distribution in the same way that a histogram or density plot does. Sometimes this trade-off will be worth it, and sometimes it won't. 
 
 Because there are so many different values in `division`, boxplots are a good strategy. Summarizing the data will allow us to see the differences between the divisions that were hidden in the `geom_freqpoly()` plot.
 
@@ -583,7 +484,7 @@ congress_2019 %>%
   mutate(division = fct_reorder(division, age)) %>% 
   ggplot(aes(division, age)) +
   geom_boxplot() +
-  stamp()
+  stamp("Bad")
 ```  
 
 By now, you should be used to the overlapping labels problem. We could try using `coord_flip()`.
@@ -594,7 +495,7 @@ congress_2019 %>%
   ggplot(aes(division, age)) +
   geom_boxplot() +
   coord_flip() +
-  stamp()
+  stamp("Bad")
 ```
 
 However, flipping makes the median lines and box boundaries harder to compare, because it is more difficult to compare vertical line segments than horizontal ones.

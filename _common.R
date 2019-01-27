@@ -15,21 +15,13 @@ knitr::opts_chunk$set(
   fig.show = "hold"
 )
 
-# Stamps plots with a tag and line 
+# Stamps plots with a tag 
 # Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(tag = "bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1,
-                  line_color = "#B33A3A", line_size = 3)
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
 {
   list(
-    annotate(
-      geom = "segment",
-      x = Inf,
-      xend = Inf,
-      y = -Inf,
-      yend = Inf,
-      color = line_color,
-      size = line_size
-    ),
     theme(
       plot.tag = element_text(color = tag_color, size = tag_size),
       plot.tag.position = "topright"

@@ -1,7 +1,7 @@
 # Reads in data on Congress members' ages
 
 # Authors: Sara Altman, Bill Behrman
-# Version: 2018-01-10
+# Version: 2018-01-26
 
 # Libraries
 library(jsonlite)
@@ -34,6 +34,7 @@ divisions <-
 
 # Output file
 file_out <- "congress_2019.rds"
+
 #===============================================================================
 
 congress_pull <- function(category, var, default = NA) {
@@ -73,8 +74,8 @@ v <-
     chamber = 
       recode(
         chamber, 
-        rep = "house", 
-        sen = "senate", 
+        rep = "House", 
+        sen = "Senate", 
         .default = NA_character_
       ),
     party = fct_lump(party, n = 2) %>% as.character()
