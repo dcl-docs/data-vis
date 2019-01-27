@@ -75,7 +75,7 @@ You can add as many layers to a gpplot2 plot as you'd like. The different layers
 
 ```{r}
 # Source: https://en.wikipedia.org/wiki/Corporate_average_fuel_economy
-cafe_standards_2008 <-
+cafe_2008 <-
   tribble(
     ~class,      ~mpg,
     "Passenger", 27.5,
@@ -85,10 +85,7 @@ cafe_standards_2008 <-
 mpg %>% 
   mutate(class = fct_reorder(class, hwy)) %>% 
   ggplot() +
-  geom_hline(
-    aes(yintercept = mpg, color = class),
-    data = cafe_standards_2008
-  ) +
+  geom_hline(aes(yintercept = mpg, color = class), data = cafe_2008) +
   geom_boxplot(aes(class, hwy)) +
   labs(color = "2008 CAFE\nstandard")
 ```
@@ -160,11 +157,11 @@ The mean is the result of summing the elements of `x` and dividing by the length
 mean(x)
 ```
 
+The median represents the midpoint of `x`. Half of the data is greater than 6, and half is less than 6.
+
 ```{r}
 median(x)
 ```
-
-The median represents the midpoint of `x`. Half of the data is greater than 6, and half is less than 6. 
 
 Right now, the mean and median of `x` are close together, but if we add an outlier the mean explodes, but the median only increases by a small amount.
 
@@ -172,9 +169,7 @@ Right now, the mean and median of `x` are close together, but if we add an outli
 x <- c(1, 2, 10, 15, 1e6)
 
 mean(x)
-```
 
-```{r}
 median(x)
 ```
 
@@ -328,7 +323,7 @@ congress_2019 %>%
   stamp("Bad")
 ```
 
-The side-by-side histograms are difficult to compare. 
+The side-by-side histograms are difficult to compare. Vertical facets are much better.
 
 ```{r}
 congress_2019 %>% 
@@ -336,8 +331,6 @@ congress_2019 %>%
   geom_histogram(binwidth = 5) +
   facet_grid(rows = vars(party))
 ```
-
-Vertical facets are much better.
 
 Another option is overlaying frequency polygons. 
 
@@ -369,7 +362,7 @@ congress_2019 %>%
 
 It's now clear that, although their shapes are similar, the House is a bit younger and more evenly distributed. 
 
-In the previous section, we mentioned another use case for `geom_density()`. One advantage of `geom_density()` is that you can fill in the curves, which makes them easier to see.
+In the previous section, we mentioned a use case for `geom_density()`. One advantage of `geom_density()` is that you can fill in the curves, which makes them easier to see.
 
 ```{r}
 congress_2019 %>% 
@@ -389,7 +382,7 @@ congress_2019 %>%
 This approach may be appropriate if you have sufficient data and the distributions can be distinguished.
 
 ```{r}
-set.seed(138)
+set.seed(916)
 
 sim_2 <- 
   tribble(
@@ -523,7 +516,7 @@ congress_2019 %>%
 
 From this plot, you can see that the median ages don't vary much across division. The size of the boxes are also similar. If you look at where in each box the median lines fall, however, you'll notice that some are in the middle, some towards the top, and some towards the bottom. This suggests that the individual distributions are different shapes. 
 
-`geom_violin()` is a good alternative to `geom_boxplot()` if you care about distribution shape.
+If you care about distribution shape, `geom_violin()` is an alternative to `geom_boxplot()`.
 
 ```{r}
 congress_2019 %>% 
