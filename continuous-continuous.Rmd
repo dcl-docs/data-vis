@@ -1,3 +1,40 @@
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
 # Continuous-continuous relationships
 
 This chapter uses the following data sets.
@@ -784,9 +821,7 @@ gapminder_2015 %>%
   scale_x_log10() 
 ```
 
-As we pointed out in the _General Strategy_ chapter, the human ability to estimate differences in area is not very accurate. It is difficult to tell the difference between the many smaller dots, or between the couple of larger dots.
-
-We can make this task a bit easier by increasing the range of possible areas with `scale_size`'s `range` argument.
+As we pointed out in the _General Strategy_ chapter, the human ability to estimate differences in area is not very accurate. It is difficult to tell the difference similarly sized points. We can make this task a bit easier by increasing the range of possible areas. We'll do this by adjusting `scale_size()`'s `range` argument.
 
 ```{r}
 gapminder_2015 %>% 
@@ -796,7 +831,7 @@ gapminder_2015 %>%
   scale_x_log10() 
 ```
 
-However, now we can't tell if the large circles cover up smaller ones. We could adjust `alpha` to address the overlap.
+However, now we can't tell if the larger circles cover up smaller ones. We could adjust `alpha` to address this overlap.
 
 ```{r}
 gapminder_2015 %>% 
@@ -816,9 +851,9 @@ gapminder_2015 %>%
   scale_x_log10() 
 ```
 
-This is a little better. However, there's still the possibility that the large dots cover up smaller ones. One useful thing to know about `geom_point()` is that it plots points in order of appearance in the data. If you want to change the order in which the points are plotted, you can change the order of the rows in your data.
+This is better. However, there's still the possibility that the large dots cover up smaller ones. One useful thing to know about `geom_point()` is that it plots points in order of their appearance in the data. If you want to change the order in which the points are plotted, you can change the order of the rows in your data.
 
-We can use `arrange()` to ensure that the smallest countries are plotted on top of the larger ones.
+We'll use `arrange()` to reorder our data so that the smallest countries are plotted on top of the larger ones.
 
 ```{r}
 gapminder_2015 %>% 
@@ -829,7 +864,7 @@ gapminder_2015 %>%
   scale_x_log10() 
 ```
 
-Each dot is now easily distinguishable. Now, we can try adding `fill` to encode `region` (recall that, unlike the default point shapes, `shape = 21` uses `fill` to control the interior of the points).
+Each dot is now more distinguishable. We can also try adding `fill` to encode `region` (recall that, unlike the default point shapes, `shape = 21` uses `fill` to control the interior of the points).
 
 ```{r}
 gapminder_2015 %>% 
@@ -837,8 +872,21 @@ gapminder_2015 %>%
   ggplot(
     aes(gdp_per_capita, life_expectancy, size = population, fill = region)
   ) +
-  geom_point(shape = 21, color = "white") +
+  geom_point(shape = 21, color = "black") +
   scale_size(range = c(1, 20)) +
+  scale_x_log10() 
+```
+
+The `population` legend isn't very informative. We can make it better by including more possible circle areas. 
+
+```{r}
+gapminder_2015 %>% 
+  arrange(desc(population)) %>% 
+  ggplot(
+    aes(gdp_per_capita, life_expectancy, size = population, fill = region)
+  ) +
+  geom_point(shape = 21, color = "black") +
+  scale_size(range = c(1, 20), breaks = c(1e6, 5e8, 1e9)) +
   scale_x_log10() 
 ```
 
