@@ -7,6 +7,7 @@ rmd_files: [
   "discrete-continuous.Rmd",
   "general-strategy.Rmd",
   "distributions.Rmd",
+  "continuous-continuous.Rmd",
   "references.Rmd"
 ]
 
