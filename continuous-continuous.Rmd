@@ -382,7 +382,7 @@ gapminder %>%
   scale_x_log10()
 ```
 
-Second, there is a lot of _overplotting_. Many of the points are plotted on top of each other, making it difficult to determine how many points there are in a given area. In the next section, we'll talk about strategies for dealing with overplotting.
+Second, there is a lot data, and many of the points overlap. This makes it difficult to determine how many points there are in a given area. In the next section, we'll talk about strategies for dealing with overplotting.
 
 ### Overplotting 
 
@@ -449,7 +449,7 @@ Making the points more transparent is one solution to minor overplotting. In `ge
 gapminder %>% 
   filter(year >= 2010) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
-  geom_point(alpha = 0.3) +
+  geom_point(alpha = 0.5) +
   scale_x_log10()
 ```
 
@@ -481,6 +481,29 @@ gapminder %>%
 ```
 
 In this situation, the `alpha` solution is probably better. However, in situations in which you want to be able to distinguish each point, `shape = 21` can be helpful. You'll see an example of a such a situation later on in the chapter.
+
+Another solution to overplotting is to _jitter_ the points using `geom_jitter()`. `geom_jitter()` adds some random variation to the position of each point so that they no longer overlap. `geom_jitter()` is generally only a good solution if your points lie directly on top of each other.
+
+```{r}
+v <-
+  tibble(
+    x = c(rep(1, 5), rep(2, 4), rep(1, 2), rep(3, 10)),
+    y = c(rep(2, 5), rep(4, 4), rep(5, 2), rep(3, 10))
+  )
+
+v %>% 
+  ggplot(aes(x, y)) +
+  geom_point() +
+  stamp()
+```
+
+```{r}
+v %>% 
+  ggplot(aes(x, y)) +
+  geom_jitter()
+```
+
+Even in these cases, you should be cautious  about using `geom_jitter()`, since, by design, the position of the points no longer directly reflect the underlying data.
 
 ### Smoothing
 
