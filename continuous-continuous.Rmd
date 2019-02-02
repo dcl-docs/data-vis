@@ -42,15 +42,11 @@ This chapter uses the following data sets.
 ```{r, message = FALSE, warning = FALSE}
 # Libraries
 library(tidyverse)
+library(ggrepel)
 
 # Data
  # Gapminder data on life expectancy, GDP, and population
 gapminder <- read_rds("data/gapminder/data/combined_1950-2015_5yr.rds")
-
-  # Subset of data containing just data on Asia in 2015
-asia_2015 <-
-  gapminder %>% 
-  filter(region == "Asia", year == 2015)
 ```
 
 ## Introduction
@@ -77,254 +73,155 @@ We'll examine these questions, and others, in the course of this chapter. First,
 
 ## Mechanics
 
-You've already learned the basics of scales. In this chapter, you'll learn more about continuous position, color, and size scales.
+In this mechanics section, you'll learn about adding annotations to your plots and some more details about continuous scales.
+
+### Annotations
+
+Adding text to your visualizations can make them more informative. The following chapter from _R4DS_ will introduce you to strategies for effective annotations.
+
+* [Annotations](https://r4ds.had.co.nz/graphics-for-communication.html#annotations)
+
+### Log scales
 
 There are many different scale functions, and they don't all follow the same format. The following table summarizes the common scale functions.
 
-```{r, message=FALSE, results='asis'}
-# need to figure out why this isn't showing up
+```{r, echo=FALSE, message=FALSE, results='asis'}
 read_csv("scale_table.csv") %>% 
-  mutate_all(kableExtra::linebreak) %>% 
-  knitr::kable(format = "latex", escape = F)
+  knitr::kable()
 ```
-
-### Log scales
 
 One of the most common scale adjustments you'll make involves transforming linear scales into log scales.
 
 Log scales are useful in several different scenarios. First, if variable spans multiple orders of magnitude, it is generally a good idea to use a log scale for that variable. The following plot is the result of using a _linear_ scale with a variable that spans several orders of magnitude.
 
-```{r}
+```{r, fig.height=3}
+asia_2015 <-
+  gapminder %>% 
+  filter(region == "Asia", year == 2015)
+
 asia_2015 %>% 
   mutate(name = fct_reorder(name, population)) %>% 
-  ggplot(aes(name, population)) +
+  ggplot(aes(population, name)) +
   geom_point() +
-  coord_flip() +
-  theme(axis.text.y = element_text(size = 6.5)) +
-  stamp()
+  stamp("Bad")
 ```
 
-Notice how countries from Jordan to Micronesia appear to have the same population. We can use `scale_y_log10()` to specify a log scale. The differences between the smaller countries now become obvious.
+Notice how countries from Jordan to Micronesia appear to have almost the same population. Many of the countries also appear to have a population of 0. 
 
-```{r}
+Using a log scale for `population` spreads out the smaller countries, making their differences more obvious.
+
+```{r, fig.height=3}
 asia_2015 %>% 
   mutate(name = fct_reorder(name, population)) %>% 
-  ggplot(aes(name, population)) +
+  ggplot(aes(population, name)) +
   geom_point() +
-  coord_flip() +
-  scale_y_log10() +
-  theme(axis.text.y = element_text(size = 6.5))
+  scale_x_log10() 
 ```
 
-Use `scale_x_log10()` if you want to use a log scale for the x-axis.
+Use `scale_y_log10()` if you want to use a log scale for the y-axis.
 
-Log scales are also useful if you suspect that your data follows an exponential, power law, or logarithmic relationship.
+Log scales are also useful for data that follow a power law. Power law relationships are fairly common. One example is word frequencies. Say you count the number of times each word appears in some text, then rank each word according to this frequency. For many collections of text, the frequency of each word is inversely proportional to its rank, and this relationship follows a power law.
 
-Exponential relationships look like this in linear space:
+For example, `war_and_peace` contains frequencies and ranks for every word used in Leo Tolstoy's _War and Peace_.
 
 ```{r}
-set.seed(2)
-
-sim_exponential <-
-  tibble(
-    x = seq(1, 100, 1),
-    y = exp(x)
-  ) 
-
-sim_exponential %>% 
-  ggplot(aes(x, y)) +
-  geom_line()
+war_and_peace
 ```
 
-If you log-transform `y`, however, the relationship becomes linear. You can visualize this by using a log scale for the `y` axis.
+```{r}
+war_and_peace %>% 
+  ggplot(aes(rank, freq)) + 
+  geom_point()
+```
 
 ```{r}
-tibble(
-  x = seq(1, 200, 1),
-  y = exp(x)
-) %>% 
-  ggplot(aes(x, y)) +
-  geom_line() +
+war_and_peace %>% 
+  ggplot(aes(rank, freq)) + 
+  geom_point() +
+  scale_x_log10() + 
   scale_y_log10()
 ```
 
-A similar thing happens with logarithmic data. In linear space, a logarithmic relationship looks like this:
-
-```{r}
-sim_log <-
-  tibble(
-    x = seq(1, 100, 1),
-    y = log(x)
-  ) 
-
-sim_log %>% 
-  ggplot(aes(x, y)) +
-  geom_line()
-```
-
-But with a logarithmic `x` scale, the plot becomes linear.
-
-```{r}
-sim_log %>% 
-  ggplot(aes(x, y)) +
-  geom_line() +
-  scale_x_log10()
-```
-
-Finally, in linear space, a power law distribution looks like this:
-
-```{r}
-sim_power <-
-  tibble(
-    x = seq(1, 100, 1),
-    y = x ^ 5
-  ) 
-
-sim_power %>% 
-  ggplot(aes(x, y)) +
-  geom_line() 
-```
-
-To get the data to appear linear, you have to use log scales for both the x- and y-axes.
-
-```{r}
-sim_power %>% 
-  ggplot(aes(x, y)) +
-  geom_line() +
-  scale_x_log10() +
-  scale_y_log10()
-```
-
-Transforming scales so that the data looks linear is useful for several reasons. First, if your data follows an exponential or power law relationship, it will often cover several orders of magnitude, and so very small or very large values will be difficult to distinguish. Using a log scale will spread out these values. Second, checking if a relationship is linear is visually easier than checking if it is exponential, logarithmic, etc. Using log scales can therefore be a visual check on your hypothesis about the relationship between two continuous variables.
+Transforming scales so that the data looks linear is useful for several reasons. First, if your data follows a  power law relationship, it will often cover several orders of magnitude, and so very small or very large values will be difficult to distinguish. Using a log scale will spread out these values. Second, checking if a relationship is linear is visually easier than checking if it follows a power law. Using log scales can therefore be a visual check on your hypothesis about the relationship between two continuous variables.
 
 ### Continuous color scales
 
-Continuous color scales work slightly differently than discrete colors scales. There are multiple ways to map a continuous variable to a color scale. The three basic scales are:
+### Sequential scales
 
-* `scale_color_gradient()` (the default)
-* `scale_color_gradient2()`
-* `scale_color_gradientn()`
+Continuous color scales work slightly differently than discrete colors scales because there are multiple ways to map a continuous variable to a color scale. 
 
-These three scales also apply to the `fill` aesthetic. Just replace `color` with `fill` in the functions to use them with `fill`.
+The default continuous color functions are `scale_color_gradient()` and `scale_fill_gradient()`, which create _sequential_ color scales. 
 
-`scale_color_gradient()`, the default continuous color scale, maps values to a two-color gradient. By default, this gradient goes from a dark blue to a light, bright blue.
-
-```{r, echo=FALSE}
-# tibble(
-#   x = seq(1, 100, .5),
-#   y = 1
-# ) %>% 
-#   ggplot(aes(x, 1, fill = x)) +
-#   geom_col(width = .5) +
-#   annotate("text", x = 1, y = -.05, label = "low") +
-#   annotate("text", x = 100, y = -.05, label = "high") +
-#   scale_fill_gradient(guide = FALSE) +
-#   theme_void() 
-
-tibble(
-  x = seq(1, 10, 1),
-  y = 1
-) %>% 
-  ggplot(aes(x, 1, color = x)) +
-  geom_point(size = 10) 
-```
-
-`scale_color_gradient()` is useful if you want to use color to encode the _magnitude_ of your data. You can change the low and high points of the color scale by setting `scale_color_gradient()`'s `low` and `high` arguments.
+By default, `scale_*_gradient()` maps low values in the data to a dark blue and high values to a light blue.
 
 ```{r}
-tibble(
-  x = seq(1, 10, 1),
-  y = 1
-) %>% 
-  ggplot(aes(x, 1, color = x)) +
-  geom_point(size = 15) +
-  scale_color_gradient(low = "#efedf5", high = "#756bb1")
+points <-
+  tibble(
+    x = seq(-5, 5, 1)
+  )
+
+points %>% 
+  ggplot(aes(x, 1, fill = x)) +
+  geom_tile(height = .1) +
+  theme_void()
 ```
 
-Sometimes a diverging color gradient will be more appropriate. `scale_color_gradient2()` creates a diverging color scale.
-
-```{r, echo=FALSE}
-# tibble(
-#   x = seq(-100, 100, .5),
-#   y = 1
-# ) %>% 
-#   ggplot(aes(x, 1, fill = x)) +
-#   geom_col(width = .5) +
-#   scale_fill_gradient2(guide = FALSE) +
-#   annotate("text", x = -100, y = -.05, label = "low") +
-#   annotate("text", x = 0, y = -.05, label = "middle") +
-#   annotate("text", x = 100, y = -.05, label = "high") +
-#   theme_void() 
-
-tibble(
-  x = seq(-5, 5, 1),
-  y = 1
-) %>% 
-  ggplot(aes(x, 1, color = x)) +
-  geom_point(size = 15) +
-  scale_color_gradient2() 
-```
-
-Use a diverging color scale if you care about both the _sign_ of your data and the _magnitude_. For example, if you have temperature data, you might want to encode if a temperature is above or below freezing, as well as how far below or above freezing. The midpoint does not have to be 0. You can adjust the midpoint so that it is meaningful for your data by setting `scale_color_gradient2()`'s `midpoint` argument.
-
-`scale_color_gradient2()` has three color set points that you can adjust: `low`, `mid`, and `high`.
-
-You may wish to set your own gradients if you can create a more meaningful mapping than the defaults. For example, if your low values signify "none", you might want to map them to a very light color. However, you should be careful about manually adjusting color gradients. Some colors work better than others, and the ggplot2 scales functions have good defaults that were chosen carefully.
-
-`scale_color_gradientn()` creates an _n_-color gradient. You can create a 3-color gradient, 4 color gradient, etc. _n_-color gradients can be helpful when creating maps.
-
-Here's an example of a custom 5-color gradient from [ColorBrewer](http://colorbrewer2.org/#type=sequential&scheme=PuBuGn&n=5).
+You can change this sequential color scale by adjusting `scale_*_gradient()`'s `low` and `high` arguments. `scale_*_gradient()` maps the minimum value in your data to the `low` color, and the maximum value in your data to the `high` color.
 
 ```{r}
-five_colors <- c("#7b3294", "#c2a5cf", "#f7f7f7", "#a6dba0", "#008837")
-
-tibble(
-  x = seq(0, 10, 1),
-  y = 1
-) %>% 
-  ggplot(aes(x, 1, color = x)) +
-  geom_point(size = 15) +
-  scale_color_gradientn(colors = five_colors)
+points %>% 
+  ggplot(aes(x, 1, fill = x)) +
+  geom_tile() +
+  scale_fill_gradient(low = "#efedf5", high = "#756bb1") +
+  theme_void()
 ```
 
-Gradients created with `scale_color_gradientn()` can be sequential (like the default blue scale) or diverging.
-
-There are also scale functions with pre-made color palettes. The most useful is `scale_fill_viridis_c()`, which creates a colorblind-friendly two-color gradient. 
+The viridis color scale was designed to be colorblind-friendly. `scale_color_viridis_c()` and `scale_fill_viridis_c()` create sequential scales using the viridis colors.
 
 (The `_c` stands for continuous. There is also a `scale_fill_viridis_d()` for discrete scales.)
 
 ```{r}
-# tibble(
-#   x = seq(1, 100, .5),
-#   y = 1
-# ) %>% 
-#   ggplot(aes(x, 1, fill = x)) +
-#   geom_col(width = .5) +
-#   annotate("text", x = 1, y = -.05, label = "low") +
-#   annotate("text", x = 100, y = -.05, label = "high") +
-#   scale_fill_viridis_c(guide = FALSE) +
-#   theme_void() 
-
-
-tibble(
-  x = seq(1, 10, 1),
-  y = 1
-) %>% 
-  ggplot(aes(x, 1, color = x)) +
-  geom_point(size = 10) +
-  scale_color_viridis_c()
+points %>% 
+  ggplot(aes(x, 1, fill = x)) +
+  geom_tile() +
+  scale_fill_viridis_c() +
+  theme_void()
 ```
 
-The viridis color scale is generally better option than the default blue scale for continuous values. A common use case for the viridis scale is replacing the default blue scale with `geom_hex()`.
+The viridis scales are generally better than the default blue scale. A common use case for the viridis scale is with `geom_hex()`.
 
 ```{r}
 diamonds %>% 
   ggplot(aes(carat, price)) +
   geom_hex() +
-  scale_fill_viridis_c()
+  scale_x_log10() +
+  scale_y_log10() +
+  scale_fill_viridis_c() 
 ```
 
-You can also change the colors for any of the gradients. `scale_color_gradient()` and `scale_fill_gradient()` both take a `high` and a `low` argument, which set the high and low colors, respectively. The `scale_*_gradient2()` functions take `high`, `mid`, and `low` arguments. 
+#### Diverging scales
+
+`scale_color_gradient2()` and `scale_fill_gradient2()` create _diverging_ color scales. 
+
+```{r}
+points %>% 
+  ggplot(aes(x, 1, fill = x)) +
+  geom_tile() +
+  scale_fill_gradient2() +
+  theme_void()
+```
+
+Diverging color scales are useful if you want to encode both the sign and magnitude of each value. For example, if you have temperature data, you might want to encode if a temperature is above or below freezing, as well as how far below or above freezing. 
+
+`scale_*_gradient2()` has three color set points that you can adjust: `low`, `mid`, and `high`. Like `scale_*_gradient()`, `scale_*_gradient2()` maps the lowest value in your data to `low` and the highest to `high`. By default, `scale_*_gradient2()` maps 0 to `mid`. If you want to adjust which value is mapped to `mid`, you can adjust the `midpoint` argument. 
+
+```{r}
+points %>% 
+  ggplot(aes(x, 1, fill = x)) +
+  geom_tile() +
+  scale_fill_gradient2(midpoint = 2) +
+  theme_void()
+```
 
 ### Size scales
 
@@ -337,7 +234,7 @@ mpg %>%
   scale_size()
 ```
 
-When you map a continuous variable to the `size` aesthetic, the default scale function is `scale_size().` `scale_size()` scales the circle area. There is another size scale function, `scale_size_radius()`, which scales the radii of the circles. Humans judge the size of circles based on area, not radius, so it's typically a good idea to scale the areas instead of the radii.
+The default size scale function is `scale_size().` `scale_size()` scales circle areas, not radii because humans judge the size of circles based on area.
 
 You can change the number of circles that appear in the legend by adjusting the breaks.
 
@@ -354,7 +251,7 @@ You can also adjust the range of possible circle areas with the `range` argument
 mpg %>% 
   ggplot(aes(hwy, cty, size = displ)) +
   geom_point() +
-  scale_size(breaks = c(2, 4, 7), range = c(.5, 4))
+  scale_size(breaks = c(2, 4, 6), range = c(.5, 4))
 ```
 
 ## Two continuous variables
@@ -362,7 +259,7 @@ mpg %>%
 `gapminder` is a subset of the [Gapminder data](https://www.gapminder.org/data/). It includes data on population, per capita GDP, and life expectancy for 183 countries from every five years, starting in 1950 and ending in 2015. 
 
 ```{r}
-gapminder %>% head()
+gapminder 
 ```
 
 Earlier, we said we were interested in the relationship between `life_expectancy` and `gdp_per_capita`. When you have two continuous variables, a scatter plot using `geom_point()` is usually a good starting point. 
@@ -370,7 +267,8 @@ Earlier, we said we were interested in the relationship between `life_expectancy
 ```{r}
 gapminder %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
-  geom_point()
+  geom_point() +
+  stamp("Bad")
 ```
 
 There are several problems with this plot. First, most of the data is concentrated on the left edge of the plot because of a few large `gdp_per_capita` values. A log scale will help this problem.
@@ -379,7 +277,8 @@ There are several problems with this plot. First, most of the data is concentrat
 gapminder %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point() +
-  scale_x_log10()
+  scale_x_log10() +
+  stamp("Bad")
 ```
 
 Second, there is a lot data, and many of the points overlap. This makes it difficult to determine how many points there are in a given area. In the next section, we'll talk about strategies for dealing with overplotting.
@@ -420,7 +319,9 @@ gapminder %>%
   scale_fill_viridis_c()
 ```
 
-If we just look at 2010 and 2015, there are fewer points, but there is still some overplotting.
+Like `geom_histogram()`, `geom_bin2d()` and `geom_hex()` both create a default number of bins. You can adjust the number of bins or binwidth with the `bins` and `binwidth` arguments. In our example, however, the default binwidth does a good job.
+
+Now, say we want to investigate just 2010 and 2015.
 
 ```{r}
 gapminder %>% 
@@ -430,7 +331,7 @@ gapminder %>%
   scale_x_log10()
 ```
 
-We could use `geom_hex()` again.
+There are fewer points, but there's still some overplotting. We could use `geom_hex()` again.
 
 ```{r}
 gapminder %>% 
@@ -443,20 +344,9 @@ gapminder %>%
 
 Most of the hexagons only represent a single point, so `geom_hex()` isn't the best option.
 
-Making the points more transparent is one solution to minor overplotting. In `geom_point()`, you adjust the transparency by setting `alpha` to a value less than 1.
-
-```{r}
-gapminder %>% 
-  filter(year >= 2010) %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy)) +
-  geom_point(alpha = 0.5) +
-  scale_x_log10()
-```
-
-Another option is to change the appearance of the points so that they have a border. There are many possible shapes `geom_point()` points can take. Each shape is associated with a number. The following image is from the _Scales_ section of the [ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
+Another option is change the shape of the dots so that they have visible borders. `geom_point()` points actually don't have to be solid-colored circles. There are 25 different possible shapes. The following image from the_Scales_ section of the [ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) displays these shapes along with their identifying numbers.
 
 ```{r, echo=FALSE}
-# how do you cite a cheat sheet
 knitr::include_graphics("shapes.png")
 ```
 
@@ -466,44 +356,50 @@ knitr::include_graphics("shapes.png")
 gapminder %>% 
   filter(year >= 2010) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
-  geom_point(shape = 21) +
+  geom_point(shape = 21, size = 3) +
   scale_x_log10()
 ```
 
-The transparent interiors and black borders allow you to perceive individual points and their overlaps better. This effect is stronger if you fill the circles and add a white border.
+The transparent interiors and black borders make it easier to peceive individual points and spot overlaps. This effect is stronger if you fill the circles and add a white border.
 
 ```{r}
 gapminder %>% 
-  filter(year > 2005) %>% 
+  filter(year >= 2010) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point(shape = 21, fill = "black", color = "white", size = 3) +
   scale_x_log10() 
 ```
 
-In this situation, the `alpha` solution is probably better. However, in situations in which you want to be able to distinguish each point, `shape = 21` can be helpful. You'll see an example of a such a situation later on in the chapter.
-
-Another solution to overplotting is to _jitter_ the points using `geom_jitter()`. `geom_jitter()` adds some random variation to the position of each point so that they no longer overlap. `geom_jitter()` is generally only a good solution if your points lie directly on top of each other.
+A simpler approach is to make the points more transparent. In `geom_point()`, you can adjust the transparency by adjusting `alpha`.
 
 ```{r}
-v <-
-  tibble(
-    x = c(rep(1, 5), rep(2, 4), rep(1, 2), rep(3, 10)),
-    y = c(rep(2, 5), rep(4, 4), rep(5, 2), rep(3, 10))
-  )
-
-v %>% 
-  ggplot(aes(x, y)) +
-  geom_point() +
-  stamp()
+gapminder %>% 
+  filter(year >= 2010) %>% 
+  ggplot(aes(gdp_per_capita, life_expectancy)) +
+  geom_point(alpha = 0.5, size = 3) +
+  scale_x_log10()
 ```
+
+Adjusting `alpha` makes it both easier to see individual points and determine areas of high density.
+
+In this situation and most others, adjusting `alpha` is better than using `shape = 21`. The `shape = 21` approach is a good solution to minor overplotting if you have a small number of points and want to emphasize the individual values. `alpha` is more general and works even if you have a large number of points with a lot of overlap. 
+
+Sometimes, your points will completely overlap.
 
 ```{r}
-v %>% 
-  ggplot(aes(x, y)) +
-  geom_jitter()
+mpg %>% 
+  ggplot(aes(displ, hwy)) +
+  geom_point()
 ```
 
-Even in these cases, you should be cautious  about using `geom_jitter()`, since, by design, the position of the points no longer directly reflect the underlying data.
+In these situations, you can use `geom_count()` to encode the number of points at a particular location with size.
+
+```{r}
+mpg %>% 
+  ggplot(aes(displ, hwy)) +
+  geom_count()
+```
+
 
 ### Smoothing
 
@@ -517,7 +413,7 @@ gapminder %>%
   scale_fill_viridis_c()
 ```
 
-What is the relationship between `life_expectancy` and `gdp_per_capita`? The blob somewhat appears linear, but if you look at just the areas with the highest density, you can see it curve upwards.
+What is the relationship between `life_expectancy` and `gdp_per_capita`? It entire blue blob appears somewhat linear, but if you look at just the areas with the highest density, you can see it curve upwards.
 
 Smooth lines can give us a quick sense of the trend. We'll use `geom_smooth()` to create a trend line.
 
@@ -530,9 +426,9 @@ gapminder %>%
   scale_fill_viridis_c() 
 ```
 
-The shaded areas around the blue line represent the confidence intervals. The larger the shaded gray area, the higher the uncertainty in that area. In this case, the confidence intervals are larger around the lower life expectancies and the highest ones, likely because there are fewer data points in these areas. 
+The shaded areas around the blue line represent the confidence intervals. The larger the shaded gray area, the higher the uncertainty in that area. In this case, the confidence intervals are larger around the lowest and highest values of `gdp_per_capita`, likely because there are fewer data points in these areas. 
 
-Notice that we got a message saying "`geom_smooth()` is using "method = 'gam'" There are many different methods we could use to create a smooth line. "gam", which is short for generalized additive model, is one. By default, `geom_smooth()` uses `method = "gam"` if your data has more than 1000 points, and `method = "loess"` if you have fewer than 1000 points. LOESS (locally estimated scatter plot smoothing) can be computationally unfeasible for larger data sets, which is why `geom_smooth()` only uses it for less than 1000 points. 
+Notice that we got a message saying "`geom_smooth()` using method = 'gam'." There are many different methods we could use to create a smooth line. "gam", which is short for generalized additive model, is one. By default, `geom_smooth()` uses `method = "gam"` if your data has more than 1000 points, and `method = "loess"` if you have fewer than 1000 points. LOESS (locally estimated scatter plot smoothing) can be computationally unfeasible for larger data sets, which is why `geom_smooth()` only uses it for less than 1000 points. 
 
 We only have 2500 points, so we can try LOESS.
 
@@ -545,13 +441,13 @@ gapminder %>%
   scale_fill_viridis_c() 
 ```
 
-In this case, there's not much of a difference between the two methods. Generally, if you're using a smooth line, you don't need to worry too much about the specifics of the method. Smooth lines are a helpful visual and exploratory tool. You shouldn't rely on the them to infer the functional form of the data or predict on new data.
+Notice that `method = "loess"` produces a smoother trend line. Unless you have a very large amount of data, `method = "loess"` is usually a better option. 
 
-Use smooth lines when you care about understanding or communicating a trend, and that trend is not immediately obvious without a smooth line. In our current situation, the smooth line makes the relationship between `life_expectancy` and `gdp_per_capita` clearer. 
+Smooth lines are a helpful tool, but they aren't always necessary. Smooth lines are a good idea when you care about understanding or communicating a trend, but that trend is not immediately obvious without a smooth line. In current example, because we used `geom_hex()` to visualize the underlying data, it is difficult to see the trend without a smooth line.
 
 Sometimes, you'll want to _only_ show the smooth lines. This is a good option if:
 
-* You are mostly about the trend lines, rather than the individual points.
+* You care more about trends than individual values.
 * You want to show multiple trends on the same plot.
 * You have more data than you can reasonably show on one plot.
 
@@ -562,12 +458,12 @@ gapminder %>%
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_point() +
   scale_x_log10() +
-  stamp()
+  stamp("Bad")
 ```
 
 (Note that we can't use `geom_hex()` here because we've already used up the color aesthetic with `region`.)
 
-This plot does not work. There are too many data points to determine the relationship between `life_expectancy` and `gdp_per_capita` for each region. We could add a smooth line on top of the points for each region.
+In this plot, there are too many data points to determine the relationship between `life_expectancy` and `gdp_per_capita` for each region. We could add a smooth line on top of the points for each region.
 
 ```{r}
 gapminder %>% 
@@ -575,7 +471,7 @@ gapminder %>%
   geom_point() +
   geom_smooth(method = "loess") +
   scale_x_log10() +
-  stamp()
+  stamp("Bad")
 ```
 
 However, this is even worse. There is too much going on, and you can't distinguish the colored smooth lines on top of all the points.
@@ -589,25 +485,16 @@ gapminder %>%
   scale_x_log10()
 ```
 
-The confidence intervals make the lines a bit difficult to detect. We can adjust the transparency of the confidence intervals with `geom_smooth()`'s alpha argument (by default, `alpha = 0.5`).
-
-```{r}
-gapminder %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
-  geom_smooth(method = "loess", alpha = 0.2) +
-  scale_y_log10()
-```
-
-Adjusting the alpha preserves the confidence intervals while still making it easy to detect the trends for each region. You can remove the confidence intervals by setting `se = FALSE` inside `geom_smooth()`, but you should only do so if the confidence intervals are very small and constant throughout the entire smooth line.
+You can remove the confidence intervals by setting `se = FALSE` inside `geom_smooth()`, but you should only do so if the confidence intervals are very small and constant throughout the entire smooth line.
 
 One part of decoding this plot involves connecting each line to its corresponding legend label. There are only four different colors, but you still have to go back-and-forth between the legend and the plot quite a bit. This process would be easier if the order of the legend matched the order of the lines (@wilke-2019). We'll do this by adjusting `breaks` in `scale_color_discrete()`.
 
 ```{r}
 gapminder %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
-  geom_smooth(method = "loess", alpha = 0.2) +
-  scale_y_log10() +
-  scale_color_discrete(breaks = c("Asia", "Europe", "Africa", "Americas"))
+  geom_smooth(method = "loess") +
+  scale_x_log10() +
+  scale_color_discrete(breaks = c("Europe", "Americas", "Asia", "Africa"))
 ```
 
 We can also adjust `legend.justification` in `theme()` so that the legend is at the top of the plot, closer to the lines.
@@ -615,36 +502,13 @@ We can also adjust `legend.justification` in `theme()` so that the legend is at 
 ```{r}
 gapminder %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
-  geom_smooth(method = "loess", alpha = 0.2) +
+  geom_smooth(method = "loess") +
   scale_x_log10() +
-  scale_color_discrete(breaks = c("Asia", "Europe", "Africa", "Americas")) +
+  scale_color_discrete(breaks = c("Europe", "Americas", "Asia", "Africa")) +
   theme(legend.justification = "top")
 ```
 
-It's now easier to connect a line with a region. These adjustments aren't necessary for EDA plots, but they can be helpful for presentation plots.
-
-Sometimes, `geom_line()` will be appropriate for continuous-continuous relationships. The following plot shows the relationship between `life_expectancy` and `gdp_per_capita` for just the Scandinavian countries. 
-
-```{r}
-scandinavia <-
-  gapminder %>% 
-  filter(name %in% c("Finland", "Sweden", "Norway", "Denmark", "Iceland"))
-  
-scandinavia %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, color = name)) +
-  geom_point() 
-```
-
-You can see that each country has it's own trend. However, it is unnecessarily difficult to connect each group of dots. Adding lines visually connects the dots for you.
-
-```{r}
-scandinavia %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, color = name)) +
-  geom_point() +
-  geom_line()
-```
-
-You can now see that Finland's life expectancy has changed more than that of the other countries. It's also interesting that Iceland and Sweden look very similar, and that Norway's per capita GDP pulled away from the rest, but its life expectancy remained similar.
+It's now much easier to connect a line with a region. These adjustments aren't necessary for EDA plots, but they're helpful for presentation plots.
 
 ### Paired data
 
@@ -659,153 +523,173 @@ gapminder_paired <-
   gapminder %>% 
   filter(year %in% c(2010, 2015)) %>% 
   select(iso_a3, name, region, year, life_expectancy) %>% 
-  spread(key = year, value = life_expectancy) %>% 
-  rename(life_expectancy_2010 = `2010`, life_expectancy_2015 = `2015`)
+  spread(key = year, value = life_expectancy, sep = "_") 
 
-gapminder_paired %>% head()
+gapminder_paired 
 ```
 
-Paired data is relatively common. One way to visualize paired data is to encode one of the values on x-axis and one on the y-axis. 
+One way to visualize paired data is to encode one of the values on x-axis and one on the y-axis. 
 
 ```{r}
 gapminder_paired %>% 
-  ggplot(aes(life_expectancy_2010, life_expectancy_2015)) +
+  ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) 
 ```
 
-There are a couple of problems with this plot. First, notice that even though the x- and y-axes are in the same units (years) and cover a similar range of values, one visual unit on the x-axis (e.g., the space between the 30 tick mark and the 40 tick mark) covers a different number of years than one visual unit on the y-axis. This is unnecessarily confusing. We can use `coord_fixed()` to set the aspect ratio to 1.
+There are a couple of problems with this plot. First, notice that even though the x- and y-axes are in the same units (years) and cover a similar range of values, one inch on the x-axis covers a different number of years than one inch on the y-axis. This is unnecessarily confusing. We can use `coord_fixed()` to set the aspect ratio to 1.
 
 ```{r}
 gapminder_paired %>% 
-  ggplot(aes(life_expectancy_2010, life_expectancy_2015)) +
+  ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
   coord_fixed()
 ```
 
-We want to know how the life expectancies changed from 2010 to 2015. Did they tend to increase? Go down? Increase for some countries and decrease for others? It is possible to obtain this information from the above visualization. However, it takes some visual work. A reference line will make this process much easier. 
+From this plot, you can tell that life exectancies didn't change much from 2010 to 2015 for most countries. A reference line will make it easier to tell if they stayed exactly the same, increased, or decreased.
 
-Previously, you learned about vertical and horizontal reference lines at fixed intercepts. In this case, we'll want a reference line at `y = x`. This reference line indicates what the data would look like if life expectancy did not change from 2010 to 2015.
+Previously, you learned about vertical and horizontal reference lines at fixed intercepts. In this case, we'll want a reference line at `y = x`. This reference line indicates what the data would look like if life expectancy did not change from 2010 to 2015. Points above the lines represent countries in which life expectancy _increased_ from 2010 to 2015. Points below the line represent countries in life expectancy _decreased_ from 2010 to 2015. We'll add annotations to make this distinction easier to decode.
 
 ```{r}
 gapminder_paired %>% 
-  ggplot(aes(life_expectancy_2010, life_expectancy_2015)) +
+  ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
+  annotate(
+    "text", 
+    x = 30, 
+    y = 85, 
+    label = "Life expectancy increased", 
+    hjust = 0
+  ) +
+  annotate(
+    "text", 
+    x = 65, 
+    y = 50, 
+    label = "Life expectancy decreased", 
+    hjust = 0
+  ) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
   coord_fixed()  
 ```
 
-Points above the lines represent countries in which life expectancy increased from 2010 to 2015. Points below the line represent countries in life expectancy decreased from 2010 to 2015. The reference line makes it easy to see that most countries' life expectancies increased between 2010 to 2015.
+It's now easy to see that life expectancy increased for most countries between 2010 and 2015.
 
-You might be curious what countries the outlying points represent. If we tried to label every point, there would be far too many labels. We can use a subset of the data to label just the points of interest.
+Notice that there a couple points far away from the red line. What countries do these points represent? Labelling these points would make our plot more interesting. 
 
 ```{r}
 outliers <-
   gapminder_paired %>% 
-  mutate(diff = life_expectancy_2015 - life_expectancy_2010) %>% 
+  mutate(diff = year_2015 - year_2010) %>% 
   filter(diff < -.5 | diff > 5)
 
 gapminder_paired %>% 
-  ggplot(aes(life_expectancy_2010, life_expectancy_2015)) +
+  ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
-  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  annotate(
+    "text", 
+    x = 30, 
+    y = 85, 
+    label = "Life expectancy increased", 
+    hjust = 0
+  ) +
+  annotate(
+    "text", 
+    x = 65, 
+    y = 50, 
+    label = "Life expectancy decreased", 
+    hjust = 0
+  ) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
   coord_fixed() 
 ```
 
-This visualization prompts hypotheses about the effects of three world events: the 2010 earthquake in Haiti, the Syrian Civil War, and Libyan Civil War, both of which started in 2011.
-
-You can also see the the countries with the lowest life expectancies in 2010 tended to make the most gains in 2015. 
+This visualization prompts hypotheses about the effects of three world events: the 2010 earthquake in Haiti, the Syrian Civil War, which began in 2011, and Libyan Civil War, which also began in 2011. 
 
 We could encode `region` with `color` to add regional information to our visualization.
 
 ```{r}
 gapminder_paired %>% 
-  ggplot(aes(life_expectancy_2010, life_expectancy_2015, color = region)) +
-  geom_point(alpha = 0.5) +
-  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
-  geom_abline(slope = 1, intercept = 0, color = "red") +
-  coord_fixed() 
-```
-
-The text is colored because `geom_text_repel()` inherits from `ggplot()`. If you only want the points colored, specify `color = region` in `geom_point()`.
-
-```{r}
-gapminder_paired %>% 
-  ggplot(aes(life_expectancy_2010, life_expectancy_2015)) +
+  ggplot(aes(year_2010, year_2015)) +
   geom_point(aes(color = region), alpha = 0.5) +
-  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  annotate(
+    "text", 
+    x = 30, 
+    y = 85, 
+    label = "Life expectancy increased", 
+    hjust = 0
+  ) +
+  annotate(
+    "text", 
+    x = 65, 
+    y = 50, 
+    label = "Life expectancy decreased", 
+    hjust = 0
+  ) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
   coord_fixed() 
 ```
 
 You can now see that many countries in Africa have relatively low life expectancies, but made some of the largest absolute gains between 2010 and 2015. 
 
-However, encoding both `life_expectancy_2010` and `life_expectancy_2015` with position make it difficult to estimate the exact change in life expectancy for a given country. It is also difficult to detect the individual countries with high life expectancies because they are bunched together.
-
-If you want to highlight the exact change in life expectancy for individual countries, it would be better to directly encode that change. Currently, we are implicitly encoding the change by plotting both 2010 and 2015 life expectancy. 
-
-To explicitly encode the change, we'll need to make a new variable.
+Encoding both `year_2010` and `year_2015` with position make it difficult to estimate the exact change in life expectancy for a given country. If we want to highlight the exact change in life expectancy for each individual country, it would be better to directly encode the change by creating a new variable.
 
 ```{r} 
 gapminder_paired %>% 
-  mutate(diff = life_expectancy_2015 - life_expectancy_2010)
+  mutate(diff = year_2015 - year_2010)
 ```
 
-This now becomes a discrete-continuous problem. There are too many individual countries for us to be able to create a reasonably sized plot, so we'll just focus on Asia for now.
+Our visualization is now a discrete-continuous problem. There are too many individual countries for us to be able to create a reasonably sized plot, so we'll just focus on Asia for now.
 
-```{r, fig.height=2.8}
+```{r, fig.height=3}
 gapminder_paired %>% 
   filter(region == "Asia") %>% 
   mutate(
-    diff = life_expectancy_2015 - life_expectancy_2010,
+    diff = year_2015 - year_2010,
     name = fct_reorder(name, diff)
   ) %>% 
-  ggplot(aes(name, diff)) +
-  geom_point() +
-  coord_flip()
+  ggplot(aes(diff, name)) +
+  geom_point() 
 ```
 
-(We made the plot space bigger so that it could fit in all the countries in the region. You can do this by adjusting the `fig.height` parameter in an RMarkdown chunk. This chunk was set to `fig.height = 2.8`.)
+(We made the plot space bigger so that it could fit in all the countries in the region. You can do this by adjusting the `fig.height` parameter in an RMarkdown chunk. This chunk was set to `fig.height = 3`.)
 
-This visualization does a good job of depicting the difference in life expectancy. However, it loses potentially important information. Did Syria move from 40 to 32? 98 to 90? Maybe Syria dropped by 8 years, but started off much higher than the rest of the countries.
+This visualization does a good job of depicting the difference in life expectancy, but it doesn't show you the actual life expectancies of the countries.
 
-We could visualize `life_expectancy_2010`, `life_expectancy_2015`, _and_ the difference between the two by plotting both the 2010 and 2015 life expectancies on the same axis.
+We can visualize `year_2010`, `year_2015`, _and_ the difference between the two by plotting both the 2010 and 2015 life expectancies on the same axis.
 
-```{r, fig.height=2.8}
-gapminder %>% 
-  filter(region == "Asia", year %in% c(2010, 2015)) %>% 
-  mutate(
-    year = as.factor(year),
-    name = fct_reorder(name, life_expectancy)
-  ) %>% 
-  ggplot(aes(name, life_expectancy, color = year)) +
-  geom_point() +
-  coord_flip()
-```
-
-Again, lines are helpful visual aids if the connect between points is important. We can add connecting lines with `geom_segment()`. 
-
-```{r, fig.height=2.8}
+```{r, fig.height=3}
 gapminder_paired %>% 
   filter(region == "Asia") %>% 
-  mutate(name = fct_reorder(name, life_expectancy_2015)) %>% 
+  mutate(name = fct_reorder(name, year_2015)) %>% 
+  ggplot(aes(y = name)) +
+  geom_point(aes(x = year_2010, color = "2010")) +
+  geom_point(aes(x = year_2015, color = "2015"))
+```
+
+Lines are helpful visual aids if the connection between points is important. We can add connecting lines with `geom_segment()`. 
+
+```{r, fig.height=3}
+gapminder_paired %>% 
+  filter(region == "Asia") %>% 
+  mutate(name = fct_reorder(name, year_2015)) %>% 
   ggplot(aes(y = name)) +
   geom_segment(
     aes(
-      x = life_expectancy_2010, 
-      xend = life_expectancy_2015, 
+      x = year_2010, 
+      xend = year_2015, 
       y = name, 
       yend = name)
   ) +
-  geom_point(aes(x = life_expectancy_2010, color = "2010")) +
-  geom_point(aes(x = life_expectancy_2015, color = "2015"))
+  geom_point(aes(x = year_2010, color = "2010")) +
+  geom_point(aes(x = year_2015, color = "2015"))
 ```
 
-The three different plots we made (the original scatterplot, the discrete-continuous one showing just `diff`, and this final one) all highlight different elements of the data. There are also other ways we could have approached the problem that would highlight other elements. As always, the best visualization will depend on what you are trying to understand or communicate about your data. Also, don't forget to create new variables if what you are trying to understand or communicate is not already explicitly represented by a variable.
+The three different plots we made (the original scatterplot, the discrete-continuous one showing just `diff`, and this final one) all highlight different elements of the data. As always, the best visualization will depend on what you are trying to understand or communicate about your data. 
 
 ## Three continuous variables
 
-Say we want to understand the relationship between `life_expectancy`, `per_capita_gdp`, and `population` for just 2015.
+Say we want to understand the relationship between `life_expectancy`, `per_capita_gdp`, `population`, and `region` for just 2015.
 
 ```{r}
 gapminder_2015 <-
@@ -813,7 +697,7 @@ gapminder_2015 <-
   filter(year == 2015)
 ```
 
-Recall the encoding ranking for continuous variables from the _General Strategy_ chapter:
+We have three continuous variables to encode. Recall the encoding ranking for continuous variables from the _General Strategy_ chapter:
 
 1. Position along a common scale (i.e., placing elements along a common axis)
 2. Position along identical but nonaligned scales (i.e., placing elements along a common axis, but on different facets)
@@ -826,11 +710,11 @@ Recall the encoding ranking for continuous variables from the _General Strategy_
 9. Color saturation (i.e., the intensity/purity of a color)
 10. Color hue (blue, green, red, etc.) [@cleveland-1985]
 
-A scatterplot will use up our two "position along a common scale" options. We should encode the most important variables with position. Let's say those are `life_expectancy` and `per_capita_gdp`.  
+A scatterplot will use up our two "position along a common scale" options. We should encode the most important variables with position. Let's say those are `life_expectancy` and `per_capita_gdp`. We'll also encode our discrete variable, `region`, with color. 
 
 ```{r}
 gapminder_2015 %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy)) +
+  ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_point() +
   scale_x_log10()
 ```
@@ -839,7 +723,9 @@ This is similar to the plots we created earlier. We then move down the ranking b
 
 ```{r}
 gapminder_2015 %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, size = population)) +
+  ggplot(
+    aes(gdp_per_capita, life_expectancy, color = region, size = population)
+  ) +
   geom_point() +
   scale_x_log10() 
 ```
@@ -848,52 +734,35 @@ As we pointed out in the _General Strategy_ chapter, the human ability to estima
 
 ```{r}
 gapminder_2015 %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, size = population)) +
+  ggplot(
+    aes(gdp_per_capita, life_expectancy, color = region, size = population)
+  ) +
   geom_point() +
   scale_size(range = c(1, 20)) +
   scale_x_log10() 
 ```
 
-However, now we can't tell if the larger circles cover up smaller ones. We could adjust `alpha` to address this overlap.
+However, now we can't tell if the larger circles cover up smaller ones of the same color. `shape = 21` would help.
 
 ```{r}
 gapminder_2015 %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, size = population)) +
-  geom_point(alpha = 0.4) +
+  ggplot(
+    aes(gdp_per_capita, life_expectancy, fill = region, size = population)
+  ) +
+  geom_point(shape = 21, color = "black") +
   scale_size(range = c(1, 20)) +
   scale_x_log10() 
 ```
 
-However, the individual circles still aren't as distinct as they could be. We could try `shape = 21`.
+There's still the possibility that the large dots cover up smaller ones. `geom_point()` plots points in order of their appearance in the data. If you want to change the order in which the points are plotted, you can change the order of the rows in your data.
 
-```{r}
-gapminder_2015 %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, size = population)) +
-  geom_point(shape = 21, fill = "blue", color = "white") +
-  scale_size(range = c(1, 20)) +
-  scale_x_log10() 
-```
-
-This is better. However, there's still the possibility that the large dots cover up smaller ones. One useful thing to know about `geom_point()` is that it plots points in order of their appearance in the data. If you want to change the order in which the points are plotted, you can change the order of the rows in your data.
-
-We'll use `arrange()` to reorder our data so that the smallest countries are plotted on top of the larger ones.
-
-```{r}
-gapminder_2015 %>% 
-  arrange(desc(population)) %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy, size = population)) +
-  geom_point(shape = 21, fill = "blue", color = "white") +
-  scale_size(range = c(1, 20)) +
-  scale_x_log10() 
-```
-
-Each dot is now more distinguishable. We can also try adding `fill` to encode `region` (recall that, unlike the default point shapes, `shape = 21` uses `fill` to control the interior of the points).
+We'll use `arrange()` to reorder our data so that each row contains a country smaller than the previous one.
 
 ```{r}
 gapminder_2015 %>% 
   arrange(desc(population)) %>% 
   ggplot(
-    aes(gdp_per_capita, life_expectancy, size = population, fill = region)
+    aes(gdp_per_capita, life_expectancy, fill = region, size = population)
   ) +
   geom_point(shape = 21, color = "black") +
   scale_size(range = c(1, 20)) +
@@ -909,7 +778,7 @@ gapminder_2015 %>%
     aes(gdp_per_capita, life_expectancy, size = population, fill = region)
   ) +
   geom_point(shape = 21, color = "black") +
-  scale_size(range = c(1, 20), breaks = c(1e6, 5e8, 1e9)) +
+  scale_size(range = c(1, 20), breaks = c(1e6, 1e8, 1e9)) +
   scale_x_log10() 
 ```
 
