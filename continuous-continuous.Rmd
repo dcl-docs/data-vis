@@ -84,14 +84,6 @@ Adding text to your visualizations can make them more informative. The following
 
 ### Log scales
 
-There are many different scale functions, and they don't all follow the same format. The following table summarizes the common scale functions.
-
-```{r, echo=FALSE, message=FALSE}
-read_csv("scale_table.csv") %>% 
-  replace_na(list(discrete = " ")) %>% 
-  knitr::kable()
-```
-
 Transforming linear scales into log scales is a common use of the scale functions. Log scales are helpful in several different scenarios. 
 
 When a variable spans several orders of magnitude, a linear scales will tend to hide differences between smaller values.
