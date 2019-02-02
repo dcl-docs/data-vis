@@ -42,7 +42,6 @@ This chapter uses the following data sets.
 ```{r, message = FALSE, warning = FALSE}
 # Libraries
 library(tidyverse)
-library(ggrepel)
 
 # Data
  # Gapminder data on life expectancy, GDP, and population
@@ -79,7 +78,7 @@ In this mechanics section, you'll learn about adding annotations to your plots a
 
 ### Annotations
 
-Adding text to your visualizations can make them more informative. The following chapter from _R4DS_ will introduce you the mechanics of effective annotations.
+Adding text to your visualizations can make them more informative. The following section from _R4DS_ will introduce you the mechanics of effective annotations.
 
 * [Annotations](https://r4ds.had.co.nz/graphics-for-communication.html#annotations)
 
@@ -93,7 +92,7 @@ read_csv("scale_table.csv") %>%
   knitr::kable()
 ```
 
-Transforming linear scales into log scales is a common use of the scale functions. Log scales are helfpul in several different scenarios. 
+Transforming linear scales into log scales is a common use of the scale functions. Log scales are helpful in several different scenarios. 
 
 When a variable spans several orders of magnitude, a linear scales will tend to hide differences between smaller values.
 
@@ -364,7 +363,7 @@ gapminder_2010_2015 %>%
   scale_x_log10()
 ```
 
-The transparent interiors and black borders make it easier to peceive individual points and spot areas of overlap. This effect is stronger if you fill the circles and add a white border.
+The transparent interiors and black borders make it easier to perceive individual points and spot areas of overlap. This effect is stronger if you fill the circles and add a white border.
 
 ```{r}
 gapminder_2010_2015 %>% 
@@ -442,7 +441,7 @@ gapminder %>%
 
 Notice that `method = "loess"` produces a smoother trend line. Unless you have a very large amount of data, `method = "loess"` is usually a better option. 
 
-Smooth lines are a helpful tool, but they aren't always necessary. Use mooth lines when you care about understanding or communicating a trend, but that trend is not immediately obvious without a smooth line.
+Smooth lines are a helpful tool, but they aren't always necessary. Use smooth lines when you care about understanding or communicating a trend, but that trend is not immediately obvious without a smooth line.
 
 Sometimes, you'll want to _only_ show the smooth lines. This is a good option if:
 
@@ -542,7 +541,7 @@ gapminder_paired %>%
   coord_fixed()
 ```
 
-It looks like, for most countries, life exectancy didn't change much from 2010 to 2015. A reference line will make it easier to tell if they stayed exactly the same, increased, or decreased.
+It looks like, for most countries, life expectancy didn't change much from 2010 to 2015. A reference line will make it easier to tell if they stayed exactly the same, increased, or decreased.
 
 Previously, you learned about vertical and horizontal reference lines at fixed intercepts. In this case, we'll want a reference line at `y = x`. This reference line indicates what the data would look like if life expectancy did not change from 2010 to 2015. Points above the lines represent countries in which life expectancy _increased_ from 2010 to 2015. Points below the line represent countries in life expectancy _decreased_ from 2010 to 2015. We'll add annotations to make this distinction easier to decode.
 
@@ -550,21 +549,14 @@ Previously, you learned about vertical and horizontal reference lines at fixed i
 gapminder_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
-  annotate(
-    "text", 
-    x = 30, 
-    y = 85, 
-    label = "Life expectancy increased", 
-    hjust = 0
-  ) +
-  annotate(
-    "text", 
-    x = 65, 
-    y = 50, 
-    label = "Life expectancy decreased", 
-    hjust = 0
-  ) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
+  annotate(
+    "text", 
+    x = c(30, 65), 
+    y = c(85, 50), 
+    label = c("Life expectancy increased", "Life expectancy decreased"), 
+    hjust = 0
+  ) +
   coord_fixed()  
 ```
 
@@ -576,27 +568,20 @@ There are a couple of points far away from the red line. What countries do these
 outliers <-
   gapminder_paired %>% 
   mutate(diff = year_2015 - year_2010) %>% 
-  filter(diff < -.5 | diff > 5)
+  filter(diff < -0.5 | diff > 5)
 
 gapminder_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
-  geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
-  annotate(
-    "text", 
-    x = 30, 
-    y = 85, 
-    label = "Life expectancy increased", 
-    hjust = 0
-  ) +
-  annotate(
-    "text", 
-    x = 65, 
-    y = 50, 
-    label = "Life expectancy decreased", 
-    hjust = 0
-  ) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
+  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  annotate(
+    "text", 
+    x = c(30, 65), 
+    y = c(85, 50), 
+    label = c("Life expectancy increased", "Life expectancy decreased"), 
+    hjust = 0
+  ) +
   coord_fixed() 
 ```
 
@@ -608,22 +593,15 @@ Encoding `region` with `color` adds an additional variable to our plot.
 gapminder_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(aes(color = region), alpha = 0.5) +
-  geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
-  annotate(
-    "text", 
-    x = 30, 
-    y = 85, 
-    label = "Life expectancy increased", 
-    hjust = 0
-  ) +
-  annotate(
-    "text", 
-    x = 65, 
-    y = 50, 
-    label = "Life expectancy decreased", 
-    hjust = 0
-  ) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
+  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  annotate(
+    "text", 
+    x = c(30, 65), 
+    y = c(85, 50), 
+    label = c("Life expectancy increased", "Life expectancy decreased"), 
+    hjust = 0
+  ) +
   coord_fixed() 
 ```
 
@@ -646,7 +624,7 @@ gapminder_paired %>%
     name = fct_reorder(name, diff)
   ) %>% 
   ggplot(aes(diff, name)) +
-  geom_point() 
+  geom_point()
 ```
 
 (We made the plot space bigger by adjusting the `fig.height` parameter in the R Markdown chunk. This chunk was set to `fig.height = 3`.)
@@ -671,13 +649,7 @@ gapminder_paired %>%
   filter(region == "Asia") %>% 
   mutate(name = fct_reorder(name, year_2015)) %>% 
   ggplot(aes(y = name)) +
-  geom_segment(
-    aes(
-      x = year_2010, 
-      xend = year_2015, 
-      y = name, 
-      yend = name)
-  ) +
+  geom_segment(aes(x = year_2010, xend = year_2015, y = name, yend = name)) +
   geom_point(aes(x = year_2010, color = "2010")) +
   geom_point(aes(x = year_2015, color = "2015"))
 ```
