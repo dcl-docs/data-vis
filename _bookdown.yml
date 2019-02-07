@@ -8,6 +8,7 @@ rmd_files: [
   "general-strategy.Rmd",
   "distributions.Rmd",
   "continuous-continuous.Rmd",
+  "time-series.Rmd",
   "references.Rmd"
 ]
 
