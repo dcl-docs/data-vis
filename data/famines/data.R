@@ -71,6 +71,7 @@ famines <-
         TRUE                                       ~ region
       )
   ) %>% 
+  mutate(region = str_to_title(region)) %>% 
   select(name, iso_a3, region, start, end, deaths_estimate) %>% 
   write_rds("famines.rds")
 
