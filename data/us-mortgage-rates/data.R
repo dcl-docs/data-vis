@@ -16,4 +16,4 @@ file_out <- "us_mortgage_rates.rds"
 read_csv(url_data) %>% 
   select(date, fixed_rate_30_yr) %>% 
   filter(!is.na(fixed_rate_30_yr)) %>% 
-  write_rds(file_out)
+  write_rds(file_out, compress = "gz")
