@@ -13,15 +13,6 @@ url_page <- "https://ourworldindata.org/famines"
   # CSS selector
 famines_css_selector <-
   "body > main > article > div > div > div > section:nth-child(5) > div > table"
-  # Country names to replace
-replace_countries <-
-  c(
-    "Persia" = "Iran",
-    "USA" = "United States",
-    "^Congo" = "Congo, Dem. Rep.",
-    "Democratic Republic of Congo" = "Congo, Dem. Rep.",
-    "S Africa" = "South Africa"
-  )
   # Output file
 file_out <- "famines.rds"
 
@@ -34,7 +25,6 @@ rename_convention <- function(col_name) {
     str_replace_all("\\s", "_")
 }
 
-gdp <- read_rds("../gapminder/data/gdp_per_capita.rds")
 countries <- read_rds("../gapminder/data/countries.rds")
 
 famines <-
@@ -52,8 +42,7 @@ famines <-
         is.na(end)           ~ start,
         TRUE                 ~ end
     ),
-    country = str_remove_all(country, "\\s\\(.*"),
-    country = str_replace_all(country, replace_countries)
+    country = str_remove_all(country, "\\s\\(.*")
   ) %>% 
   mutate_at(
     vars(start, end, contains("mortality")), 
@@ -69,11 +58,21 @@ famines <-
     countries %>% select(iso_a3, name, region = region_gm4), 
     by = "name"
   ) %>% 
-  left_join(
-    gdp,
-    by = c("iso_a3", "name", "start" = "year")
+  mutate(
+    region = 
+      case_when(
+        is.na(region) & str_detect(name, "USSR")   ~ "europe",
+        is.na(region) & str_detect(name, "Africa") ~ "africa",
+        is.na(region) & str_detect(name, "Asia")   ~ "asia",
+        is.na(region) & str_detect(name, "Syria")  ~ "asia",
+        is.na(region) & str_detect(name, "Congo")  ~ "africa",
+        name == "USA"                              ~ "americas",
+        name == "Persia"                           ~ "asia",
+        TRUE                                       ~ region
+      )
   ) %>% 
-  filter(!is.na(gdp_per_capita)) %>% 
+  mutate(region = str_to_title(region)) %>% 
+  select(name, iso_a3, region, start, end, deaths_estimate) %>% 
   write_rds("famines.rds")
 
 

@@ -18,9 +18,8 @@ life_expectancy <-
     countries %>% select(iso_a3, region = region_gm4),
     by = "iso_a3"
   ) %>% 
+  filter(year <= 2015) %>% 
   mutate(region = str_to_title(region))
-  # US mortgage rates over time
-mortgage_rates <- read_rds("data/us-mortgage-rates/us_mortgage_rates.rds")
   # Major famines by year and country
 famines <- read_rds("data/famines/famines.rds")
 ```
@@ -36,7 +35,7 @@ The following [ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/
 
 The lubridate package is a helpful tool for working with dates. We'll use some lubridate functions throughout the chapter. Take a look at the [lubridate cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf) if you're not already familiar with the package.
 
-There are many different types of time series, and you'll want to highlight different aspects of the data for different time series. Sometimes, you'll be interested in a long-term trend, sometimes in short-term fluctuations, cyclical patterns, or even just individual values. In this chapter, we'll cover various strategies for dealing with these different scenarios. 
+Not all time series are alike. In some situations, you'll be interested in a long-term, trend, but, in others, you'll want to highlight short-term changes or even just individual values. In this chapter, we'll cover various strategies for dealing with these different scenarios. 
 
 First, we'll talk about the mechanics of date scales, which are useful for time series.
 
@@ -51,7 +50,7 @@ nycflights13::flights %>%
   select(time_hour)
 ```
 
-When you map `time_hour` to an aesthetic, ggplot2 uses the scale function for date-times: `scale_*_datetime()`. There is also `scale_*_date()` for dates and `scale_*_time()` for times. The date- and time-specific scale functions are useful because they create meaningful breaks and labels.
+When you map `time_hour` to an aesthetic, ggplot2 uses `sclae_*_datetime()`, the scale function for date-times. There is also `scale_*_date()` for dates and `scale_*_time()` for times. The date- and time-specific scale functions are useful because they create meaningful breaks and labels.
 
 `flights_0101_0102` contains data on the number of flights per hour on January 1st and January 2nd, 2013. 
 
@@ -85,7 +84,7 @@ flights_0101_0102 %>%
 
 Similarly, you can change the labels using the `labels` argument, but `scale_*_date()` and `scale_*_datetime()` also include a `date_labels` function made for working with dates. `date_labels` takes the same formatting strings as functions like `ymd()` and `as_datetime()`. You can see a list of all formatting strings at `?strptime`.
 
-Our plot above would be better if we just displayed the hours.
+We'll use `date_labels` to format `time_hour` so that it doesn't take up as much space.
 
 ```{r}
 flights_0101_0102 %>% 
@@ -95,6 +94,8 @@ flights_0101_0102 %>%
 ```
 
 ## Trends
+
+### One response variable
 
 `gapminder` is the same Gapminder data you saw in the previous chapter. Previously, we investigated how life expectancy is associated with per capita GDP. Now, we'll ask a more obvious question: how has life expectancy changed over time?
 
@@ -114,7 +115,7 @@ south_africa %>%
   geom_point() 
 ```
 
-You can easily see how life expectancy has changed over time for South Africa. A line will visually connect the dots, making the trend easier to see and reinforcing the idea that there is an order to the dots.
+Adding `geom_line()` will make it easier to connect the dots and see the trend.
 
 ```{r}
 south_africa %>% 
@@ -133,7 +134,7 @@ south_africa %>%
   geom_vline(xintercept = 1994, color = "blue")
 ```
 
-We could remove the points and just use a line, but the points are helpful indicators of the actual data. Generally, the more points you have, the less important it is to use `geom_point()` in addition to `geom_line()`. For example, here's a plot of life expectancy for South Africa over time using the full `life_expectancy` data.
+We could remove the points and just use a line, but the points are helpful indicators of the actual data. Generally, the more points you have, the less important it is to keep the points. For example, the following plot shows life expectancy for South Africa using the full `life_expectancy` data, which contains yearly data.
 
 ```{r}
 south_africa_le <-
@@ -147,7 +148,7 @@ south_africa_le %>%
   geom_vline(xintercept = 1994, color = "blue")
 ```
 
-The points are so close together that, for the most part, they form a line. Removing `geom_point()` doesn't affect the appearance of the plot very much.
+The points are so close together that they form their own line, and so removing `geom_point()` doesn't really affect the appearance of the plot.
 
 ```{r}
 south_africa_le %>% 
@@ -156,11 +157,11 @@ south_africa_le %>%
   geom_vline(xintercept = 1994, color = "blue")
 ```
 
-Including points is also important if your data is irregularly distributed, or if it is difficult to determine if peaks or values are outliers or real trends. 
+Including points is important, however, if your data is irregularly distributed. For example, say our data only included two points between 1800 and 1950, but was yearly after 1950. In this situation, it would be important to use both points and lines to show the discrepancy in the amount of data.
 
-The downward spike in 1918 is shows the affects of the 1918 influenza pandemic. Why did life expectancy decline after the end of apartheid? One hypothesis is that data reporting procedures changed when the South African government changed. Maybe the apartheid government systematically under-sampled non-white groups. Another hypothesis is that changes in government led to general upheaval, which somehow affected life expectancy. 
+There are two major dips in life expectancy in our plot. The first is the result of the 1918 influenza pandemic. The second, as we already pointed out, started around the end of apartheid. One hypothesis for this dip is that data reporting procedures changed when the South African government changed. Maybe the apartheid government systematically under-sampled non-white groups who may have had lower life expectancies. Another hypothesis is that changes in government led to general upheaval, which somehow affected life expectancy. 
 
-To further investigate, we could compare South Africa to its neighbors during this time period. 
+To further investigate, we'll compare South Africa to its neighbors during this time period. 
 
 ```{r}
 southern_africa_countries <-
@@ -180,7 +181,7 @@ southern_africa_countries %>%
   theme(legend.justification = "top") 
 ```
 
-We can make it easier to group each country's points by adding `geom_line()`.
+When you have multiple time series, adding `geom_line()` makes it easier to group each series together.
 
 ```{r}
  southern_africa_countries %>% 
@@ -194,7 +195,7 @@ We can make it easier to group each country's points by adding `geom_line()`.
   theme(legend.justification = "top")
 ```
 
-In the previous chapter, you learned how to reorder and align the legend so that it is easier to match lines with legend labels. It's even easier to connect lines with labels if you directly label the lines on the plot. To do this, we'll use `ggrepel::geom_text_repel()`.
+In the previous chapter, you learned how to reorder and align legends to make it easier to match lines with labels. Directly labeling the lines makes it even easier to connect a line with its label.
 
 ```{r}
 southern_africa_countries %>% 
@@ -206,16 +207,17 @@ southern_africa_countries %>%
     data = southern_africa_countries %>% filter(year == 2015),
     aes(label = name),
     color = "black",
-    size = 3,
-    nudge_x = 2.3
+    hjust = 0,
+    nudge_x = 0.5,
+    size = 3
   ) +
-  coord_cartesian(xlim = c(1980, 2020)) +
-  guides(color = "none")
+  guides(color = "none") +
+  coord_cartesian(xlim = c(1980, 2020)) 
 ```
 
-We also got rid of the legend by using `guides(color = "none")`.
+We removed the legend by using `guides(color = "none")`.
 
-Interestingly, all four countries experienced similar declines in the early 1990s. This suggests that South Africa's decline was not related to the end of apartheid. Next, we might wonder if this dip occurred in all of Africa. This brings us to the next section: visualizing distributions over time.
+Interestingly, all four countries experienced similar declines in the early 1990s. This suggests that South Africa's decline was not related to the end of apartheid. Next, we might ask if this dip occurred in all of Africa, which brings us to the next section: visualizing distributions over time.
 
 ### Distributions over time
 
@@ -235,7 +237,7 @@ africa_le %>%
   n_distinct()
 ```
 
-Plotting all the data at once is messy.
+Plotting all the data at once is messy, but you can see that many countries experienced the same dip in the 1990s. You can also see that the countries with high life expectancies didn't experience at dip at all, and that many countries experienced dramatic downward spikes due to single events.  
 
 ```{r}
 africa_le %>% 
@@ -243,53 +245,100 @@ africa_le %>%
   geom_line(alpha = 0.4)
 ```
 
-You can see that some countries experienced the same dip in the 1990s, but it's difficult to see if most did, or only a few. We could add a smooth line to our plot.
+One of these downward spikes is the Rwandan genocide.
+
+```{r}
+africa_le %>% 
+  ggplot(aes(year, life_expectancy, group = name)) +
+  geom_line(alpha = 0.4) +
+  geom_line(data = africa_le %>% filter(name == "Rwanda"), color = "red") +
+  geom_point(data = africa_le %>% filter(name == "Rwanda", year == 1994)) +
+  geom_text(
+    data = africa_le %>% filter(name == "Rwanda", year == 1994), 
+    aes(label = year),
+    hjust = 0
+  ) 
+```
+
+Another is the Libyan Civil War.
+
+```{r}
+africa_le %>% 
+  ggplot(aes(year, life_expectancy, group = name)) +
+  geom_line(alpha = 0.4) +
+  geom_line(data = africa_le %>% filter(name == "Libya"), color = "red") +
+  geom_point(data = africa_le %>% filter(name == "Libya", year == 2011)) +
+  geom_label(
+    data = africa_le %>% filter(name == "Libya", year == 2011), 
+    aes(label = year),
+    hjust = 0,
+    nudge_x = 0.5
+  ) 
+```
+
+Highlighting specific lines of interest is a useful way to compare select values to the rest of the data. We could try highlighting the subset of countries in southern Africa that we looked at earlier. 
+
+```{r}
+africa_le %>% 
+  ggplot(aes(year, life_expectancy, group = name)) +
+  geom_line(alpha = 0.4) +
+  geom_line(data = southern_africa_countries, color = "red") 
+```
+
+You can see that the countries we highlighted weren't the only ones that experienced the dip in the 1990s.
+
+To get a sense of the trend for all of Africa, we could add a smooth line.
 
 ```{r}
 africa_le %>% 
   ggplot(aes(year, life_expectancy)) +
   geom_line(aes(group = name), alpha = 0.4) +
-  geom_smooth(color = "red", method = "loess") 
+  geom_smooth(method = "loess", color = "red") 
 ```
 
-The dip experienced by the countries in southern Africa doesn't really show up.
+You can see a slight dip around the 1990s. However, this smooth line doesn't capture the amount of variation in trends. Africa is a massive continent. Maybe dividing it up further will be more informative.
 
-The outlier in the early 1990s is the Rwandan genocide.
-
-```{r}
-africa_le %>% 
-  filter(year == 1994, name == "Rwanda")
-```
-
-Africa is massive continent. `countries` contains more detailed region information. By joining `africa_le` with `countries`, we can divide up Africa into North Africa and Sub-Saharan Africa.
+`countries` contains more detailed region information. By joining `africa_le` with `countries`, we can divide Africa into North Africa and Sub-Saharan Africa.
 
 ```{r}
-africa_le %>% 
+africa_le_detail <-
+  africa_le %>% 
   left_join(
     countries %>% select(iso_a3, region2 = region_gm8), by = "iso_a3"
-  ) %>% 
+  )
+
+africa_le_detail %>% 
   ggplot(aes(year, life_expectancy, color = region2, group = name)) +
   geom_line()
 ```
 
-The countries in North Africa tend to have higher life expectancies. Now, we can try a smooth line for each region.
+Most of the data lies between 40 and 80 years. We'll use `coord_cartesian()` to zoom in on this region.
 
 ```{r}
-africa_le %>% 
-  left_join(
-    countries %>% select(iso_a3, region2 = region_gm8), by = "iso_a3"
-  ) %>% 
-  ggplot(aes(year, life_expectancy, color = region2)) +
-  geom_smooth(method = "loess")
+africa_le_detail %>% 
+  ggplot(aes(year, life_expectancy, color = region2, group = name)) +
+  geom_line() +
+  coord_cartesian(ylim = c(40, 80))
 ```
 
-There is a slight dip in life expectancy in Sub-Saharan Africa in the early 1990s, but it's not as extreme as the dips we saw earlier for just the countries in southern Africa. This dip is likely due the [HIV/AIDs pandemic](https://ourworldindata.org/grapher/share-of-the-population-infected-with-hiv?year=1995), which affected many countries in southern Africa particularly severely.
+Individual lines are now easier to see. There aren't very many countries in North Africa, but they all have relatively high life expectancies. All of the countries that experienced a severe dip in life expectancy in the 1990s are in Sub-Saharan Africa.
+
+Now, we can try a smooth line for each region.
+
+```{r}
+africa_le_detail %>% 
+  ggplot(aes(year, life_expectancy, color = region2)) +
+  geom_smooth(method = "loess") +
+  coord_cartesian(ylim = c(40, 80))
+```
+
+There's a sharp contrast between North Africa and Sub-Saharan Africa. The dip in Sub-Saharan African life expectancies is likely due the [HIV/AIDS pandemic](https://ourworldindata.org/grapher/share-of-the-population-infected-with-hiv?year=1995), which affected most of Sub-Saharan Africa severely, but was particularly bad in the southern countries that we looked at earlier. 
 
 In other situations, you may want to use the techniques covered in the _Distributions_ chapter. For example, you might be curious how the distribution of life expectancies for African countries has changed over time. Box plots are a good option.
 
 ```{r}
 life_expectancy %>% 
-  filter(region == "Africa", year < 2015) %>% 
+  filter(region == "Africa", year <= 2015) %>% 
   mutate(median_le = median(life_expectancy, na.rm = TRUE)) %>% 
   ggplot(aes(year, life_expectancy, group = cut_width(year, 10))) +
   geom_hline(aes(yintercept = median_le), color = "red") +
@@ -299,9 +348,9 @@ life_expectancy %>%
 
 ### Two response variables
 
-So far, we've encoded time as position along the x-axis and a response variable, `life_expectancy`, along the y-axis. What if we want to want to encode a second response variable? It would be interesting to see how both life expectancy and per capita GDP have changed over time.
+So far, we've encoded time as position along the x-axis and a response variable, `life_expectancy`, along the y-axis. What if we want to encode a second response variable? It would be interesting to see how both life expectancy and per capita GDP have changed over time.
 
-`geom_path()` is a useful way to represent a time series with two response variables. Unlike `geom_line()`, which connects points in the order they appear along the x-axis, `geom_path()` connects points in the order they appear in the data. We can use this feature of `geom_path()` to represent a time series without actually plotting time along an axis.  
+`geom_path()` is a useful way to represent a time series with two response variables. Unlike `geom_line()`, which connects points in the order they appear along the x-axis, `geom_path()` connects points in the order they appear in the data. We can use this feature of `geom_path()` to represent a time series without actually plotting time along an axis.
 
 Here, we've plotted `gdp_per_capita` and `life_expectancy` for South Africa using `geom_path()`. We arranged the data by year so that the earliest years are plotted first.
 
@@ -313,7 +362,7 @@ south_africa %>%
   stamp("Bad")
 ```
 
-To read a `geom_path()` plot, you follow the line's path through the plot space. One problem with our current plot is that it doesn't indicate which end of the line is the starting point. We can add a dot to the end of our line  indicating the end point.
+To read a `geom_path()` plot, you follow the line's path through the plot space, but you can't currently tell which end of the line is the starting point. We'll add a dot to the end of the line indicating the endpoint.
 
 ```{r}
 south_africa %>% 
@@ -323,17 +372,7 @@ south_africa %>%
   geom_point(data = south_africa %>% top_n(n = 1, wt = year))
 ```
 
-Sometimes, you'll want to plot individual points as well as the path line.
-
-```{r}
-south_africa %>% 
-  arrange(year) %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy)) +
-  geom_path() +
-  geom_point() 
-```
-
-In this case, we can make the last point bigger to indicate that it's the endpoint.
+Sometimes, you'll want to plot individual points as well as the path line. We'll make the last point bigger to indicate that it's the endpoint.
 
 ```{r}
 south_africa %>% 
@@ -341,7 +380,7 @@ south_africa %>%
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_path() +
   geom_point() +
-  geom_point(data = south_africa %>% top_n(n = 1, wt = year), size = 4)
+  geom_point(data = south_africa %>% top_n(n = 1, wt = year), size = 3)
 ```
 
 Now, it's clear that the line starts in the lower left corner. Both life expectancy and per capita GDP increased until around $1100. Then, life expectancy continued to grow, but per capita GDP shrank. Around $9025, this trend reversed. Life expectancy fell when per capita GDP increased. Finally, both started increasing again.
@@ -354,7 +393,7 @@ south_africa %>%
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_path() +
   geom_point() +
-  geom_point(data = south_africa %>% top_n(n = 1, wt = year), size = 4) +
+  geom_point(data = south_africa %>% top_n(n = 1, wt = year), size = 3) +
   geom_text(
     data = south_africa %>% filter(year %in% c(1950, 1980, 1995, 2005, 2015)), 
     aes(label = year),
@@ -362,7 +401,9 @@ south_africa %>%
   )
 ```
 
-Another approach is to use alpha to encode time.
+In 1980, per capita GDP started going down, but life expectancy kept increasing. As a response to apartheid, the United States and other countries imposed [sanctions against South Africa in the 1980s](https://en.wikipedia.org/wiki/Comprehensive_Anti-Apartheid_Act). The [campaign to divest from South Africa](https://en.wikipedia.org/wiki/Disinvestment_from_South_Africa#Economic_effects) also gathered speed in the 1980s. Both the sanctions and the divestment campaign likely caused the per capita capita GDP to drop. Notice that the trend reversed in 1995. 
+
+We could also use `alpha` to encode `year`. 
 
 ```{r}
 south_africa %>% 
@@ -406,55 +447,6 @@ south_africa %>%
   guides(alpha = "none")
 ```
 
-### Multiple trend-types
-
-All our life expectancy plots were relatively smooth. There were some outliers and downward trends, but, for the most part, life expectancy has been smoothly increasing. Often, however, you'll encounter data with multiple types of trends.
-
-`mortgage_rates` contains data on mortgage rates in the US over time.
-
-```{r}
-mortgage_rates
-```
-
-```{r}
-mortgage_rates %>% 
-  ggplot(aes(date, fixed_rate_30_yr)) +
-  geom_line() 
-```
-
-There is much more fluctuation in this plot than in any of our life expectancy plots. There's a long-term downward trend, but there's also a cyclical trend. Mortgage rates tend rise for a while, and then then fall, rise, then fall. 
-
-The long-term trend spans decades, but each cycle lasts only several years.
-
-```{r}
-mortgage_rates %>% 
-  ggplot(aes(date, fixed_rate_30_yr)) +
-  geom_line() +
-  scale_x_date(date_breaks = "3 years", date_labels = "%Y")
-```
-
-There is also fluctuation within the cycles. 
-
-```{r}
-mortgage_rates %>% 
-  filter(lubridate::year(date) > 1998, lubridate::year(date) < 2005) %>% 
-  ggplot(aes(date, fixed_rate_30_yr)) +
-  geom_line() +
-  scale_x_date(date_breaks = "6 months", date_labels = "%b")
-```
-
-When there are multiple types of trends, you'll need to decide which trend is most important. A smooth line can be helpful when you want to emphasize the long-term trend.
-
-```{r}
-mortgage_rates %>% 
-  ggplot(aes(date, fixed_rate_30_yr)) +
-  geom_line() +
-  geom_smooth(method = "loess") +
-  scale_x_date(date_breaks = "3 years", date_labels = "%Y")
-```
-
-Notice that LOESS does not pick up on the cyclical trend, and only shows the long-term trend.
-
 ## Short-term fluctuations
 
 In the mechanics section of this chapter, you saw the following plot.
@@ -462,21 +454,24 @@ In the mechanics section of this chapter, you saw the following plot.
 ```{r}
 flights_0101_0102 %>% 
   ggplot(aes(time_hour, num_flights)) +
-  geom_col()
+  geom_col() +
+  scale_x_datetime(date_breaks = "6 hours", date_labels = "%a %I %p") 
 ```
 
-You might wonder why we used `geom_col()` to represent a time series. Here's the same plot using `geom_line()` and `geom_point().
+You might wonder why we used `geom_col()` to represent a time series. Here's the same plot using `geom_line()` and `geom_point()`.
 
 ```{r}
 flights_0101_0102 %>% 
   ggplot(aes(time_hour, num_flights)) +
   geom_point() +
-  geom_line()
+  geom_line() +
+  scale_x_datetime(date_breaks = "6 hours", date_labels = "%a %I %p")
 ```
 
-From both plots, you can see that most flights occur in the early morning, there's a late morning lull, and another peak around 4pm. In this situation, though, it's helpful to see time as a discrete variable. We've counted the number of flights for each hour, and so it's useful to be able to connect a number of flights with a specific hour. Columns make it easier to connect a number of flights to an hour. 
+From both plots, you can see that most flights occur in the early morning and around 4pm, but notice that we're actually treating time like a discrete variable in this situation. We've counted the number of flights for each hour, and so it's useful to be able to connect a number of flights with a specific hour. Columns make it easier to connect numbers of flights to specific hours. 
 
 Vertical segment plots using `geom_segment()` can also be helpful for some time series data. Say we want to understand what the first week in January looked like. 
+
 ```{r}
 flights_week1 <-
   nycflights13::flights %>% 
@@ -497,7 +492,7 @@ flights_week1 %>%
   scale_x_datetime(date_breaks = "1 day", date_labels = "%a") 
 ```
 
-You can see that each day is shaped similarly. However, you can't see that there are actually no flights for a couple hours each night.
+You can see that each day is shaped similarly. However, you can't tell that there are actually no flights for a couple hours each night.
 
 ```{r}
 flights_week1 %>% 
@@ -506,7 +501,7 @@ flights_week1 %>%
   scale_x_datetime(date_breaks = "1 day", date_labels = "%a") 
 ```
 
-`geom_segment()` does a better job of showing the gaps between days. It's also easier to perceive each day as a group to compare against the others. Another advantage of `geom_segment()` is that we can use `color` to encode a categorical variable. 
+`geom_segment()` does a better job of showing the gaps between days. Segments also make it easier to perceive each day as a group to compare against the others. Another advantage of `geom_segment()` is that we can use `color` to encode a categorical variable. 
 
 ```{r}
 flights_week1 %>% 
@@ -518,7 +513,7 @@ flights_week1 %>%
   scale_x_datetime(date_breaks = "1 day", date_labels = "%a") 
 ```
 
-In this case, there's no long-term trend we're interested in. Instead, we want to understand short-term fluctuations, and care about individual values. In these situations, `geom_col()` and `geom_segment()` can be good options. 
+In this case, there's no long-term trend we're interested in. Instead, we want to understand short-term fluctuations, and we care about individual values. In these situations, `geom_col()` and `geom_segment()` are good options. 
 
 ## Individual values
 
@@ -530,7 +525,7 @@ Sometimes, you'll want to display time on the x-axis like a time series, but you
 famines
 ```
 
-Deaths due to famines have not changed much over time.
+There's no obvious relationship between time and deaths due to famines.
 
 ```{r}
 famines %>%
@@ -539,28 +534,7 @@ famines %>%
   scale_y_log10()
 ```
 
-The per capita GDP at which major famines occur has also not changed much over time.
-
-```{r}
-famines %>% 
-  ggplot(aes(start, gdp_per_capita)) +
-  geom_point() +
-  scale_y_log10()
-```
-
-There's no trend, but we might be interested in the individual famines. Where did they occur? How many people died? 
-  
-We can use the strategy we talked about in _Continuous-continuous relationships_.
-
-```{r, fig.width = 8}
-famines %>% 
-  arrange(desc(deaths_estimate)) %>% 
-  ggplot(aes(start, gdp_per_capita, size = deaths_estimate, fill = region)) +
-  geom_point(shape = 21, color = "black") +
-  ggrepel::geom_text_repel(aes(label = name), size = 2) +
-  scale_size(range = c(1, 15)) +
-  scale_y_log10()
-```
+Even though there's no trend, this data is still interesting if you're curious about individual famines. 
 
 The above plot only uses the `start` date, but we also have the length of the famines. We can treat the x-axis as representing year generally and encode the length of a line as the length of the famine.
 
@@ -581,5 +555,6 @@ famines %>%
   scale_y_log10() +
   labs(x = "year")
 ```
+
 
 
