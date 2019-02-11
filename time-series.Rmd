@@ -15,7 +15,8 @@ countries <- read_rds("data/gapminder/data/countries.rds")
 life_expectancy <- 
   read_rds("data/gapminder/data/life_expectancy.rds") %>% 
   left_join(
-    countries %>% select(iso_a3, region = region_gm4), by = "iso_a3"
+    countries %>% select(iso_a3, region = region_gm4),
+    by = "iso_a3"
   ) %>% 
   mutate(region = str_to_title(region))
   # US mortgage rates over time
