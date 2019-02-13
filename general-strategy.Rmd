@@ -97,7 +97,7 @@ sprint_times %>%
   mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_col() +
-  coord_flip()
+  coord_flip() 
 ```
 
 This plot communicates that Usain Bolt won, but it was pretty close. When we encode time with position using `geom_point()`, we get a different picture.
@@ -120,7 +120,8 @@ You've already seen plenty of examples of presentation plots in which decoding f
 buildings_10 %>% 
   ggplot(mapping = aes(x = building, y = height_ft)) +
   geom_col() +
-  coord_flip()
+  coord_flip() +
+  stamp("Bad")
 ```
 
 Say the idea you wished to transfer from your mind to the minds of others is the ranking of the buildings (i.e., the tallest is Burj Khalifa, then Shanghai Tower, etc.). The decoding process doesn't totally fail, but it goes poorly. As we said earlier, it's hard to compare unordered amounts. Using bars instead of dots also makes comparisons between the buildings more difficult.
@@ -165,7 +166,8 @@ buildings_10 %>%
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
   ) +
-  labs(y = NULL)
+  labs(y = NULL) +
+  stamp("Bad")
 ``` 
 
 You can still tell that Burj Khalifa is the tallest, but its exact height is difficult to estimate. Encoding with color also makes it much harder to compare buildings. Lotte World Tower and One World Trade Center appear almost identical.
@@ -182,7 +184,8 @@ buildings_10 %>%
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank()
   ) +
-  labs(y = NULL)
+  labs(y = NULL) +
+  stamp("Bad")
 ```
 
 To quantify these observations, Cleveland and McGill (@cleveland-1985) designed an experiment to test how accurately humans can decode different encodings of _continuous data_. The results of their experiment led the following ranking (from best to worst) of encodings:
@@ -280,7 +283,8 @@ Sometimes, your visual system will immediately let you know when decoding is fai
 buildings %>% 
   ggplot(mapping = aes(x = country, y = height_ft)) +
   geom_point() +
-  coord_flip()
+  coord_flip() +
+  stamp("Bad")
 ```
 
 However, this discovery isn't obvious to first time viewers. 
