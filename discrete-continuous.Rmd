@@ -220,7 +220,11 @@ df %>% head()
 levels(df$language) %>% head()
 ```
 
-`fct_reorder()` has changed `language` from a character vector to a factor. The levels of the factor are just the languages themselves in the order of increasing number of speakers (Laotian has the fewest speakers). With a factor, ggplot2 will use the order of the factor levels instead of alphabetical order.
+`fct_reorder()` has changed `language` from a character vector to a factor. The levels of the factor are just the languages themselves in the order of increasing number of speakers (Laotian has the fewest speakers). 
+
+Note that, by default, `fct_reorder()` uses the median of the second variable to reorder the first. In the current example, there's only one value of `speakers` for each value of `language`, so the median of each value is the same as that value.
+
+Now, `ggplot()` will use the factor levels to order the plot.
 
 ```{r}
 utah_languages %>% 
