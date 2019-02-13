@@ -1,3 +1,40 @@
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
 
 # Distributions
 
@@ -352,15 +389,15 @@ congress_2019 %>%
 
 Interestingly, they both have a very similar shape. However, because the House has hundreds more members than the Senate, the distributions are far away from each other and it is difficult to directly compare them. 
 
-We can solve this issue by mapping the _density_ of each age group to the y-axis. Like `geom_histogram()` and `geom_bar()`, `geom_freqpoly()` computes y-values from the data, and so you don't need to supply a `y` aesthetic. In order to get `geom_freqpoly()` to plot densities instead of counts, we need to tell it to carry out a different computation. We'll do this by setting the `y` aesthetic to `..density..`. By default, the `y` aesthetic is `..count..`.
+We can solve this issue by mapping the _density_ of each age group to the y-axis. Like `geom_histogram()` and `geom_bar()`, `geom_freqpoly()` computes y-values from the data, and so you don't need to supply a `y` aesthetic. By default, the `y` aesthetic is set to `stat(count)`. `stat(count)` computes the number of items in each bin. In order to get `geom_freqpoly()` to plot densities instead of counts, we'll set `y = stat(density)`, which computes the density of items in each bin.
 
 ```{r}
 congress_2019 %>% 
-  ggplot(aes(age, y = ..density.., color = chamber)) +
+  ggplot(aes(age, y = stat(density), color = chamber)) +
   geom_freqpoly(binwidth = 5) 
 ``` 
 
-It's now clear that, although their shapes are similar, the House is a bit younger and more evenly distributed. 
+Now, instead of mapping the number of people in each age bin to the y-axis, `geom_freqpoly()` uses the density of the people in each bin. It's now clear that, although their shapes are similar, the House is a bit younger and more evenly distributed. 
 
 In the previous section, we mentioned a use case for `geom_density()`. One advantage of `geom_density()` is that you can fill in the curves, which makes them easier to see.
 
@@ -379,7 +416,7 @@ congress_2019 %>%
   geom_density(alpha = 0.5)
 ```
 
-This approach may be appropriate if you have sufficient data and the distributions can be distinguished.
+This approach works best when you have sufficient data and the distributions can be distinguished from each other.
 
 ```{r}
 set.seed(916)
@@ -388,7 +425,7 @@ sim_2 <-
   tribble(
     ~mean, ~x,
     "0", rnorm(n = 1e4),
-    "5", rnorm(n = 1e4, mean = 5, sd = 2)
+    "5", rnorm(n = 1e5, mean = 5, sd = 2)
   ) %>% 
   unnest()
   
@@ -396,6 +433,18 @@ sim_2 %>%
   ggplot(aes(x, color = mean, fill = mean)) +
   geom_density(alpha = 0.5) 
 ```
+
+`geom_density()`, like `geom_freqpoly()`, doesn't require that you specify a `y` aesthetic. By default, the `y` aesthetic for `geom_density()` is `stat(density)`. 
+
+In some situations, you'll want to use `stat(count)` instead of `stat(density)`. For example, notice that in `sim_2`, there are more observations in the "5" group than in the "0" group. `stat(density)` doesn't show the number of observations in each group, so you can't see this difference in the above plot. If we use `stat(count)`, however, this difference is obvious.
+
+```{r}
+sim_2 %>% 
+  ggplot(aes(x, y = stat(count), color = mean, fill = mean)) +
+  geom_density(alpha = 0.5) 
+```
+
+Use `stat(count)` instead of `stat(density)` if you want to highlight the number of observations in each group. Otherwise, you can use the default `stat(density)`.
 
 If we want to visualize more than 2 or 3 distributions at once, we'll need a new strategy. The variable `division` contains the US Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so the `geom_freqpoly()` plus color combination doesn't work well.
 
