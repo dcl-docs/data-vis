@@ -140,7 +140,8 @@ Compare the following plot with the default coordinate system to one with `coord
 ```{r}
 mpg %>% 
   ggplot(mapping = aes(x = manufacturer)) +
-  geom_bar()
+  geom_bar() +
+  stamp("Bad")
 ```
 
 ```{r}
@@ -178,7 +179,8 @@ To visualize the number of speakers of each language in `utah_languages` we can 
 ```{r}
 utah_languages %>% 
   ggplot(mapping = aes(x = language, y = speakers)) +
-  geom_col() 
+  geom_col() +
+  stamp("Bad")
 ```
 
 We can evaluate this visualization by determining if it meets the two goals outlined earlier.
@@ -193,7 +195,8 @@ Luckily, we can easily solve these two problems. First, to correct the labeling 
 utah_languages %>% 
   ggplot(mapping = aes(x = language, y = speakers)) +
   geom_col() +
-  coord_flip()
+  coord_flip() +
+  stamp("Bad")
 ```
 
 It's now effortless to connect a bar with a label.
@@ -322,7 +325,8 @@ sprint_times %>%
   mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_col() +
-  coord_flip()
+  coord_flip() +
+  stamp("Bad")
 ```
 
 The main conclusion you can take away from this plot is that all the sprinters ran the race in around 10 seconds. If you knew nothing about sprinting, the 2016 Olympics, or Usain Bolt, however, this information is largely useless. Is 10 seconds slow or fast? 
@@ -354,7 +358,7 @@ For example, earlier we visualized the number of cars in each drivetrain categor
 ```{r}
 mpg %>% 
   ggplot(mapping = aes(x = drv, fill = year)) +
-  geom_bar()
+  geom_bar() 
 ```
 
 `fill = year` didn't do anything. What happened? Recall from earlier that ggplot treats integers as continuous variables. The "fill" aesthetic of bar plots, however, must be a discrete variable. To fix this problem, we'll turn `year` into a factor.
@@ -363,7 +367,8 @@ mpg %>%
 mpg %>% 
   mutate(year = as.factor(year)) %>% 
   ggplot(mapping = aes(x = drv, fill = year)) +
-  geom_bar()
+  geom_bar() +
+  stamp("Bad")
 ```
 
 This is a "stacked" bar plot. Stacked bar plots are rarely a good idea. It's pretty easy to understand the relationship between count and drivetrain for cars from 2008 (the blue bars). However, some visual arithmetic is required to compare the 1999 bars because they start at different points along the y-axis. Any more values in `year` would only exacerbate this problem.
@@ -384,7 +389,8 @@ Notice that it's now much easier to compare the red bars to each other, as they 
 ```{r}
 mpg %>% 
   ggplot(mapping = aes(x = drv, fill = trans)) +
-  geom_bar(position = "dodge")
+  geom_bar(position = "dodge") +
+  stamp("Bad")
 ```
 
 Recall our goals from the beginning of this chapter. The first goal states that it should be easy to connect categories with numbers. Two variables now define each category. It's pretty easy to connect `drv` to a number of cars. However, it's difficult to connect `trans` with those numbers. There are so many different colors that it's hard to remember which color refers to which transmission type.
