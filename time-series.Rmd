@@ -51,7 +51,7 @@ nycflights13::flights %>%
   select(time_hour)
 ```
 
-When you map `time_hour` to an aesthetic, ggplot2 uses `sclae_*_datetime()`, the scale function for date-times. There is also `scale_*_date()` for dates and `scale_*_time()` for times. The date- and time-specific scale functions are useful because they create meaningful breaks and labels.
+When you map `time_hour` to an aesthetic, ggplot2 uses `scale_*_datetime()`, the scale function for date-times. There is also `scale_*_date()` for dates and `scale_*_time()` for times. The date- and time-specific scale functions are useful because they create meaningful breaks and labels.
 
 `flights_0101_0102` contains data on the number of flights per hour on January 1st and January 2nd, 2013. 
 
