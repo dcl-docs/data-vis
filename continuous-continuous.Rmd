@@ -304,7 +304,7 @@ Most of the hexagons only represent a single point, so `geom_hex()` isn't the be
 Another option is change the shape of the dots so that they have visible borders. By default, `geom_point()` points are solid-colored circles, but there are actually 25 different possible shapes. The following image from the _Scales_ section of the [ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) displays these shapes along with their identifying numbers.
 
 ```{r, echo=FALSE}
-knitr::include_graphics("shapes.png")
+knitr::include_graphics("images/shapes.png")
 ```
 
 `shape = 21` points have both a border and a fill. By default, the border is black and the fill is transparent. 
