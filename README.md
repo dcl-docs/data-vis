@@ -1,6 +1,6 @@
-# Vis Wisdom
+# Data Visualization
 
-This repository contains the source for the book [Vis Wisdom](https://bookdown.org/content/2138/).
+This repository contains the source for the book [Data Visualization](https://bookdown.org/content/2138/).
 
 We welcome suggestions for improvements.
 
