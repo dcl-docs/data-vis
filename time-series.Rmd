@@ -171,12 +171,10 @@ southern_africa_countries <-
   filter(year >= 1980, year <= 2015)
 
 southern_africa_countries %>% 
+  mutate(name = fct_reorder2(name, year, life_expectancy)) %>% 
   ggplot(aes(year, life_expectancy, color = name)) +
   geom_vline(xintercept = 1994, color = "blue") +
   geom_point() +
-  scale_color_discrete(
-    breaks = c("Botswana", "South Africa", "Swaziland", "Lesotho")
-  ) +
   theme(legend.justification = "top") 
 ```
 
@@ -184,13 +182,11 @@ When you have multiple time series, adding `geom_line()` makes it easier to grou
 
 ```{r}
  southern_africa_countries %>% 
+  mutate(name = fct_reorder2(name, year, life_expectancy)) %>% 
   ggplot(aes(year, life_expectancy, color = name)) +
   geom_vline(xintercept = 1994, color = "blue") +
   geom_line() +
   geom_point() +
-  scale_color_discrete(
-    breaks = c("Botswana", "South Africa", "Swaziland", "Lesotho")
-  ) +
   theme(legend.justification = "top")
 ```
 

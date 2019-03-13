@@ -436,7 +436,7 @@ gapminder %>%
 
 You can remove the confidence intervals by setting `se = FALSE` inside `geom_smooth()`, but you should only do so if the confidence intervals are small and constant throughout the entire smooth line.
 
-When you decode this plot, you have to connect each line to its corresponding legend label. Notice that, even though there are only four regions, you still have to go back-and-forth between the legend and the plot quite a bit. This process would be easier if the order of the legend matched the order of the lines (@wilke-2019). We can change the order of the legend by adjusting `breaks` in `scale_color_discrete()`.
+When you decode this plot, you have to connect each line to its corresponding legend label. Notice that, even though there are only four regions, you still have to go back-and-forth between the legend and the plot quite a bit. This process would be easier if the order of the legend matched the order of the lines (@wilke-2019). One option is to change the order of the legend by adjusting `breaks` in `scale_color_discrete()`.
 
 ```{r}
 gapminder %>% 
@@ -446,14 +446,25 @@ gapminder %>%
   scale_color_discrete(breaks = c("Europe", "Americas", "Asia", "Africa"))
 ```
 
+A better option is to use `fct_reorder2()` to reorder `region` by the last `life_expectancy` value. 
+
+```{r}
+gapminder %>% 
+  mutate(region =  fct_reorder2(region, gdp_per_capita, life_expectancy)) %>% 
+  ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
+  geom_smooth(method = "loess") +
+  scale_x_log10()
+```
+`fct_reorder2()` essentially first arranges `region` by `gdp_per_capita`, then reorders `region` by the last value in `life_expectancy`. This option is better than reordering by hand because it is simpler and will still work even if the data changes.
+
 We can also adjust `legend.justification` in `theme()` so that the legend is at the top of the plot, closer to the lines.
 
 ```{r}
 gapminder %>% 
+  mutate(region =  fct_reorder2(region, gdp_per_capita, life_expectancy)) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
   scale_x_log10() +
-  scale_color_discrete(breaks = c("Europe", "Americas", "Asia", "Africa")) +
   theme(legend.justification = "top")
 ```
 
