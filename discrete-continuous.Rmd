@@ -129,13 +129,13 @@ star %>%
   coord_fixed()
 ```
 
-The above plot no longer looks like a start. Instead of just zooming in, we've changed what's plotted. Therefore, to zoom, we recommend using the `xlim` and `ylim` arguments of `coord_cartesian()` and `coord_fixed()` instead of other methods that delete data before plotting. 
+The above plot no longer looks like a star. Instead of just zooming in, we've changed what's plotted. Therefore, to zoom, we recommend using the `xlim` and `ylim` arguments of `coord_cartesian()` and `coord_fixed()` instead of other methods that delete data before plotting. 
 
 ### `coord_flip()`
 
 `coord_flip()` flips Cartesian coordinates, so that the variable mapped to `x` is used for the y-coordinates and the variable mapped to `y` is used for the x-coordinates. 
 
-Compare the following plot with the default coordinate system to one with `coord_flip()`
+Compare the following plot with the default coordinate system to one with `coord_flip()`.
 
 ```{r}
 mpg %>% 
