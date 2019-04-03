@@ -22,7 +22,7 @@ This book is a practical introduction to creating effective visualizations using
 
 We intend this book as a _complement_ to these resources, building on what they teach about ggplot2, and we will link to them often.
 
-_R4DS_, the website, and the cheat sheet mostly cover the _mechanics_ of ggplot2. They teach you how to build plots in ggplot2, but it is generally discusses the practice of creating effective visualizations is generally outside their scope. There is also a wealth of resources devoted to teaching effective visualization techniques, which we call visualization _wisdom_. These resources include:
+_R4DS_, the website, and the cheat sheet mostly cover the _mechanics_ of ggplot2. They teach you how to build plots in ggplot2, but the practice of creating effective visualizations is generally outside their scope. There is also a wealth of resources devoted to teaching effective visualization techniques, which we call visualization _wisdom_. These resources include:
 
 * William Cleveland's books and papers, including [The Elements of Graphing Data](https://books.google.com/books?id=KMsZAQAAIAAJ)
 * Edward Tufte's books, including [The Visual Display of Quantitative Information](https://books.google.com/books?id=GTd5oQEACAAJ)
