@@ -379,9 +379,9 @@ gapminder %>%
 
 The shaded areas around the blue line represent the confidence intervals. The larger the shaded gray area, the higher the uncertainty in that area. In this case, the confidence intervals are larger around the lowest and highest values of `gdp_per_capita`.
 
-Notice that we got a message saying "`geom_smooth()` using method = 'gam'." There are many different methods we could use to create a smooth line. "gam", which is short for generalized additive model, is one. By default, `geom_smooth()` uses `method = "gam"` if your data has more than 1000 points, and `method = "loess"` if you have fewer than 1000 points because LOESS (locally estimated scatter plot smoothing) can be computationally unfeasible for larger data sets.
+Notice that we got a message saying `geom_smooth()` is using "method = 'gam'." There are many different methods we could use to create a smooth line. "gam", which is short for generalized additive model, is one. By default, `geom_smooth()` uses `method = "gam"` if your data has more than 1000 points, and `method = "loess"` if you have fewer than 1000 points because LOESS (locally estimated scatter plot smoothing) can be computationally unfeasible for larger data sets.
 
-We only have 2500 points, so we can try LOESS.
+In general, we recommend using `method = "loess"` unless you have far more than 1000 points. We only have 2500 points, so we can try LOESS.
 
 ```{r}
 gapminder %>% 
@@ -392,7 +392,19 @@ gapminder %>%
   scale_fill_viridis_c() 
 ```
 
-Notice that `method = "loess"` produces a smoother trend line. Unless you have a very large amount of data, `method = "loess"` is usually a better option. 
+Notice that `method = "loess"` produces a smoother trend line. 
+
+`geom_smooth()` will default to `method = "gam"` if you have too much data for LOESS, which means you will rarely need to manually specify `method = "gam"` inside `geom_smooth()`. If you find yourself in a situation in which you do need to manually specify `method = "gam"`, note that you will also need to provide a value to `geom_smooth()`'s `formula` argument. Otherwise, `formula` will default to `y ~ x`, producing a linear fit.
+
+```{r}
+gapminder %>% 
+  ggplot(aes(gdp_per_capita, life_expectancy)) +
+  geom_hex() +
+  geom_smooth(method = "gam") +
+  scale_x_log10() +
+  scale_fill_viridis_c() +
+  stamp("Bad")
+```
 
 Smooth lines are a helpful tool, but they aren't always necessary. Use smooth lines when you care about understanding or communicating a trend, but that trend is not immediately obvious without a smooth line.
 
