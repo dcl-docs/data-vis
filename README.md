@@ -1,6 +1,6 @@
 # Data Visualization
 
-This repository contains the source for the book [Data Visualization](https://bookdown.org/content/2138/).
+This repository contains the source for the book [Data Visualization](https://dcl-data-vis.stanford.edu/).
 
 We welcome suggestions for improvements.
 
