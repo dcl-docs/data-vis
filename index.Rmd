@@ -20,7 +20,7 @@ This book is a practical introduction to creating effective visualizations using
 * The [ggplot2 website](https://ggplot2.tidyverse.org/)
 * RStudio's [Data visualization with ggplot2](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) cheat sheet
 
-We intend this book as a _complement_ to these resources, building on what they teach about ggplot2, and we will link to them often.
+We intend this book as a _complement_ to these resources, building on what they teach about ggplot2. We will link to them often.
 
 _R4DS_, the website, and the cheat sheet mostly cover the _mechanics_ of ggplot2. They teach you how to build plots in ggplot2, but the practice of creating effective visualizations is generally outside their scope. There is also a wealth of resources devoted to teaching effective visualization techniques, which we call visualization _wisdom_. These resources include:
 
