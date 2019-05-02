@@ -49,7 +49,7 @@ Adding text to your visualizations can make them more informative. The following
 
 Transforming linear scales into log scales is a common use of the scale functions. Log scales are helpful in several different scenarios. 
 
-When a variable spans several orders of magnitude, a linear scales will tend to hide differences between smaller values.
+When a variable spans several orders of magnitude, a linear scale will tend to hide differences between smaller values.
 
 ```{r, fig.asp=1}
 asia_2015 <-
