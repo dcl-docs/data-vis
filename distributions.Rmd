@@ -403,7 +403,7 @@ In the previous section, we mentioned a use case for `geom_density()`. One advan
 
 ```{r}
 congress_2019 %>% 
-  ggplot(aes(age, y = ..density.., color = chamber, fill = chamber )) +
+  ggplot(aes(age, y = stat(density), color = chamber, fill = chamber )) +
   geom_density() +
   stamp("Bad")
 ```
@@ -412,7 +412,7 @@ By default, the fill regions are opaque, so to be useful we need to change the t
 
 ```{r}
 congress_2019 %>% 
-  ggplot(aes(age, y = ..density.., color = chamber, fill = chamber )) +
+  ggplot(aes(age, y = stat(density), color = chamber, fill = chamber )) +
   geom_density(alpha = 0.5)
 ```
 
@@ -450,7 +450,7 @@ If we want to visualize more than 2 or 3 distributions at once, we'll need a new
 
 ```{r}
 congress_2019 %>% 
-  ggplot(aes(age, ..density.., color = division)) +
+  ggplot(aes(age, stat(density), color = division)) +
   geom_freqpoly(binwidth = 8) +
   stamp("Bad")
 ```
