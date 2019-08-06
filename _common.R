@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
   fig.show = "hold"
 )
 
+image_dpi <- 125
+
 # Stamps plots with a tag 
 # Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
 stamp <- function(
