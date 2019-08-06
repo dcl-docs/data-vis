@@ -4,7 +4,7 @@ title: "Data Visualization"
 author: "Sara Altman, Bill Behrman"
 date: "`r Sys.Date()`"
 description: "This book is a practical introduction to creating effective visualizations using ggplot2."
-url: 'https\://datalab.stanford.edu/dcl-docs/data-vis'
+url: 'https\://dcl-data-vis.stanford.edu'
 github-repo: dcl-docs/data-vis
 site: bookdown::bookdown_site
 documentclass: book
