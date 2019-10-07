@@ -488,13 +488,17 @@ Paired data occurs when you have the same measure at two separate points. For ex
 
 In the Gapminder data, we might want to understand how life expectancy changed from 2010 to 2015 for each country. This data is paired. The same metric (life expectancy) was measured twice at two different points.
 
-To get the data into a form that is easy to visualize, we'll need to use `spread()`.
+To get the data into a form that is easy to visualize, we'll need to use `pivot_wider()`.
 
 ```{r}
 gapminder_paired <-
   gapminder_2010_2015 %>%  
   select(iso_a3, name, region, year, life_expectancy) %>% 
-  spread(key = year, value = life_expectancy, sep = "_") 
+  pivot_wider(
+    names_from = year,
+    names_prefix = "year_",
+    values_from = life_expectancy
+  )
 
 gapminder_paired 
 ```
