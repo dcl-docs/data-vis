@@ -253,7 +253,7 @@ Here are four practical strategies to keep in mind when creating visualizations.
 
 ### Set goals
 
-Setting goals for visualizations forces you to think clearly about a visualization's purpose. For EDA plots, your goals will typically be questions (e.g., "What's the tallest building?". For presentation plots, your goals revolve around conveying specific information to your audience.
+Setting goals for visualizations forces you to think clearly about a visualization's purpose. For EDA plots, your goals will typically be questions (e.g., "What's the tallest building?"). For presentation plots, your goals revolve around conveying specific information to your audience.
 
 Setting clear goals allows you to evaluate the effectiveness of your visualizations. Recall how, in the _Discrete-continuous relationships_ chapter, we started off with two goals for our Utah languages visualization and then used those goals to evaluate various plots. 
 
