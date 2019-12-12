@@ -3,11 +3,9 @@
 ```{r, message=FALSE}
 # Libraries
 library(tidyverse)
+library(dcldata)
 
 # Data
-  # Times for 2016 Olympics men's 100 meter final
-sprint_times <- read_rds("data/olympics-2016/100m_men.rds")
-
   # Data on world's tallest buildings
 buildings <-
   read_rds("data/tallest-buildings/tallest_buildings.rds")
@@ -93,7 +91,7 @@ Whether you are creating an EDA or presentation plot, you have to choose your en
 For example, recall our 100-meter dash plots from the previous chapter. When we use `geom_bar()`, we encode time with length.
 
 ```{r}
-sprint_times %>% 
+example_sprint %>% 
   mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_col() +
@@ -103,14 +101,14 @@ sprint_times %>%
 This plot communicates that Usain Bolt won, but it was pretty close. When we encode time with position using `geom_point()`, we get a different picture.
 
 ```{r}
-sprint_times %>% 
+example_sprint %>% 
   mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_point() +
   coord_flip()
 ```
 
-A choice of encodings could affect how you explore and understand the `sprint_times` data. 
+A choice of encodings could affect how you explore and understand the `example_sprint` data. 
 
 In a presentation plot, encoding information in visual elements is a way to transfer ideas about the data from your mind to the minds of others. You should choose your encodings so that the decoding process is easy for your audience. Ideally, as little information as possible should be lost in the decoding process. Your audience should come away with the same understanding of the data as you started with.
 

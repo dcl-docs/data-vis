@@ -320,7 +320,7 @@ The choice between points and bars is largely a choice between comparing values 
 For example, the following plot shows the times from the men's 100 meter final in the 2016 Olympics. The times are all very close together, and the bars fill up most of the plot.
 
 ```{r}
-sprint_times %>% 
+example_sprint %>% 
   mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_col() +
@@ -337,7 +337,7 @@ In the _Visual Display of Quantitative Information_, Edward Tufte gives the foll
 "Compared to what?" is a useful question to ask yourself when creating visualizations. Our bar plot above seems to say the important comparison is between the race times and 0. However, the interesting time comparisons aren't to 0, but among the runners. `geom_point()` allows us to highlight these comparisons. 
 
 ```{r}
-sprint_times %>% 
+example_sprint %>% 
   mutate(name = fct_reorder(name, -time)) %>% 
   ggplot(mapping = aes(x = name, y = time)) +
   geom_point() +
