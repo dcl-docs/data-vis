@@ -2,20 +2,12 @@
 
 ## Introduction
 
-In this chapter, we'll use the tidyverse package and the following data sets.
+In this chapter, we'll use the tidyverse package and data from the dcldata package.
 
 ```{r, message=FALSE}
 # Libraries
 library(tidyverse)
-
-# Data
-
-  # Languages other than English and Spanish spoken at home in Utah
-utah_languages <- 
-  read_rds("data/us-languages/non-english-spanish_utah.rds")
-
-  # Times for 2016 Olympics men's 100 meter final
-sprint_times <- read_rds("data/olympics-2016/100m_men.rds")
+library(dcldata)
 ```
 
 Before reading this chapter, take a look at the following sections from the [Data Visualization with ggplot2 cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
@@ -155,10 +147,17 @@ As you'll see later, `coord_flip()` is useful when visualizing discrete-continuo
 
 ## One discrete category
 
-In this section, we'll use data collected by the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs/) on languages spoken at home across the US. The tibble `utah_languages` contains data from the 2013 ACS on the top 20 languages, other than English and Spanish, spoken at home in Utah. 
+In this section, we'll use data collected by the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs/) on languages spoken at home across the US. `dcldata::languages_states` contains data from the 2013 ACS on the number of at-home speakers of non-English speakers by state. 
+
+We've filtered `languages_states` to focus on the top 20 languages spoken in Utah, besides English and Spanish. We'll use this tibble, `utah_languages`, for the rest of the chapter.
 
 ```{r}
-head(utah_languages)
+utah_languages <-
+  languages_states %>% 
+  filter(state == "Utah", language != "Spanish") %>%
+  top_n(n = 20, wt = speakers)
+
+utah_languages
 ```
 
 `utah_languages` contains one discrete variable (`language`) and one continuous variable (`speakers`). In the next section, we'll visualize the number of speakers of each language, a discrete-continuous relationship. 

@@ -32,11 +32,51 @@ Our goal is to combine ggplot2 mechanics and visualization wisdom into a single 
 
 ## How to read this book {-}
 
+### Code and data
+
+You can easily copy the code in this book by hovering over a chunk and then clicking the copy button that appears in the upper-right corner.
+
+Every dataset we use is contained in an R package, making it easy to follow along and replicate our examples. Many of the datasets are in our own [dcldata package](https://github.com/dcl-docs/dcldata). To install dcldata, copy the following code and paste it into RStudio.
+
+```{r eval=FALSE}
+# You can copy this code with the copy button!
+# First, install devtools if you don't already have it:
+# install.packages("devtools")
+devtools::install_github("dcl-docs/dcldata")
+```
+
+To access the datasets, load the relevant package
+
+```{r message=FALSE, warning=FALSE}
+library(dcldata)
+```
+
+and then call the dataset by name.
+
+```{r}
+anscombe_1
+```
+
+All datasets have accompanying documentation, which you can find with the `?` operator.
+
+```{r eval=FALSE}
+?anscombe_1
+```
+
+You can also view the names of all datasets in a given package with the `data()` function.
+
+```{r eval=FALSE}
+data(package = "dcldata")
+```
+
+### Organization
+
 This book is organized thematically, with each chapter building upon the previous ones, and we recommend reading the chapters in order. For the most part, each chapter discusses a category of visualization (e.g., time series, distributions) and contains both ggplot2 mechanics and visualization wisdom. We've woven ggplot2 mechanics through the book so that readers quickly learn the most important skills, and then acquire more advanced skills as they become relevant to the visualization tasks at hand.
 
 An advantage of the thematic approach is that readers just starting out with both ggplot2 and data visualization can simultaneously learn how to create plots in ggplot2 and how to make those plots effective. The thematic organization also enables readers to use the book as a visualization category reference. For example, if you know you want to visualize a distribution, you can go to the _Distributions_ chapter and remind yourself of the various strategies. 
 
 A disadvantage of this organization is that the book does not function well as a reference for looking up ggplot2 mechanics (e.g., if you forget how scales work and try to refer back to the relevant section). The ggplot2 cheat sheet is a better resource for looking up mechanics, and we mention relevant sections so that readers can familiarize themselves with the cheat sheet for later use. 
+
 
 ## An evolving book {-}
 
