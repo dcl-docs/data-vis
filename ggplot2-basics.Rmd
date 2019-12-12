@@ -141,6 +141,7 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
   <SCALE_FUNCTION(s)> + 
   <COORDINATE_FUNCTION> +
   <FACET_FUNCTION> + 
+  <GUIDES> +
   <THEME> +
   <LABELS>
 ```
