@@ -304,9 +304,3 @@ It's now much more obvious that China has more tall buildings than any other cou
 Your first attempt at a visualization will almost never be your best attempt. You shouldn't expect to know, before plotting, the best way to visualize a given data set, and so iteration is critical. Once you have your goals in mind and have carefully looked at your visualizations, you can begin to iterate, fixing problems and emphasizing the relationships you wish to show.
 
 Keep in mind that iteration can take time. You may not be able to come up with a better alternative to a plot immediately. It's often helpful to take a break from a difficult visualization problem, allow your mind time to work on the problem in the background, and return later on.
-
-
-
-
-
-
