@@ -6,15 +6,11 @@ This chapter uses the following data sets.
 # Libraries
 library(tidyverse)
 library(dcldata)
-
-# Data
- # Gapminder data on life expectancy, GDP per capita, and population
-gapminder <- read_rds("data/gapminder/data/combined_1950-2015_5yr.rds")
 ```
 
 ## Introduction
 
-Visualizing continuous-continuous relationships allows you to see associations between variables. In this chapter, we'll use [Gapminder](https://www.gapminder.org/) data to visualize the relationship between life expectancy and per capita GDP. 
+Visualizing continuous-continuous relationships allows you to see associations between variables. In this chapter, we'll use [Gapminder](https://www.gapminder.org/) data from  the dcldata package to visualize the relationship between life expectancy and per capita GDP. 
 
 Here are some questions we might ask about the relationship between life expectancy and per capita GDP:
 
@@ -52,7 +48,7 @@ When a variable spans several orders of magnitude, a linear scale will tend to h
 
 ```{r, fig.asp=1}
 asia_2015 <-
-  gapminder %>% 
+  gm_combined %>% 
   filter(region == "Asia", year == 2015)
 
 asia_2015 %>% 
@@ -210,16 +206,16 @@ mpg %>%
 
 ## Two continuous variables
 
-`gapminder` is a subset of the [Gapminder data](https://www.gapminder.org/data/). It includes data on population, per capita GDP, and life expectancy for 183 countries from every five years, starting in 1950 and ending in 2015. 
+`gm_combined` is a subset of the [Gapminder data](https://www.gapminder.org/data/) and is included in the dcldata package. It includes data on population, per capita GDP, and life expectancy for 183 countries from every five years, starting in 1950 and ending in 2015. 
 
 ```{r}
-gapminder 
+gm_combined 
 ```
 
 Earlier, we said we were interested in the relationship between `life_expectancy` and `gdp_per_capita`. When you have two continuous variables, a scatter plot using `geom_point()` is usually a good starting point. 
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point() +
   stamp("Bad")
@@ -228,7 +224,7 @@ gapminder %>%
 However, there are several problems with this plot. First, most of the data is concentrated on the left edge of the plot because of a few large `gdp_per_capita` values. A log scale helps, but there is a lot of data and many of the points still overlap.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point() +
   scale_x_log10() +
@@ -244,7 +240,7 @@ One way to address overplotting is to bin the data and then use color to encode 
 `geom_bin2d()` divides up the total data space into rectangular bins. The `fill` color of the bin represents how many data points fall into the area covered by that bin.  
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_bin2d() +
   scale_x_log10()
@@ -255,7 +251,7 @@ From this plot, you can see that the highest concentration of points is around (
 `geom_hex()` uses hexagons instead of rectangles.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   scale_x_log10()
@@ -266,7 +262,7 @@ We recommend using `geom_hex()` instead of `geom_bin2d()` in most situations, si
 The contrast between the viridis colors makes the `geom_hex()` plot even easier to decode.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   scale_x_log10() +
@@ -278,11 +274,11 @@ Like `geom_histogram()`, `geom_bin2d()` and `geom_hex()` both create a default n
 Now, say we want to investigate just 2010 and 2015.
 
 ```{r}
-gapminder_2010_2015 <-
-  gapminder %>% 
+gm_combined_2010_2015 <-
+  gm_combined %>% 
   filter(year %in% c(2010, 2015))
 
-gapminder_2010_2015 %>% 
+gm_combined_2010_2015 %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point() +
   scale_x_log10()
@@ -291,7 +287,7 @@ gapminder_2010_2015 %>%
 There are fewer points, but there's still some overplotting. We could use `geom_hex()` again.
 
 ```{r}
-gapminder_2010_2015 %>% 
+gm_combined_2010_2015 %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   scale_x_log10() +
@@ -309,7 +305,7 @@ knitr::include_graphics("images/shapes.png")
 `shape = 21` points have both a border and a fill. By default, the border is black and the fill is transparent. 
 
 ```{r}
-gapminder_2010_2015 %>% 
+gm_combined_2010_2015 %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point(shape = 21, size = 3) +
   scale_x_log10()
@@ -318,7 +314,7 @@ gapminder_2010_2015 %>%
 The transparent interiors and black borders make it easier to perceive individual points and spot areas of overlap. This effect is stronger if you fill the circles and add a white border.
 
 ```{r}
-gapminder_2010_2015 %>% 
+gm_combined_2010_2015 %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point(shape = 21, fill = "black", color = "white", size = 3) +
   scale_x_log10() 
@@ -327,7 +323,7 @@ gapminder_2010_2015 %>%
 A simpler strategy is to make the points more transparent. In `geom_point()`, you can adjust the transparency with the `alpha` argument.
 
 ```{r}
-gapminder_2010_2015 %>%  
+gm_combined_2010_2015 %>%  
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_point(alpha = 0.5, size = 3) +
   scale_x_log10()
@@ -358,7 +354,7 @@ mpg %>%
 Here's our earlier `geom_hex()` plot.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   scale_x_log10() +
@@ -368,7 +364,7 @@ gapminder %>%
 `geom_hex()` does a good job of representing the data, but it can make it difficult to see the general trend. We'll use a smooth line to get a quick sense of the trend.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   geom_smooth() +
@@ -383,7 +379,7 @@ Notice that we got a message saying `geom_smooth()` is using "method = 'gam'." T
 In general, we recommend using `method = "loess"` unless you have far more than 1000 points. We only have 2500 points, so we can try LOESS.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   geom_smooth(method = "loess") +
@@ -396,7 +392,7 @@ Notice that `method = "loess"` produces a smoother trend line.
 `geom_smooth()` will default to `method = "gam"` if you have too much data for LOESS, which means you will rarely need to manually specify `method = "gam"` inside `geom_smooth()`. If you find yourself in a situation in which you do need to manually specify `method = "gam"`, note that you will also need to provide a value to `geom_smooth()`'s `formula` argument. Otherwise, `formula` will default to `y ~ x`, producing a linear fit.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
   geom_smooth(method = "gam") +
@@ -416,7 +412,7 @@ Sometimes, you'll want to _only_ show the smooth lines. This is a good option if
 For example, here's a plot showing the relationship between `gdp_per_capita` and `life_expectancy`. We've also used `color` to encode `region`.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_point() +
   scale_x_log10() +
@@ -426,7 +422,7 @@ gapminder %>%
 In this plot, there are too many data points to determine the relationship between `life_expectancy` and `gdp_per_capita` for each region. We could add a smooth line on top of the points for each region.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_point() +
   geom_smooth(method = "loess") +
@@ -439,7 +435,7 @@ However, this is even worse. There is too much going on, and you can't distingui
 Removing the points allows you to see that each region has a slightly different trend.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
   scale_x_log10()
@@ -450,7 +446,7 @@ You can remove the confidence intervals by setting `se = FALSE` inside `geom_smo
 When you decode this plot, you have to connect each line to its corresponding legend label. Notice that, even though there are only four regions, you still have to go back-and-forth between the legend and the plot quite a bit. This process would be easier if the order of the legend matched the order of the lines (@wilke-2019). One option is to change the order of the legend by adjusting `breaks` in `scale_color_discrete()`.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
   scale_x_log10() +
@@ -460,7 +456,7 @@ gapminder %>%
 A better option is to use `fct_reorder2()` to reorder `region` by the last `life_expectancy` value. 
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   mutate(region =  fct_reorder2(region, gdp_per_capita, life_expectancy)) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
@@ -471,7 +467,7 @@ gapminder %>%
 We can also adjust `legend.justification` in `theme()` so that the legend is at the top of the plot, closer to the lines.
 
 ```{r}
-gapminder %>% 
+gm_combined %>% 
   mutate(region =  fct_reorder2(region, gdp_per_capita, life_expectancy)) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
@@ -490,8 +486,8 @@ In the Gapminder data, we might want to understand how life expectancy changed f
 To get the data into a form that is easy to visualize, we'll need to use `pivot_wider()`.
 
 ```{r}
-gapminder_paired <-
-  gapminder_2010_2015 %>%  
+gm_combined_paired <-
+  gm_combined_2010_2015 %>%  
   select(iso_a3, name, region, year, life_expectancy) %>% 
   pivot_wider(
     names_from = year,
@@ -499,13 +495,13 @@ gapminder_paired <-
     values_from = life_expectancy
   )
 
-gapminder_paired 
+gm_combined_paired 
 ```
 
 One way to visualize paired data is to encode one of the values on x-axis and one on the y-axis. 
 
 ```{r}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) 
 ```
@@ -513,7 +509,7 @@ gapminder_paired %>%
 There are a couple of problems with this plot. First, notice that even though the x- and y-axes are in the same units (years) and cover a similar range of values, one unit on the x-axis covers a different number of years than one unit on the y-axis. This is unnecessarily confusing. We can use `coord_fixed()` to set the aspect ratio to 1.
 
 ```{r}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
   coord_fixed()
@@ -524,7 +520,7 @@ It looks like, for most countries, life expectancy didn't change much from 2010 
 Previously, you learned about vertical and horizontal reference lines at fixed intercepts. In this case, we'll want a reference line at `y = x`. This reference line indicates what the data would look like if life expectancy did not change from 2010 to 2015. Points above the lines represent countries in which life expectancy _increased_ from 2010 to 2015. Points below the line represent countries in life expectancy _decreased_ from 2010 to 2015. We'll add annotations to make this distinction easier to decode.
 
 ```{r}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
@@ -544,11 +540,11 @@ There are a couple of points far away from the red line. What countries do these
 
 ```{r}
 outliers <-
-  gapminder_paired %>% 
+  gm_combined_paired %>% 
   mutate(diff = year_2015 - year_2010) %>% 
   filter(diff < -0.5 | diff > 5)
 
-gapminder_paired %>% 
+gm_combined_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
@@ -568,7 +564,7 @@ This visualization prompts hypotheses about the effects of three world events: t
 Encoding `region` with `color` adds an additional variable to our plot.
 
 ```{r}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(aes(color = region), alpha = 0.5) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
@@ -588,14 +584,14 @@ You can now see that many countries in Africa have relatively low life expectanc
 Encoding both `year_2010` and `year_2015` with position make it difficult to estimate the exact change in life expectancy for a given country. If our goal is to communicate or understand these exact changes, we should create a new variable.
 
 ```{r} 
-gapminder_paired %>% 
+gm_combined_paired %>% 
   mutate(diff = year_2015 - year_2010)
 ```
 
 We now have a discrete-continuous problem. There are too many individual countries for us to be able to create a reasonably sized plot, so we'll just focus on Asia for now.
 
 ```{r, fig.asp=1}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   filter(region == "Asia") %>% 
   mutate(
     diff = year_2015 - year_2010,
@@ -612,7 +608,7 @@ This visualization does a good job of depicting the difference in life expectanc
 We can visualize `year_2010`, `year_2015`, _and_ the difference between the two by plotting both the 2010 and 2015 life expectancies on the same axis.
 
 ```{r, fig.asp=1}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   filter(region == "Asia") %>% 
   mutate(name = fct_reorder(name, year_2015)) %>% 
   ggplot(aes(y = name)) +
@@ -623,7 +619,7 @@ gapminder_paired %>%
 Lines are helpful visual aids if the connection between points is important. We can add connecting lines with `geom_segment()`. 
 
 ```{r, fig.asp=1}
-gapminder_paired %>% 
+gm_combined_paired %>% 
   filter(region == "Asia") %>% 
   mutate(name = fct_reorder(name, year_2015)) %>% 
   ggplot(aes(y = name)) +
@@ -639,8 +635,8 @@ The three different plots we made (the original scatterplot, the discrete-contin
 Say we want to understand the relationship between `life_expectancy`, `per_capita_gdp`, `population`, and `region` for just 2015.
 
 ```{r}
-gapminder_2015 <-
-  gapminder %>% 
+gm_combined_2015 <-
+  gm_combined %>% 
   filter(year == 2015)
 ```
 
@@ -660,7 +656,7 @@ We have three continuous variables to encode. Recall the encoding ranking for co
 A scatterplot will use up our two "position along a common scale" options. We'll encode the most important variables with position. Let's say those are `life_expectancy` and `per_capita_gdp`. We'll also encode our discrete variable, `region`, with color. 
 
 ```{r}
-gapminder_2015 %>% 
+gm_combined_2015 %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_point() +
   scale_x_log10()
@@ -669,7 +665,7 @@ gapminder_2015 %>%
 This is similar to the plots we created earlier. We then move down the ranking before arriving at `size`, the most reasonable option for encoding `population`.
 
 ```{r}
-gapminder_2015 %>% 
+gm_combined_2015 %>% 
   ggplot(
     aes(gdp_per_capita, life_expectancy, color = region, size = population)
   ) +
@@ -680,7 +676,7 @@ gapminder_2015 %>%
 As we pointed out in the _General Strategy_ chapter, the human ability to estimate differences in area is not very accurate. It is difficult to tell the difference similarly sized points. We can make this task a bit easier by increasing the range of possible areas. We'll do this by adjusting `scale_size()`'s `range` argument.
 
 ```{r}
-gapminder_2015 %>% 
+gm_combined_2015 %>% 
   ggplot(
     aes(gdp_per_capita, life_expectancy, color = region, size = population)
   ) +
@@ -692,7 +688,7 @@ gapminder_2015 %>%
 However, now we can't tell if the larger circles cover up smaller ones of the same color. `shape = 21` would help.
 
 ```{r}
-gapminder_2015 %>% 
+gm_combined_2015 %>% 
   ggplot(
     aes(gdp_per_capita, life_expectancy, fill = region, size = population)
   ) +
@@ -706,7 +702,7 @@ There's still the possibility that the large dots cover up smaller ones. `geom_p
 We'll use `arrange()` to reorder our data so that each row contains a country smaller than the previous one.
 
 ```{r}
-gapminder_2015 %>% 
+gm_combined_2015 %>% 
   arrange(desc(population)) %>% 
   ggplot(
     aes(gdp_per_capita, life_expectancy, fill = region, size = population)
@@ -719,7 +715,7 @@ gapminder_2015 %>%
 The `population` legend isn't very informative. We can make it better by including more possible circle areas. 
 
 ```{r}
-gapminder_2015 %>% 
+gm_combined_2015 %>% 
   arrange(desc(population)) %>% 
   ggplot(
     aes(gdp_per_capita, life_expectancy, size = population, fill = region)

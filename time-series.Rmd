@@ -1,30 +1,10 @@
 # Time series
 
-In this chapter, we'll use the tidyverse package and the following data.
-
 ```{r, message=FALSE}
 # Libraries
 library(tidyverse)
-
-# Data
-  # Gapminder data with life expectancy, per capita GDP, and population for
-  # 183 countries; every five years from 1950-2015
-gapminder <- read_rds("data/gapminder/data/combined_1950-2015_5yr.rds")
-  # Detailed information on Gapminder countries
-countries <- read_rds("data/gapminder/data/countries.rds")
-  # Gapminder life expectancy data for all years, 1800-2100
-life_expectancy <- 
-  read_rds("data/gapminder/data/life_expectancy.rds") %>% 
-  left_join(
-    countries %>% select(iso_a3, region = region_gm4),
-    by = "iso_a3"
-  ) %>% 
-  filter(year <= 2015) %>% 
-  mutate(region = str_to_title(region))
-  # Major famines by year and country
-famines <- read_rds("data/famines/famines.rds")
+library(dcldata)
 ```
-
 
 In the last chapter, we visualized the relationship between per capita GDP and life expectancy. You might have wondered how time fits into that association. In this chapter, we'll explore life expectancy and GDP over time. 
 
@@ -96,17 +76,17 @@ flights_0101_0102 %>%
 
 ### One response variable
 
-`gapminder` is the same Gapminder data you saw in the previous chapter. Previously, we investigated how life expectancy is associated with per capita GDP. Now, we'll ask a more obvious question: how has life expectancy changed over time?
+`gm_combined` is the same Gapminder data you saw in the previous chapter. Previously, we investigated how life expectancy is associated with per capita GDP. Now, we'll ask a more obvious question: how has life expectancy changed over time?
 
 ```{r}
-gapminder
+gm_combined
 ```
 
 First, let's just look at a single country: South Africa.
 
 ```{r}
 south_africa <-
-  gapminder %>% 
+  gm_combined %>% 
   filter(name == "South Africa")
 
 south_africa %>% 
@@ -133,12 +113,11 @@ south_africa %>%
   geom_vline(xintercept = 1994, color = "blue")
 ```
 
-We could remove the points and just use a line, but the points are helpful indicators of the actual data. Generally, the more points you have, the less important it is to keep the points. For example, the following plot shows life expectancy for South Africa using the full `life_expectancy` data, which contains yearly data.
-
+We could remove the points and just use a line, but the points are helpful indicators of the actual data. Generally, the more points you have, the less important it is to keep the points. For example, the following plot shows life expectancy for South Africa using the `gm_life_expectancy`, which contains yearly data. We've also filtered the data to only include the years 1800 to 2015, because the data after 2015 is based on projections. 
 ```{r}
 south_africa_le <-
-  life_expectancy %>% 
-  filter(name == "South Africa")
+  gm_life_expectancy %>% 
+  filter(name == "South Africa", year <= 2015)
 
 south_africa_le %>% 
   ggplot(aes(year, life_expectancy)) +
@@ -164,7 +143,7 @@ To further investigate, we'll compare South Africa to its neighbors during this 
 
 ```{r}
 southern_africa_countries <-
-  life_expectancy %>% 
+  gm_life_expectancy %>% 
   filter(
     name %in% c("South Africa", "Swaziland" ,"Lesotho", "Botswana")
   ) %>% 
@@ -216,13 +195,14 @@ Interestingly, all four countries experienced similar declines in the early 1990
 
 ### Distributions over time
 
-There are 54 countries listed under the "Africa" region in our data set. 
+We can join `gm_life_expectancy` with `gm_countries` to look at all countries in Africa. 
 
 ```{r}
 africa_le <-
-  life_expectancy %>% 
+  gm_life_expectancy %>% 
+  left_join(gm_countries, by = c("iso_a3", "name")) %>% 
   filter(
-    region == "Africa",
+    region_gm4 == "africa",
     year >= 1980,
     year <= 2015
   ) 
@@ -231,6 +211,8 @@ africa_le %>%
   pull(name) %>% 
   n_distinct()
 ```
+
+There are `r africa_le %>% pull(name) %>% n_distinct()` countries listed under the "Africa" region in the data.
 
 Plotting all the data at once is messy, but you can see that many countries experienced the same dip in the 1990s. You can also see that the countries with high life expectancies didn't experience at dip at all, and that many countries experienced dramatic downward spikes due to single events.  
 
@@ -294,16 +276,10 @@ africa_le %>%
 
 You can see a slight dip around the 1990s. However, this smooth line doesn't capture the amount of variation in trends. Africa is a massive continent. Maybe dividing it up further will be more informative.
 
-`countries` contains more detailed region information. By joining `africa_le` with `countries`, we can divide Africa into North Africa and Sub-Saharan Africa.
+We can use `region_gm8` to compare North Africa to Sub-Saharan Africa.
 
 ```{r}
-africa_le_detail <-
-  africa_le %>% 
-  left_join(
-    countries %>% select(iso_a3, region_gm8), by = "iso_a3"
-  )
-
-africa_le_detail %>% 
+africa_le %>% 
   ggplot(aes(year, life_expectancy, color = region_gm8, group = name)) +
   geom_line()
 ```
@@ -311,7 +287,7 @@ africa_le_detail %>%
 Most of the data lies between 40 and 80 years. We'll use `coord_cartesian()` to zoom in on this region.
 
 ```{r}
-africa_le_detail %>% 
+africa_le %>% 
   ggplot(aes(year, life_expectancy, color = region_gm8, group = name)) +
   geom_line() +
   coord_cartesian(ylim = c(40, 80))
@@ -322,7 +298,7 @@ Individual lines are now easier to see. There aren't very many countries in Nort
 Now, we can try a smooth line for each region.
 
 ```{r}
-africa_le_detail %>% 
+africa_le %>% 
   ggplot(aes(year, life_expectancy, color = region_gm8)) +
   geom_smooth(method = "loess") +
   coord_cartesian(ylim = c(40, 80))
@@ -333,8 +309,9 @@ There's a sharp contrast between North Africa and Sub-Saharan Africa. The dip in
 In other situations, you may want to use the techniques covered in the _Distributions_ chapter. For example, you might be curious how the distribution of life expectancies for African countries has changed over time. Box plots are a good option.
 
 ```{r}
-life_expectancy %>% 
-  filter(region == "Africa", year <= 2015) %>% 
+gm_life_expectancy %>% 
+  left_join(gm_countries, by = c("iso_a3", "name")) %>% 
+  filter(region_gm4 == "africa", year <= 2015) %>% 
   mutate(median_le = median(life_expectancy, na.rm = TRUE)) %>% 
   ggplot(aes(year, life_expectancy, group = cut_width(year, 10))) +
   geom_hline(aes(yintercept = median_le), color = "red") +
@@ -519,7 +496,7 @@ In this case, there's no long-term trend we're interested in. Instead, we want t
 
 Sometimes, you'll want to display time on the x-axis like a time series, but you won't actually care about displaying any kind of trend.
 
-`famines` contains data on major famines across time.
+The `famines` dataset from dcldata tracks major famines across time.
 
 ```{r}
 famines
@@ -529,7 +506,7 @@ There's no obvious relationship between time and deaths due to famines.
 
 ```{r}
 famines %>%
-  ggplot(aes(start, deaths_estimate)) +
+  ggplot(aes(year_start, deaths_estimate)) +
   geom_point() +
   scale_y_log10()
 ```
@@ -541,13 +518,13 @@ The above plot only uses the `start` date, but we also have the length of the fa
 ```{r, fig.width = 8}
 famines %>% 
   arrange(desc(deaths_estimate)) %>% 
-  ggplot(aes(start, deaths_estimate)) +
+  ggplot(aes(year_start, deaths_estimate)) +
   geom_segment(
-    aes(xend = end, yend = deaths_estimate, color = region),
+    aes(xend = year_end, yend = deaths_estimate, color = region),
     size = 2,
     lineend = "round"
   ) +
-  ggrepel::geom_text_repel(aes(label = name), size = 2.3) +
+  ggrepel::geom_text_repel(aes(label = location), size = 2.3) +
   scale_y_log10() +
   labs(x = "year")
 ```
