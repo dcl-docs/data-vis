@@ -138,9 +138,9 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
 <DATA> %>% 
   ggplot(mapping = aes(<MAPPINGS>)) + 
   <GEOM(s)> +
-  <SCALE_FUNCTION(s)> + 
-  <COORDINATE_FUNCTION> +
   <FACET_FUNCTION> + 
+  <COORDINATE_FUNCTION> +
+  <SCALE_FUNCTION(s)> + 
   <GUIDES> +
   <THEME> +
   <LABELS>
