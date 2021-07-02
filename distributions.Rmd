@@ -2,7 +2,7 @@
 # Distributions
 
 ```{r, message = FALSE}
-# Libraries
+# Packages
 library(tidyverse)
 library(dcldata)
 ```
@@ -103,9 +103,9 @@ mpg %>%
   geom_boxplot()
 ```
 
-In the _Discrete-continuous relationships_ chapter, you saw how we can use `coord_flip()` to flip a plot and put the labels on the y-axis. However, for reasons you'll learn later on in this chapter, in this case it's better to keep the boxplots oriented vertically. 
+In the _Discrete-continuous relationships_ chapter, you saw how we can flip a plot and put the labels on the y-axis. However, for reasons you'll learn later on in this chapter, in this case it's better to keep the boxplots oriented vertically. 
 
-Instead of using `coord_flip()`, we'll use `theme()`'s `axis.text.x` argument to angle the labels. 
+Instead of putting the labels on the y-axis, we'll use `theme()`'s `axis.text.x` argument to angle the labels. 
 
 ```{r}
 mpg %>% 
@@ -199,7 +199,7 @@ and the oldest member is 85.
 
 ```{r}
 congress %>% 
-  top_n(n = 1, wt = age) 
+  slice_max(age) 
 ```
 
 These summary calculations can only tell us so much about the data. We can get a richer understanding of the data by visualizing the age distribution, both for Congress as a whole and for the different chambers, states, parties, etc.
@@ -243,15 +243,17 @@ In this case, the original 30 bins wasn't too far off from ideal. We'll make a m
 ```{r}
 congress %>% 
   ggplot(aes(x = age)) +
-  geom_histogram(binwidth = 5)
+  geom_histogram(binwidth = 5, boundary = 0)
 ```
+
+The argument `boundary = 0` directs the bin boundaries to be at 0 plus multiples of the `binwidth`; in this case, the bin boundaries are at 25, 30, 35, ..., 90.
 
 We can improve this histogram by adding a reference line at the median. 
 
 ```{r}
 congress %>% 
   ggplot(aes(age)) +
-  geom_histogram(binwidth = 5) +
+  geom_histogram(binwidth = 5, boundary = 0) +
   geom_vline(aes(xintercept = median(age)), color = "red")
 ```
 
@@ -304,10 +306,15 @@ A first pass at a plot might involve using a histogram with `fill` to represent 
 congress %>% 
   ggplot(aes(age, fill = party)) +
   geom_histogram(binwidth = 5) +
+  scale_fill_discrete(direction = -1) +
   stamp("Bad")
 ```
 
-Like stacked bar plots, stacked histograms aren't a very good idea. Stacking makes it difficult to figure out how many Democrats are in each bin.
+Like stacked bar plots, stacked histograms aren't a very good idea. Stacking makes it difficult to figure out how many Democrats are in each bin. The line
+
+`scale_fill_discrete(direction = -1)`
+
+changes the direction of the fill colors, making the Democrats blue and the Republicans red.
 
 One option is to facet.
 
@@ -333,7 +340,8 @@ Another option is overlaying frequency polygons.
 ```{r}
 congress %>% 
   ggplot(aes(age, color = party)) +
-  geom_freqpoly(binwidth = 5)
+  geom_freqpoly(binwidth = 5) +
+  scale_color_discrete(direction = -1)
 ```
 
 The frequency polygons make it even easier to compare the three distributions. Democrats and Republicans are similar, but Democrats are more spread out and are slightly older. The few members in the "Other" category are older than the average Democrat or Republican. 
@@ -381,12 +389,10 @@ This approach works best when you have sufficient data and the distributions can
 set.seed(916)
 
 sim_2 <- 
-  tribble(
-    ~mean, ~x,
-    "0", rnorm(n = 1e4),
-    "5", rnorm(n = 1e5, mean = 5, sd = 2)
-  ) %>% 
-  unnest()
+  bind_rows(
+    tibble(mean = "0", x = rnorm(n = 1e4, mean = 0, sd = 1)),
+    tibble(mean = "1", x = rnorm(n = 1e5, mean = 5, sd = 2))
+  )
   
 sim_2 %>% 
   ggplot(aes(x, color = mean, fill = mean)) +
@@ -405,7 +411,7 @@ sim_2 %>%
 
 Use `stat(count)` instead of `stat(density)` if you want to highlight the number of observations in each group. Otherwise, you can use the default `stat(density)`.
 
-If we want to visualize more than 2 or 3 distributions at once, we'll need a new strategy. The variable `division` contains the US Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so the `geom_freqpoly()` plus color combination doesn't work well.
+If we want to visualize more than 2 or 3 distributions at once, we'll need a new strategy. The variable `division` contains the U.S. Census division for each Congress member's state. There are more values in `division` than in `chamber` or `party`, so the `geom_freqpoly()` plus color combination doesn't work well.
 
 ```{r}
 congress %>% 
@@ -424,23 +430,21 @@ Boxplots summarize data.
 set.seed(200)
 
 sim_3 <- tibble(x = rnorm(100, 0, 10))
+text_color <- "#B33A3A"
 
 sim_3 %>%
   ggplot(aes(x = 1, x)) + 
   geom_boxplot() +
   geom_segment(
-    aes(
-      y = quantile(x, .25),
-      yend = quantile(x, .75)
-    ),
+    aes(y = quantile(x, .25), yend = quantile(x, .75)),
     x = 1.42,
     xend = 1.42,
-    color = "#B33A3A"
+    color = text_color
   ) +
   geom_text(
     aes(y = quantile(x, .75)),
     x = 1.45, 
-    color = "#B33A3A",
+    color = text_color,
     label = "50% of the data",
     hjust = 0
   ) +
@@ -450,7 +454,7 @@ sim_3 %>%
     label = "Max value, excluding outliers",
     hjust = 0,
     vjust = 1.5,
-    color = "#B33A3A"
+    color = text_color
   ) +
   geom_text(
     aes(y = min(x)),
@@ -458,19 +462,19 @@ sim_3 %>%
     label = "Min value, excluding outliers",
     hjust = 0,
     vjust = 0,
-    color = "#B33A3A"
+    color = text_color
   ) +
   geom_text(
     aes(y = median(x)), 
     x = 0.5, 
     label = "Median", 
-    color = "#B33A3A"
+    color = text_color
   ) +
   geom_text(
     aes(y = max(x)),
     x = 0.85, 
     label = "Outliers",
-    color = "#B33A3A"
+    color = text_color
   ) +
   coord_cartesian(xlim = c(0, 2)) +
   theme_void()
@@ -488,20 +492,19 @@ congress %>%
   stamp("Bad")
 ```  
 
-By now, you should be used to the overlapping labels problem. We could try using `coord_flip()`.
+By now, you should be used to the overlapping labels problem. We could try putting the labels on the y-axis.
 
 ```{r}
 congress %>% 
   mutate(division = fct_reorder(division, age)) %>% 
-  ggplot(aes(division, age)) +
+  ggplot(aes(age, division)) +
   geom_boxplot() +
-  coord_flip() +
   stamp("Bad")
 ```
 
 However, flipping makes the median lines and box boundaries harder to compare, because it is more difficult to compare vertical line segments than horizontal ones.
 
-Instead of using `coord_flip()`, we can use `theme()` to angle the labels like you learned earlier.
+Instead putting the labels on the y-axis, we can use `theme()` to angle the labels like you learned earlier.
 
 ```{r}
 congress %>%  
@@ -548,10 +551,7 @@ congress %>%
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
 ```
 
-(`geom_violin()` calculates quantiles differently than `geom_boxplot()` or the `median()` and `quantile()` functions, which is why the 0.5 quantile lines aren't perfectly ordered.)
+(`geom_violin()` calculates the quantiles of the density estimate, which is not the same as the quantiles of the data used by `quantile()`, `median()`, and `geom_boxplot()`. This is why the 0.5 quantile lines aren't perfectly ordered.)
 
 Neither boxplots nor violin plots display the amount of data behind each plot, and so you can't tell from the plots that New England has fewer representatives than the Pacific division. There are positives and negatives to every visualization decision you'll make, and so the best geom will depend on what you want your plot to show. 
-
-
-
 

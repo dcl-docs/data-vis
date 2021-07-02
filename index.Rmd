@@ -32,7 +32,7 @@ Our goal is to combine ggplot2 mechanics and visualization wisdom into a single 
 
 ## How to read this book {-}
 
-### Code and data
+### Code and data {-}
 
 You can easily copy the code in this book by hovering over a chunk and then clicking the copy button that appears in the upper-right corner.
 
@@ -40,9 +40,9 @@ Every dataset we use is contained in an R package, making it easy to follow alon
 
 ```{r eval=FALSE}
 # You can copy this code with the copy button!
-# First, install devtools if you don't already have it:
-# install.packages("devtools")
-devtools::install_github("dcl-docs/dcldata")
+# First, install remotes if you don't already have it:
+# install.packages("remotes")
+remotes::install_github("dcl-docs/dcldata")
 ```
 
 To access the datasets, load the relevant package
@@ -69,7 +69,7 @@ You can also view the names of all datasets in a given package with the `data()`
 data(package = "dcldata")
 ```
 
-### Organization
+### Organization {-}
 
 This book is organized thematically, with each chapter building upon the previous ones, and we recommend reading the chapters in order. For the most part, each chapter discusses a category of visualization (e.g., time series, distributions) and contains both ggplot2 mechanics and visualization wisdom. We've woven ggplot2 mechanics through the book so that readers quickly learn the most important skills, and then acquire more advanced skills as they become relevant to the visualization tasks at hand.
 

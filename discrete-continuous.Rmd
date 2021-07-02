@@ -5,7 +5,7 @@
 In this chapter, we'll use the tidyverse package and data from the dcldata package.
 
 ```{r, message=FALSE}
-# Libraries
+# Packages
 library(tidyverse)
 library(dcldata)
 ```
@@ -15,7 +15,7 @@ Before reading this chapter, take a look at the following sections from the [Dat
 * Coordinate systems
 * Geoms: `geom_col()`, `geom_bar()`, and `geom_point()`
 
-You'll often want to visualize the number or amount of something across different categories. For example, you might be interested in the the number of sheep that reside in each US state, the milligrams of caffeine in different coffee drinks, or the gross income of films. 
+You'll often want to visualize the number or amount of something across different categories. For example, you might be interested in the the number of sheep that reside in each U.S. state, the milligrams of caffeine in different coffee drinks, or the gross income of films. 
 
 We'll call this class of visualizations _discrete-continuous_ because they involve plotting a continuous variable against a discrete one. In the above examples, the states, coffee drinks, and films are the discrete variables. The associated numbers of sheep, milligrams of caffeine, and gross income are the continuous variables.
 
@@ -123,31 +123,9 @@ star %>%
 
 The above plot no longer looks like a star. Instead of just zooming in, we've changed what's plotted. Therefore, to zoom, we recommend using the `xlim` and `ylim` arguments of `coord_cartesian()` and `coord_fixed()` instead of other methods that delete data before plotting. 
 
-### `coord_flip()`
-
-`coord_flip()` flips Cartesian coordinates, so that the variable mapped to `x` is used for the y-coordinates and the variable mapped to `y` is used for the x-coordinates. 
-
-Compare the following plot with the default coordinate system to one with `coord_flip()`.
-
-```{r}
-mpg %>% 
-  ggplot(mapping = aes(x = manufacturer)) +
-  geom_bar() +
-  stamp("Bad")
-```
-
-```{r}
-mpg %>% 
-  ggplot(mapping = aes(x = manufacturer)) +
-  geom_bar() +
-  coord_flip()
-```
-
-As you'll see later, `coord_flip()` is useful when visualizing discrete-continuous relationships. 
-
 ## One discrete category
 
-In this section, we'll use data collected by the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs/) on languages spoken at home across the US. `dcldata::languages_states` contains data from the 2013 ACS on the number of at-home speakers of non-English speakers by state. 
+In this section, we'll use data collected by the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs/) on languages spoken at home across the U.S. `dcldata::languages_states` contains data from the 2013 ACS on the number of at-home speakers of non-English speakers by state. 
 
 We've filtered `languages_states` to focus on the top 20 languages spoken in Utah, besides English and Spanish. We'll use this tibble, `utah_languages`, for the rest of the chapter.
 
@@ -155,7 +133,7 @@ We've filtered `languages_states` to focus on the top 20 languages spoken in Uta
 utah_languages <-
   languages_states %>% 
   filter(state == "Utah", language != "Spanish") %>%
-  top_n(n = 20, wt = speakers)
+  slice_max(speakers, n = 20)
 
 utah_languages
 ```
@@ -188,13 +166,12 @@ First, does this visualization make it easy to connect categories to their assoc
 
 Second, does this visualization make it easy to compare numbers to each other? Again, no. Try to compare the bar furthest to the right (Vietnamese) with the bar 4th from the left (French). It takes a bit of back-and-forth eye motion to determine which is longer. Now try to figure out which bar is the shortest. It's not immediately obvious, but it should be. 
 
-Luckily, we can easily solve these two problems. First, to correct the labeling issue, we can use `coord_flip()` to flip the plot 90 degrees, placing the language labels on the y-axis. 
+Luckily, we can easily solve these two problems. First, to correct the labeling issue, we can switch the order of the variables in `aes()`, placing the language labels on the y-axis. 
 
 ```{r}
 utah_languages %>% 
-  ggplot(mapping = aes(x = language, y = speakers)) +
+  ggplot(mapping = aes(x = speakers, y = language)) +
   geom_col() +
-  coord_flip() +
   stamp("Bad")
 ```
 
@@ -203,7 +180,7 @@ It's now effortless to connect a bar with a label.
 Comparing numbers of speakers across languages, however, is still difficult. We can make these comparisons much easier by ordering the languages by number of speakers.
 
 ```{r}
-utah_languages %>% head()
+utah_languages
 ```
 
 Notice that the languages in `utah_languages` appear in order of descending speakers, but, in the plot, they appear in alphabetical order. ggplot2 plots character variables in alphabetical order from bottom to top, disregarding row order. You have to change a character variable to a factor if you want ggplot2 to plot the variable in an order other than alphabetical.
@@ -217,7 +194,7 @@ df <-
   utah_languages %>% 
   mutate(language = fct_reorder(language, speakers))
 
-df %>% head()
+df
 
 levels(df$language) %>% head()
 ```
@@ -231,9 +208,8 @@ Now, `ggplot()` will use the factor levels to order the plot.
 ```{r}
 utah_languages %>% 
   mutate(language = fct_reorder(language, speakers)) %>% 
-  ggplot(mapping = aes(x = language, y = speakers)) +
-  geom_col() +
-  coord_flip()
+  ggplot(mapping = aes(x = speakers, y = language)) +
+  geom_col()
 ```
 
 Now, it's obvious which of the languages has the most speakers and which has the fewest. Try comparing Vietnamese with French again. French now clearly has more speakers. You don't need to move your eyes back and forth several times to determine which value is greater, and you can easily estimate the magnitude of differences between adjacent categories. It's now also obvious that Laotian has the fewest speakers. 
@@ -263,7 +239,7 @@ mpg %>%
   geom_bar() 
 ```
 
-The bars now appear in order of count, from highest to lowest. However, you'll often want the bars to appear from low to high, especially if you use `coord_flip()`. To change the order, we'll have to use another function, `fct_rev()`, after `fct_infreq()`. `fct_rev()`  reverses factor levels.
+The bars now appear in order of count, from highest to lowest. Sometimes, you'll want the bars to appear from low to high. To change the order, we'll have to use another function, `fct_rev()`, after `fct_infreq()`. `fct_rev()` reverses factor levels.
 
 ```{r}
 mpg %>% 
@@ -279,9 +255,8 @@ We could have used `geom_point()` to visualize the language use data.
 ```{r}
 utah_languages %>% 
   mutate(language = fct_reorder(language, speakers)) %>% 
-  ggplot(mapping = aes(x = language, y = speakers)) +
-  geom_point() +
-  coord_flip()
+  ggplot(mapping = aes(x = speakers, y = language)) +
+  geom_point()
 ```
 
 This plot is pretty similar to our bar plot from earlier. They are both pretty clear, and both meet our two goals. However, notice that the x-axis of this `geom_point()` plot starts around 1250, while the x-axis of our bar plot began at 0. 
@@ -322,9 +297,8 @@ For example, the following plot shows the times from the men's 100 meter final i
 ```{r}
 example_sprint %>% 
   mutate(name = fct_reorder(name, -time)) %>% 
-  ggplot(mapping = aes(x = name, y = time)) +
+  ggplot(mapping = aes(x = time, y = name)) +
   geom_col() +
-  coord_flip() +
   stamp("Bad")
 ```
 
@@ -339,9 +313,8 @@ In the _Visual Display of Quantitative Information_, Edward Tufte gives the foll
 ```{r}
 example_sprint %>% 
   mutate(name = fct_reorder(name, -time)) %>% 
-  ggplot(mapping = aes(x = name, y = time)) +
-  geom_point() +
-  coord_flip()
+  ggplot(mapping = aes(x = time, y = name)) +
+  geom_point()
 ```
 
 We now get a much better sense of the race. There's a couple runners in the back, then a pack in the middle, and then Bolt way out ahead. This narrative is hidden in the bar plot.
@@ -381,7 +354,7 @@ mpg %>%
   geom_bar(position = "dodge")
 ```
 
-Notice that it's now much easier to compare the red bars to each other, as they now all begin at 0.
+Notice that it's now much easier to compare the red bars to each other and to compare the red and blue bars, as they now all begin at 0.
 
 `year` is a pretty simple variable. It contains only two values. What if we wanted to encode a variable with more values? For example, `trans` contains 10 different values. 
 
@@ -412,6 +385,6 @@ mpg %>%
   facet_grid(rows = vars(drv))
 ```
 
-This plot has some additional advantages over the previous faceted plot. First, it's generally a good idea to put the variable with more values on the axis, and facet by the variable with fewer values. As we said above, it's easier to compare values in a single facet than it is to compare values across facets.
+This plot has some additional advantages over the previous faceted plot. First, it's generally a good idea to put the variable with more values on the x-axis, and facet by the variable with fewer values. As we said above, it's easier to compare values in a single facet than it is to compare values across facets.
 
 Second, because there are fewer facets, we can use `facet_grid()` to align the facets vertically. This vertical alignment makes it easier to compare the distributions of values because of all facets now share a common x-axis. 

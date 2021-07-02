@@ -3,7 +3,7 @@
 This chapter uses the following data sets.
 
 ```{r, message = FALSE, warning = FALSE}
-# Libraries
+# Packages
 library(tidyverse)
 library(dcldata)
 ```
@@ -346,7 +346,8 @@ In these situations, you can use `geom_count()` to encode the number of points a
 ```{r}
 mpg %>% 
   ggplot(aes(displ, hwy)) +
-  geom_count()
+  geom_count() +
+  scale_size()
 ```
 
 ### Smoothing
@@ -378,7 +379,7 @@ Notice that we got a message saying `geom_smooth()` is using "method = 'gam'." T
 
 In general, we recommend using `method = "loess"` unless you have far more than 1000 points. We only have 2500 points, so we can try LOESS.
 
-```{r}
+```{r message=FALSE}
 gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy)) +
   geom_hex() +
@@ -389,17 +390,7 @@ gm_combined %>%
 
 Notice that `method = "loess"` produces a smoother trend line. 
 
-`geom_smooth()` will default to `method = "gam"` if you have too much data for LOESS, which means you will rarely need to manually specify `method = "gam"` inside `geom_smooth()`. If you find yourself in a situation in which you do need to manually specify `method = "gam"`, note that you will also need to provide a value to `geom_smooth()`'s `formula` argument. Otherwise, `formula` will default to `y ~ x`, producing a linear fit.
-
-```{r}
-gm_combined %>% 
-  ggplot(aes(gdp_per_capita, life_expectancy)) +
-  geom_hex() +
-  geom_smooth(method = "gam") +
-  scale_x_log10() +
-  scale_fill_viridis_c() +
-  stamp("Bad")
-```
+`geom_smooth()` will default to `method = "gam"` if you have too much data for LOESS, which means you will rarely need to manually specify `method = "gam"` inside `geom_smooth()`.
 
 Smooth lines are a helpful tool, but they aren't always necessary. Use smooth lines when you care about understanding or communicating a trend, but that trend is not immediately obvious without a smooth line.
 
@@ -421,7 +412,7 @@ gm_combined %>%
 
 In this plot, there are too many data points to determine the relationship between `life_expectancy` and `gdp_per_capita` for each region. We could add a smooth line on top of the points for each region.
 
-```{r}
+```{r message=FALSE}
 gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_point() +
@@ -434,7 +425,7 @@ However, this is even worse. There is too much going on, and you can't distingui
 
 Removing the points allows you to see that each region has a slightly different trend.
 
-```{r}
+```{r message=FALSE}
 gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
@@ -445,7 +436,7 @@ You can remove the confidence intervals by setting `se = FALSE` inside `geom_smo
 
 When you decode this plot, you have to connect each line to its corresponding legend label. Notice that, even though there are only four regions, you still have to go back-and-forth between the legend and the plot quite a bit. This process would be easier if the order of the legend matched the order of the lines (@wilke-2019). One option is to change the order of the legend by adjusting `breaks` in `scale_color_discrete()`.
 
-```{r}
+```{r message=FALSE}
 gm_combined %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
   geom_smooth(method = "loess") +
@@ -455,7 +446,7 @@ gm_combined %>%
 
 A better option is to use `fct_reorder2()` to reorder `region` by the last `life_expectancy` value. 
 
-```{r}
+```{r message=FALSE}
 gm_combined %>% 
   mutate(region =  fct_reorder2(region, gdp_per_capita, life_expectancy)) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
@@ -466,7 +457,7 @@ gm_combined %>%
 
 We can also adjust `legend.justification` in `theme()` so that the legend is at the top of the plot, closer to the lines.
 
-```{r}
+```{r message=FALSE}
 gm_combined %>% 
   mutate(region =  fct_reorder2(region, gdp_per_capita, life_expectancy)) %>% 
   ggplot(aes(gdp_per_capita, life_expectancy, color = region)) +
@@ -542,13 +533,18 @@ There are a couple of points far away from the red line. What countries do these
 outliers <-
   gm_combined_paired %>% 
   mutate(diff = year_2015 - year_2010) %>% 
-  filter(diff < -0.5 | diff > 5)
+  filter(diff < -0.5 | diff > 5) %>% 
+  mutate(nudge_x = if_else(diff > 0, -5, 2))
 
 gm_combined_paired %>% 
   ggplot(aes(year_2010, year_2015)) +
   geom_point(alpha = 0.5) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
-  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  ggrepel::geom_text_repel(
+    aes(label = name), 
+    data = outliers,
+    nudge_x = outliers$nudge_x
+  ) +
   annotate(
     geom = "text", 
     x = c(30, 65), 
@@ -568,7 +564,11 @@ gm_combined_paired %>%
   ggplot(aes(year_2010, year_2015)) +
   geom_point(aes(color = region), alpha = 0.5) +
   geom_abline(slope = 1, intercept = 0, color = "red") +
-  ggrepel::geom_text_repel(aes(label = name), nudge_x = -5, data = outliers) +
+  ggrepel::geom_text_repel(
+    aes(label = name), 
+    data = outliers,
+    nudge_x = outliers$nudge_x
+  ) +
   annotate(
     geom = "text", 
     x = c(30, 65), 
@@ -721,7 +721,7 @@ gm_combined_2015 %>%
     aes(gdp_per_capita, life_expectancy, size = population, fill = region)
   ) +
   geom_point(shape = 21, color = "black") +
-  scale_size(range = c(0.5, 20), breaks = 10^(6:9)) +
+  scale_size(breaks = 10^(6:9), range = c(0.5, 20)) +
   scale_x_log10() 
 ```
 

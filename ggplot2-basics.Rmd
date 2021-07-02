@@ -137,10 +137,10 @@ We recommend that you construct your ggplot2 plots by using the ordering specifi
 ```{eval=FALSE}
 <DATA> %>% 
   ggplot(mapping = aes(<MAPPINGS>)) + 
-  <GEOM(s)> +
+  <GEOMS> +
   <FACET_FUNCTION> + 
   <COORDINATE_FUNCTION> +
-  <SCALE_FUNCTION(s)> + 
+  <SCALE_FUNCTIONS> + 
   <GUIDES> +
   <THEME> +
   <LABELS>
