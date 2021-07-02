@@ -3,7 +3,6 @@
 This chapter uses the following data sets.
 
 ```{r, message = FALSE, warning = FALSE}
-# Packages
 library(tidyverse)
 library(dcldata)
 ```

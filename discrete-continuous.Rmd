@@ -5,7 +5,6 @@
 In this chapter, we'll use the tidyverse package and data from the dcldata package.
 
 ```{r, message=FALSE}
-# Packages
 library(tidyverse)
 library(dcldata)
 ```

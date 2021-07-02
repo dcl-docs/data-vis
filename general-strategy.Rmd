@@ -1,7 +1,6 @@
 # General strategy
 
 ```{r, message=FALSE}
-# Packages
 library(tidyverse)
 library(dcldata)
 ```
