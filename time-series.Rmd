@@ -38,7 +38,7 @@ When you map `time_hour` to an aesthetic, ggplot2 uses `scale_*_datetime()`, the
 flights_0101_0102 <-
   nycflights13::flights %>% 
   filter(month == 1, day <= 2) %>% 
-  group_by(time_hour = lubridate::floor_date(time_hour, "hour")) %>% 
+  group_by(time_hour = floor_date(time_hour, "hour")) %>% 
   summarize(num_flights = n())
 
 flights_0101_0102
@@ -211,8 +211,7 @@ africa_le %>%
   n_distinct()
 ```
 
-There are `r library(magrittr); africa_le %>% dplyr::pull(name) %>% dplyr::n_distinct()`
-countries listed under the "Africa" region in the data.
+There are `r africa_le |> dplyr::pull(name) |> dplyr::n_distinct()` countries listed under the "Africa" region in the data.
 
 Plotting all the data at once is messy, but you can see that many countries experienced the same dip in the 1990s. You can also see that the countries with high life expectancies didn't experience at dip at all, and that many countries experienced dramatic downward spikes due to single events.  
 
@@ -446,8 +445,8 @@ Vertical segment plots using `geom_segment()` can also be helpful for some time 
 ```{r}
 flights_week_1 <-
   nycflights13::flights %>% 
-  filter(lubridate::week(time_hour) == 1) %>% 
-  group_by(time_hour = lubridate::floor_date(time_hour, "hour")) %>% 
+  filter(week(time_hour) == 1) %>% 
+  group_by(time_hour = floor_date(time_hour, "hour")) %>% 
   summarize(num_flights = n())
 ```
 
@@ -476,7 +475,7 @@ flights_week_1 %>%
 
 ```{r}
 flights_week_1 %>% 
-  mutate(am_pm = if_else(lubridate::am(time_hour), "AM", "PM")) %>% 
+  mutate(am_pm = if_else(am(time_hour), "AM", "PM")) %>% 
   ggplot() +
   geom_segment(
     aes(

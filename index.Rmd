@@ -2,7 +2,6 @@
 knitr: bookdown::render_book
 title: "Data Visualization"
 author: "Sara Altman, Bill Behrman"
-date: "`r Sys.Date()`"
 description: "This book is a practical introduction to creating effective visualizations using ggplot2."
 url: 'https\://dcl-data-vis.stanford.edu'
 github-repo: dcl-docs/data-vis
@@ -67,6 +66,19 @@ You can also view the names of all datasets in a given package with the `data()`
 
 ```{r eval=FALSE}
 data(package = "dcldata")
+```
+
+In the following, we used these packages:
+
+```{r echo=FALSE}
+sessioninfo::package_info(
+  pkgs = c("dcldata", "ggrepel", "nycflights13", "tidyverse"),
+  dependencies = FALSE
+) |> 
+  tibble::as_tibble() |> 
+  dplyr::mutate(Source = stringr::str_remove(source, "@\\w*")) |> 
+  dplyr::select(Package = package, Version = ondiskversion, Source) |> 
+  knitr::kable()
 ```
 
 ### Organization {-}
