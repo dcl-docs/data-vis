@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Discrete-continuous relationships | Data Visualization</title>
+  <meta name="description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Discrete-continuous relationships | Data Visualization" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-data-vis.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="github-repo" content="dcl-docs/data-vis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Discrete-continuous relationships | Data Visualization" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman" />
+
+
+<meta name="date" content="2021-07-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ggplot2-basics.html"/>
+<link rel="next" href="general-strategy.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Data Visualization</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i>How to read this book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-data"><i class="fa fa-check"></i>Code and data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i>Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html"><i class="fa fa-check"></i><b>1</b> ggplot2 basics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#additional-information"><i class="fa fa-check"></i><b>1.1</b> Additional information</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#pipes-and-aesthetics"><i class="fa fa-check"></i><b>1.1.1</b> Pipes and aesthetics</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#facet-syntax"><i class="fa fa-check"></i><b>1.1.2</b> Facet syntax</a></li>
+<li class="chapter" data-level="1.1.3" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>1.1.3</b> The grammar of graphics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="discrete-continuous.html"><a href="discrete-continuous.html"><i class="fa fa-check"></i><b>2</b> Discrete-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#introduction"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coordinate-systems"><i class="fa fa-check"></i><b>2.2</b> Coordinate systems</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coord_fixed"><i class="fa fa-check"></i><b>2.2.1</b> <code>coord_fixed()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#zooming"><i class="fa fa-check"></i><b>2.2.2</b> Zooming</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#one-discrete-category"><i class="fa fa-check"></i><b>2.3</b> One discrete category</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#effective-bar-plots"><i class="fa fa-check"></i><b>2.3.1</b> Effective bar plots</a></li>
+<li class="chapter" data-level="2.3.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#geom_bar"><i class="fa fa-check"></i><b>2.3.2</b> <code>geom_bar()</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#bars-vs.-dots"><i class="fa fa-check"></i><b>2.3.3</b> Bars vs. dots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="discrete-continuous.html"><a href="discrete-continuous.html#two-discrete-categories"><i class="fa fa-check"></i><b>2.4</b> Two discrete categories</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#color-and-facets"><i class="fa fa-check"></i><b>2.4.1</b> Color and facets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="general-strategy.html"><a href="general-strategy.html"><i class="fa fa-check"></i><b>3</b> General strategy</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="general-strategy.html"><a href="general-strategy.html#the-goals-of-visualization"><i class="fa fa-check"></i><b>3.1</b> The goals of visualization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="general-strategy.html"><a href="general-strategy.html#two-types-of-plots"><i class="fa fa-check"></i><b>3.1.1</b> Two types of plots</a></li>
+<li class="chapter" data-level="3.1.2" data-path="general-strategy.html"><a href="general-strategy.html#encoding-and-decoding"><i class="fa fa-check"></i><b>3.1.2</b> Encoding and decoding</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="general-strategy.html"><a href="general-strategy.html#perception"><i class="fa fa-check"></i><b>3.2</b> Perception</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="general-strategy.html"><a href="general-strategy.html#encodings"><i class="fa fa-check"></i><b>3.2.1</b> Encodings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="general-strategy.html"><a href="general-strategy.html#strategies"><i class="fa fa-check"></i><b>3.3</b> Strategies</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="general-strategy.html"><a href="general-strategy.html#set-goals"><i class="fa fa-check"></i><b>3.3.1</b> Set goals</a></li>
+<li class="chapter" data-level="3.3.2" data-path="general-strategy.html"><a href="general-strategy.html#go-for-quantity"><i class="fa fa-check"></i><b>3.3.2</b> Go for quantity</a></li>
+<li class="chapter" data-level="3.3.3" data-path="general-strategy.html"><a href="general-strategy.html#look-at-your-plots"><i class="fa fa-check"></i><b>3.3.3</b> Look at your plots</a></li>
+<li class="chapter" data-level="3.3.4" data-path="general-strategy.html"><a href="general-strategy.html#iterate"><i class="fa fa-check"></i><b>3.3.4</b> Iterate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="distributions.html"><a href="distributions.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="distributions.html"><a href="distributions.html#mechanics"><i class="fa fa-check"></i><b>4.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="distributions.html"><a href="distributions.html#layering"><i class="fa fa-check"></i><b>4.2.1</b> Layering</a></li>
+<li class="chapter" data-level="4.2.2" data-path="distributions.html"><a href="distributions.html#theme"><i class="fa fa-check"></i><b>4.2.2</b> <code>theme()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="distributions.html"><a href="distributions.html#one-distribution"><i class="fa fa-check"></i><b>4.3</b> One distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="distributions.html"><a href="distributions.html#multiple-distributions"><i class="fa fa-check"></i><b>4.4</b> Multiple distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-continuous.html"><a href="continuous-continuous.html"><i class="fa fa-check"></i><b>5</b> Continuous-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#introduction-2"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#mechanics-1"><i class="fa fa-check"></i><b>5.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#annotations"><i class="fa fa-check"></i><b>5.2.1</b> Annotations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#log-scales"><i class="fa fa-check"></i><b>5.2.2</b> Log scales</a></li>
+<li class="chapter" data-level="5.2.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#continuous-color-scales"><i class="fa fa-check"></i><b>5.2.3</b> Continuous color scales</a></li>
+<li class="chapter" data-level="5.2.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#size-scales"><i class="fa fa-check"></i><b>5.2.4</b> Size scales</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#two-continuous-variables"><i class="fa fa-check"></i><b>5.3</b> Two continuous variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#overplotting"><i class="fa fa-check"></i><b>5.3.1</b> Overplotting</a></li>
+<li class="chapter" data-level="5.3.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#smoothing"><i class="fa fa-check"></i><b>5.3.2</b> Smoothing</a></li>
+<li class="chapter" data-level="5.3.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#paired-data"><i class="fa fa-check"></i><b>5.3.3</b> Paired data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#three-continuous-variables"><i class="fa fa-check"></i><b>5.4</b> Three continuous variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="time-series.html"><a href="time-series.html"><i class="fa fa-check"></i><b>6</b> Time series</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="time-series.html"><a href="time-series.html#mechanics-2"><i class="fa fa-check"></i><b>6.1</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="time-series.html"><a href="time-series.html#datetime-scales"><i class="fa fa-check"></i><b>6.1.1</b> Date/time scales</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="time-series.html"><a href="time-series.html#trends"><i class="fa fa-check"></i><b>6.2</b> Trends</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="time-series.html"><a href="time-series.html#one-response-variable"><i class="fa fa-check"></i><b>6.2.1</b> One response variable</a></li>
+<li class="chapter" data-level="6.2.2" data-path="time-series.html"><a href="time-series.html#distributions-over-time"><i class="fa fa-check"></i><b>6.2.2</b> Distributions over time</a></li>
+<li class="chapter" data-level="6.2.3" data-path="time-series.html"><a href="time-series.html#two-response-variables"><i class="fa fa-check"></i><b>6.2.3</b> Two response variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="time-series.html"><a href="time-series.html#short-term-fluctuations"><i class="fa fa-check"></i><b>6.3</b> Short-term fluctuations</a></li>
+<li class="chapter" data-level="6.4" data-path="time-series.html"><a href="time-series.html#individual-values"><i class="fa fa-check"></i><b>6.4</b> Individual values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Visualization</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="discrete-continuous-relationships" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Discrete-continuous relationships</h1>
+<div id="introduction" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Introduction</h2>
+<p>In this chapter, we’ll use the tidyverse package and data from the dcldata package.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="discrete-continuous.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb14-2"><a href="discrete-continuous.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dcldata)</span></code></pre></div>
+<p>Before reading this chapter, take a look at the following sections from the <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">Data Visualization with ggplot2 cheat sheet</a>.</p>
+<ul>
+<li>Coordinate systems</li>
+<li>Geoms: <code>geom_col()</code>, <code>geom_bar()</code>, and <code>geom_point()</code></li>
+</ul>
+<p>You’ll often want to visualize the number or amount of something across different categories. For example, you might be interested in the the number of sheep that reside in each U.S. state, the milligrams of caffeine in different coffee drinks, or the gross income of films.</p>
+<p>We’ll call this class of visualizations <em>discrete-continuous</em> because they involve plotting a continuous variable against a discrete one. In the above examples, the states, coffee drinks, and films are the discrete variables. The associated numbers of sheep, milligrams of caffeine, and gross income are the continuous variables.</p>
+<p>You might argue that number of sheep is not a continuous variable, as you can’t really have a fractional sheep. However, ggplot2 treats integers and doubles as continuous variables, and treats only factors, characters, and logicals as discrete.</p>
+<p>For example, in the tibble <code>x</code>, <code>count</code> is an integer variable (the <code>L</code>s create integers).</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="discrete-continuous.html#cb15-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span></span>
+<span id="cb15-2"><a href="discrete-continuous.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb15-3"><a href="discrete-continuous.html#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">category =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>),</span>
+<span id="cb15-4"><a href="discrete-continuous.html#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">c</span>(1L, 2L)</span>
+<span id="cb15-5"><a href="discrete-continuous.html#cb15-5" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb15-6"><a href="discrete-continuous.html#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="discrete-continuous.html#cb15-7" aria-hidden="true" tabindex="-1"></a>x</span>
+<span id="cb15-8"><a href="discrete-continuous.html#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span id="cb15-9"><a href="discrete-continuous.html#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   category count</span></span>
+<span id="cb15-10"><a href="discrete-continuous.html#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt;</span></span>
+<span id="cb15-11"><a href="discrete-continuous.html#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 a            1</span></span>
+<span id="cb15-12"><a href="discrete-continuous.html#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 b            2</span></span></code></pre></div>
+<p>However, ggplot creates a continuous scale for <code>count</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="discrete-continuous.html#cb16-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="discrete-continuous.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> count)) <span class="sc">+</span> </span>
+<span id="cb16-3"><a href="discrete-continuous.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As you’ll see later, it’s useful to understand how ggplot2 treats different types of variables.</p>
+<p>In this chapter, you’ll first learn about the mechanics of coordinate systems in ggplot2. Sometimes, you’ll want to change the default settings of a coordinate system to create a more effective visualization. You’ll need these mechanics in the “wisdom” section of the reading, where you’ll learn about common visualization strategies for discrete-continuous relationships.</p>
+</div>
+<div id="coordinate-systems" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Coordinate systems</h2>
+<p>Every ggplot2 plot has a coordinate system. ggplot2’s default coordinate system is the Cartesian coordinate system, which is used in the following plot.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="discrete-continuous.html#cb17-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="discrete-continuous.html#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="discrete-continuous.html#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This plot is the same as the following, since <code>ggplot()</code> implicitly calls <code>coord_cartesian()</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="discrete-continuous.html#cb18-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="discrete-continuous.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="discrete-continuous.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb18-4"><a href="discrete-continuous.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Much of the time, you won’t need to think about the coordinate system. However, as you’ll see below, you’ll sometimes want to change its default settings.</p>
+<div id="coord_fixed" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> <code>coord_fixed()</code></h3>
+<p>Consider the following plot.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="discrete-continuous.html#cb19-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">rep_len</span>(<span class="fu">c</span>(<span class="dv">100</span> , <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sin</span>(pi <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">/</span> <span class="fu">cos</span>(pi <span class="sc">/</span> <span class="dv">5</span>)), <span class="at">length.out =</span> <span class="dv">11</span>)</span>
+<span id="cb19-2"><a href="discrete-continuous.html#cb19-2" aria-hidden="true" tabindex="-1"></a>star <span class="ot">&lt;-</span> </span>
+<span id="cb19-3"><a href="discrete-continuous.html#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb19-4"><a href="discrete-continuous.html#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> r <span class="sc">*</span> <span class="fu">sin</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> pi, <span class="at">length.out =</span> <span class="dv">11</span>)),</span>
+<span id="cb19-5"><a href="discrete-continuous.html#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> r <span class="sc">*</span> <span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> pi, <span class="at">length.out =</span> <span class="dv">11</span>))</span>
+<span id="cb19-6"><a href="discrete-continuous.html#cb19-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-7"><a href="discrete-continuous.html#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="discrete-continuous.html#cb19-8" aria-hidden="true" tabindex="-1"></a>star <span class="sc">%&gt;%</span> </span>
+<span id="cb19-9"><a href="discrete-continuous.html#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="discrete-continuous.html#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb19-11"><a href="discrete-continuous.html#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>By default, <code>coord_cartesian()</code> fills the space available for plotting. This space is wider than it is tall, which causes the space between 0 and 50 on the x-axis to be longer than the space between 0 and 50 on the y-axis, distorting the star.</p>
+<p>To override the default aspect ratio, you can use <code>coord_fixed()</code>. <code>coord_fixed()</code> contains a <code>ratio</code> argument that allows you to specify an aspect ratio. By default, <code>ratio</code> is 1, which creates a square plot.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="discrete-continuous.html#cb20-1" aria-hidden="true" tabindex="-1"></a>star <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="discrete-continuous.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="discrete-continuous.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb20-4"><a href="discrete-continuous.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-5"><a href="discrete-continuous.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="zooming" class="section level3" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Zooming</h3>
+<p>Say you want to get a closer look at the lower portion of the star. <code>coord_cartesian()</code> and <code>coord_fixed()</code> both contain the arguments <code>xlim</code> and <code>ylim</code> that allow you to zoom in or out of your plot, controlling the bounds of what’s visible.</p>
+<p>Here, we’ll set the boundaries so that only points with y less than or equal to 50 and x greater than or equal to -50 are visible.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="discrete-continuous.html#cb21-1" aria-hidden="true" tabindex="-1"></a>star <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="discrete-continuous.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="discrete-continuous.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb21-4"><a href="discrete-continuous.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb21-5"><a href="discrete-continuous.html#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">50</span>, <span class="dv">100</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">85</span>, <span class="dv">50</span>))</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Note that zooming is <em>not</em> the same as removing values and then plotting. The following plot is the result of first removing all values outside the bounds and then plotting.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="discrete-continuous.html#cb22-1" aria-hidden="true" tabindex="-1"></a>star <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="discrete-continuous.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(x <span class="sc">&gt;=</span> <span class="sc">-</span><span class="dv">50</span>, y <span class="sc">&lt;=</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="discrete-continuous.html#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="discrete-continuous.html#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb22-5"><a href="discrete-continuous.html#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-6"><a href="discrete-continuous.html#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The above plot no longer looks like a star. Instead of just zooming in, we’ve changed what’s plotted. Therefore, to zoom, we recommend using the <code>xlim</code> and <code>ylim</code> arguments of <code>coord_cartesian()</code> and <code>coord_fixed()</code> instead of other methods that delete data before plotting.</p>
+</div>
+</div>
+<div id="one-discrete-category" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> One discrete category</h2>
+<p>In this section, we’ll use data collected by the <a href="https://www.census.gov/programs-surveys/acs/">American Community Survey (ACS)</a> on languages spoken at home across the U.S. <code>dcldata::languages_states</code> contains data from the 2013 ACS on the number of at-home speakers of non-English speakers by state.</p>
+<p>We’ve filtered <code>languages_states</code> to focus on the top 20 languages spoken in Utah, besides English and Spanish. We’ll use this tibble, <code>utah_languages</code>, for the rest of the chapter.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="discrete-continuous.html#cb23-1" aria-hidden="true" tabindex="-1"></a>utah_languages <span class="ot">&lt;-</span></span>
+<span id="cb23-2"><a href="discrete-continuous.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  languages_states <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="discrete-continuous.html#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">&quot;Utah&quot;</span>, language <span class="sc">!=</span> <span class="st">&quot;Spanish&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="discrete-continuous.html#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(speakers, <span class="at">n =</span> <span class="dv">20</span>)</span>
+<span id="cb23-5"><a href="discrete-continuous.html#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="discrete-continuous.html#cb23-6" aria-hidden="true" tabindex="-1"></a>utah_languages</span>
+<span id="cb23-7"><a href="discrete-continuous.html#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 20 x 3</span></span>
+<span id="cb23-8"><a href="discrete-continuous.html#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   state language   speakers</span></span>
+<span id="cb23-9"><a href="discrete-continuous.html#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;         &lt;int&gt;</span></span>
+<span id="cb23-10"><a href="discrete-continuous.html#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Utah  German         9025</span></span>
+<span id="cb23-11"><a href="discrete-continuous.html#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Utah  Navajo         8193</span></span>
+<span id="cb23-12"><a href="discrete-continuous.html#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Utah  Chinese        7625</span></span>
+<span id="cb23-13"><a href="discrete-continuous.html#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Utah  Portuguese     7150</span></span>
+<span id="cb23-14"><a href="discrete-continuous.html#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Utah  French         6645</span></span>
+<span id="cb23-15"><a href="discrete-continuous.html#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 Utah  Vietnamese     6355</span></span>
+<span id="cb23-16"><a href="discrete-continuous.html#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 14 more rows</span></span></code></pre></div>
+<p><code>utah_languages</code> contains one discrete variable (<code>language</code>) and one continuous variable (<code>speakers</code>). In the next section, we’ll visualize the number of speakers of each language, a discrete-continuous relationship.</p>
+<p>Before we get started with these visualizations, however, here are two general goals of visualizing discrete-continuous relationships. We’ll use these goals to evaluate the various plots we make in the next section.</p>
+<p>A discrete-continuous visualization should make it easy to:</p>
+<ul>
+<li>Connect categories with their associated numbers (e.g., German to the number of German speakers)</li>
+<li>Compare numbers to each other (e.g., the number of German speakers to the number of Navajo speakers)</li>
+</ul>
+<p>Keep in mind that the visualization strategies we discuss aren’t the final word on visualizations for discrete-continuous relationships. There are many other ways not discussed here that you might find useful and you should therefore treat these strategies only as a starting point.</p>
+<div id="effective-bar-plots" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Effective bar plots</h3>
+<p>To visualize the number of speakers of each language in <code>utah_languages</code> we can use <code>geom_col()</code> to create a bar plot.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="discrete-continuous.html#cb24-1" aria-hidden="true" tabindex="-1"></a>utah_languages <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="discrete-continuous.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> language, <span class="at">y =</span> speakers)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="discrete-continuous.html#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb24-4"><a href="discrete-continuous.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We can evaluate this visualization by determining if it meets the two goals outlined earlier.</p>
+<p>First, does this visualization make it easy to connect categories to their associated numbers? No. The overlapping x-axis labels make it really difficult to connect categories (languages) to numbers (speakers) because the labels on the x-axis overlap.</p>
+<p>Second, does this visualization make it easy to compare numbers to each other? Again, no. Try to compare the bar furthest to the right (Vietnamese) with the bar 4th from the left (French). It takes a bit of back-and-forth eye motion to determine which is longer. Now try to figure out which bar is the shortest. It’s not immediately obvious, but it should be.</p>
+<p>Luckily, we can easily solve these two problems. First, to correct the labeling issue, we can switch the order of the variables in <code>aes()</code>, placing the language labels on the y-axis.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="discrete-continuous.html#cb25-1" aria-hidden="true" tabindex="-1"></a>utah_languages <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="discrete-continuous.html#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> speakers, <span class="at">y =</span> language)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="discrete-continuous.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb25-4"><a href="discrete-continuous.html#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>It’s now effortless to connect a bar with a label.</p>
+<p>Comparing numbers of speakers across languages, however, is still difficult. We can make these comparisons much easier by ordering the languages by number of speakers.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="discrete-continuous.html#cb26-1" aria-hidden="true" tabindex="-1"></a>utah_languages</span>
+<span id="cb26-2"><a href="discrete-continuous.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 20 x 3</span></span>
+<span id="cb26-3"><a href="discrete-continuous.html#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   state language   speakers</span></span>
+<span id="cb26-4"><a href="discrete-continuous.html#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;         &lt;int&gt;</span></span>
+<span id="cb26-5"><a href="discrete-continuous.html#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Utah  German         9025</span></span>
+<span id="cb26-6"><a href="discrete-continuous.html#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Utah  Navajo         8193</span></span>
+<span id="cb26-7"><a href="discrete-continuous.html#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Utah  Chinese        7625</span></span>
+<span id="cb26-8"><a href="discrete-continuous.html#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Utah  Portuguese     7150</span></span>
+<span id="cb26-9"><a href="discrete-continuous.html#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Utah  French         6645</span></span>
+<span id="cb26-10"><a href="discrete-continuous.html#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 Utah  Vietnamese     6355</span></span>
+<span id="cb26-11"><a href="discrete-continuous.html#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 14 more rows</span></span></code></pre></div>
+<p>Notice that the languages in <code>utah_languages</code> appear in order of descending speakers, but, in the plot, they appear in alphabetical order. ggplot2 plots character variables in alphabetical order from bottom to top, disregarding row order. You have to change a character variable to a factor if you want ggplot2 to plot the variable in an order other than alphabetical.</p>
+<p>A factor is a categorical variable with a fixed number of values, called <em>levels</em>. If you want to read more about factors, see the <a href="https://r4ds.had.co.nz/factors.html">Factors</a> chapter from <em>R4DS</em>.</p>
+<p>To order <code>language</code> by number of speakers, we’ll first turn <code>language</code> into a factor with levels ordered by number of speakers. The function <code>fct_reorder()</code> can do this for us.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="discrete-continuous.html#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span>  </span>
+<span id="cb27-2"><a href="discrete-continuous.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  utah_languages <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="discrete-continuous.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">language =</span> <span class="fu">fct_reorder</span>(language, speakers))</span>
+<span id="cb27-4"><a href="discrete-continuous.html#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="discrete-continuous.html#cb27-5" aria-hidden="true" tabindex="-1"></a>df</span>
+<span id="cb27-6"><a href="discrete-continuous.html#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 20 x 3</span></span>
+<span id="cb27-7"><a href="discrete-continuous.html#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   state language   speakers</span></span>
+<span id="cb27-8"><a href="discrete-continuous.html#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;fct&gt;         &lt;int&gt;</span></span>
+<span id="cb27-9"><a href="discrete-continuous.html#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Utah  German         9025</span></span>
+<span id="cb27-10"><a href="discrete-continuous.html#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Utah  Navajo         8193</span></span>
+<span id="cb27-11"><a href="discrete-continuous.html#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Utah  Chinese        7625</span></span>
+<span id="cb27-12"><a href="discrete-continuous.html#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Utah  Portuguese     7150</span></span>
+<span id="cb27-13"><a href="discrete-continuous.html#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Utah  French         6645</span></span>
+<span id="cb27-14"><a href="discrete-continuous.html#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 Utah  Vietnamese     6355</span></span>
+<span id="cb27-15"><a href="discrete-continuous.html#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 14 more rows</span></span>
+<span id="cb27-16"><a href="discrete-continuous.html#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="discrete-continuous.html#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>language) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span>
+<span id="cb27-18"><a href="discrete-continuous.html#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Laotian&quot;              &quot;Dutch&quot;                &quot;Mon-Khmer, Cambodian&quot;</span></span>
+<span id="cb27-19"><a href="discrete-continuous.html#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;Nepali&quot;               &quot;Mandarin&quot;             &quot;Arabic&quot;</span></span></code></pre></div>
+<p><code>fct_reorder()</code> has changed <code>language</code> from a character vector to a factor. The levels of the factor are just the languages themselves in the order of increasing number of speakers (Laotian has the fewest speakers).</p>
+<p>Note that, by default, <code>fct_reorder()</code> uses the median of the second variable to reorder the first. In the current example, there’s only one value of <code>speakers</code> for each value of <code>language</code>, so the median of each value is the same as that value.</p>
+<p>Now, <code>ggplot()</code> will use the factor levels to order the plot.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="discrete-continuous.html#cb28-1" aria-hidden="true" tabindex="-1"></a>utah_languages <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="discrete-continuous.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">language =</span> <span class="fu">fct_reorder</span>(language, speakers)) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="discrete-continuous.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> speakers, <span class="at">y =</span> language)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="discrete-continuous.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now, it’s obvious which of the languages has the most speakers and which has the fewest. Try comparing Vietnamese with French again. French now clearly has more speakers. You don’t need to move your eyes back and forth several times to determine which value is greater, and you can easily estimate the magnitude of differences between adjacent categories. It’s now also obvious that Laotian has the fewest speakers.</p>
+<p>Reordering a character variable before plotting is almost always a good idea. You’ll rarely want to plot in alphabetical order. Typically, you’ll want to reorder according to the amount plotted on the other axis. Sometimes, however, you’ll want to match an intrinsic ordering of the variables, such as the <code>clarity</code> variable in diamonds, which is an ordered factor.</p>
+</div>
+<div id="geom_bar" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> <code>geom_bar()</code></h3>
+<p>In the previous section, we used <code>geom_col()</code> to plot number of speakers versus language. <code>geom_col()</code> takes two variables: one to map to the x-axis and one to map to the y-axis. Sometimes, however, the amounts you wish to plot will be implicit in the data.</p>
+<p>For example, say you want to determine the number of cars with each drivetrain type in the <code>mpg</code> data set. Each row in <code>mpg</code> represents a single car, so we can use <code>geom_bar()</code> to visualize the number of cars with each drivetrain.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="discrete-continuous.html#cb29-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="discrete-continuous.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="discrete-continuous.html#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Unlike <code>geom_col()</code>, <code>geom_bar()</code> takes only the <code>x</code> aesthetic. The y-value is the count of items in each <code>x</code> category. <code>geom_bar()</code> is therefore like a special case of the more general <code>geom_col()</code>.</p>
+<p>If you want to order a variable like <code>drv</code> by count, the function <code>fct_infreq()</code> is useful. Like <code>fct_reorder()</code>, <code>fct_infreq()</code> creates an ordered factor. However, instead of ordering the levels by another variable, <code>fct_infreq()</code> orders them by the number of times each value appears in the data.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="discrete-continuous.html#cb30-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="discrete-continuous.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">drv =</span> <span class="fu">fct_infreq</span>(drv)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="discrete-continuous.html#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv)) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="discrete-continuous.html#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() </span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The bars now appear in order of count, from highest to lowest. Sometimes, you’ll want the bars to appear from low to high. To change the order, we’ll have to use another function, <code>fct_rev()</code>, after <code>fct_infreq()</code>. <code>fct_rev()</code> reverses factor levels.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="discrete-continuous.html#cb31-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="discrete-continuous.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">drv =</span> <span class="fu">fct_infreq</span>(drv) <span class="sc">%&gt;%</span> <span class="fu">fct_rev</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="discrete-continuous.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv)) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="discrete-continuous.html#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() </span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="bars-vs.-dots" class="section level3" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Bars vs. dots</h3>
+<p>We could have used <code>geom_point()</code> to visualize the language use data.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="discrete-continuous.html#cb32-1" aria-hidden="true" tabindex="-1"></a>utah_languages <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="discrete-continuous.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">language =</span> <span class="fu">fct_reorder</span>(language, speakers)) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="discrete-continuous.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> speakers, <span class="at">y =</span> language)) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="discrete-continuous.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This plot is pretty similar to our bar plot from earlier. They are both pretty clear, and both meet our two goals. However, notice that the x-axis of this <code>geom_point()</code> plot starts around 1250, while the x-axis of our bar plot began at 0.</p>
+<p>ggplot2 requires that the numerical axis of a bar plots starts at 0. To demonstrate the rationale behind this requirement, consider the tibble <code>x</code>. In <code>x</code>, “c” is twice “b” and “b” is twice “a.” The bar plot below accurately portrays these relationships.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="discrete-continuous.html#cb33-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span></span>
+<span id="cb33-2"><a href="discrete-continuous.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb33-3"><a href="discrete-continuous.html#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">category =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>),</span>
+<span id="cb33-4"><a href="discrete-continuous.html#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">amount =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>)</span>
+<span id="cb33-5"><a href="discrete-continuous.html#cb33-5" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb33-6"><a href="discrete-continuous.html#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="discrete-continuous.html#cb33-7" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%&gt;%</span> </span>
+<span id="cb33-8"><a href="discrete-continuous.html#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> amount)) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="discrete-continuous.html#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>However, imagine if the y-axis started at 1, marked by the red line.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="discrete-continuous.html#cb34-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="discrete-continuous.html#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> amount)) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="discrete-continuous.html#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb34-4"><a href="discrete-continuous.html#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>“a”’s bar would have length 1, but “b”’s would have length 3. The 1:2 relationships between the variables would be lost.</p>
+<p>When you estimate values in bar plots, you judge and compare the <em>lengths</em> of the bars. These lengths must therefore accurately encode the values. They can only do so if the axis starts at 0.</p>
+<p><code>geom_point()</code>, however, encodes values with <em>position</em>. The relative positions of the dots will accurately encode the data no matter where the axis begins. Therefore, it’s okay for <code>geom_point()</code> to start the axis at a value other than 0.</p>
+<p>The choice between points and bars is largely a choice between comparing values to 0 or comparing values to each other.</p>
+<p>For example, the following plot shows the times from the men’s 100 meter final in the 2016 Olympics. The times are all very close together, and the bars fill up most of the plot.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="discrete-continuous.html#cb35-1" aria-hidden="true" tabindex="-1"></a>example_sprint <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="discrete-continuous.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">fct_reorder</span>(name, <span class="sc">-</span>time)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="discrete-continuous.html#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> name)) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="discrete-continuous.html#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb35-5"><a href="discrete-continuous.html#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The main conclusion you can take away from this plot is that all the sprinters ran the race in around 10 seconds. If you knew nothing about sprinting, the 2016 Olympics, or Usain Bolt, however, this information is largely useless. Is 10 seconds slow or fast?</p>
+<p>In the <em>Visual Display of Quantitative Information</em>, Edward Tufte gives the following directive:</p>
+<blockquote>
+<p>To be truthful and revealing, data graphics must bear on the question at the heart of quantitative thinking: “Compared to what?” <span class="citation">(<a href="#ref-tufte-2001" role="doc-biblioref">Tufte 2001, 74</a>)</span></p>
+</blockquote>
+<p>“Compared to what?” is a useful question to ask yourself when creating visualizations. Our bar plot above seems to say the important comparison is between the race times and 0. However, the interesting time comparisons aren’t to 0, but among the runners. <code>geom_point()</code> allows us to highlight these comparisons.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="discrete-continuous.html#cb36-1" aria-hidden="true" tabindex="-1"></a>example_sprint <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="discrete-continuous.html#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">fct_reorder</span>(name, <span class="sc">-</span>time)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="discrete-continuous.html#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> name)) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="discrete-continuous.html#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We now get a much better sense of the race. There’s a couple runners in the back, then a pack in the middle, and then Bolt way out ahead. This narrative is hidden in the bar plot.</p>
+</div>
+</div>
+<div id="two-discrete-categories" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Two discrete categories</h2>
+<div id="color-and-facets" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Color and facets</h3>
+<p>Previously, we visualized continuous amounts in a single discrete category. In the language plot, <code>language</code> was the single discrete category. In the race plot, <code>name</code> was the single discrete category. Often, however, your data will contain multiple categories, and you’ll want to visualize all these categories at once.</p>
+<p>For example, earlier we visualized the number of cars in each drivetrain category. What if we want to add <code>year</code> to our plot? One option is to encode <code>year</code> using a fill color.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="discrete-continuous.html#cb37-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="discrete-continuous.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv, <span class="at">fill =</span> year)) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="discrete-continuous.html#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() </span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>fill = year</code> didn’t do anything. What happened? Recall from earlier that ggplot treats integers as continuous variables. The “fill” aesthetic of bar plots, however, must be a discrete variable. To fix this problem, we’ll turn <code>year</code> into a factor.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="discrete-continuous.html#cb38-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="discrete-continuous.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.factor</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="discrete-continuous.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv, <span class="at">fill =</span> year)) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="discrete-continuous.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb38-5"><a href="discrete-continuous.html#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This is a “stacked” bar plot. Stacked bar plots are rarely a good idea. It’s pretty easy to understand the relationship between count and drivetrain for cars from 2008 (the blue bars). However, some visual arithmetic is required to compare the 1999 bars because they start at different points along the y-axis. Any more values in <code>year</code> would only exacerbate this problem.</p>
+<p>Luckily, <code>geom_bar()</code> and <code>geom_col()</code> both take a <code>position</code> argument that controls the position of the different colored bars. Setting <code>position = "dodge"</code> greatly improves the plot.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="discrete-continuous.html#cb39-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="discrete-continuous.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.factor</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="discrete-continuous.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv, <span class="at">fill =</span> year)) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="discrete-continuous.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Notice that it’s now much easier to compare the red bars to each other and to compare the red and blue bars, as they now all begin at 0.</p>
+<p><code>year</code> is a pretty simple variable. It contains only two values. What if we wanted to encode a variable with more values? For example, <code>trans</code> contains 10 different values.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="discrete-continuous.html#cb40-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="discrete-continuous.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv, <span class="at">fill =</span> trans)) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="discrete-continuous.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="discrete-continuous.html#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Recall our goals from the beginning of this chapter. The first goal states that it should be easy to connect categories with numbers. Two variables now define each category. It’s pretty easy to connect <code>drv</code> to a number of cars. However, it’s difficult to connect <code>trans</code> with those numbers. There are so many different colors that it’s hard to remember which color refers to which transmission type.</p>
+<p>The second goal states that it should be easy to compare numbers. Comparing bars within a single <code>drv</code> value is easy. However, it’s harder to compare bars of the same <code>trans</code> value. Try to compare all the dark green (“auto(I5)”) bars. Notice that it takes some visual construction work to pull out all the dark green bars and compare them to each other. Therefore, it’s generally not a good idea to create a dodged bar plot if the variable encoded by the fill color has more than 2 values. Faceting can be a better option.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="discrete-continuous.html#cb41-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="discrete-continuous.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> drv)) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="discrete-continuous.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb41-4"><a href="discrete-continuous.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(trans))</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>When faceting, notice that it’s much easier to compare values in a single facet than it is to compare values across facets. Therefore, think about the goals of your plot when choosing which variable to facet by and which to plot on the axis. If you want to highlight how drivetrain numbers vary within a single transmission class, the above plot works well. However, if you want to instead highlight how transmission numbers vary within a single drivetrain, facet by drivetrain and put transmission on the axis.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="discrete-continuous.html#cb42-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a href="discrete-continuous.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(trans)) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="discrete-continuous.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb42-4"><a href="discrete-continuous.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">rows =</span> <span class="fu">vars</span>(drv))</span></code></pre></div>
+<p><img src="discrete-continuous_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This plot has some additional advantages over the previous faceted plot. First, it’s generally a good idea to put the variable with more values on the x-axis, and facet by the variable with fewer values. As we said above, it’s easier to compare values in a single facet than it is to compare values across facets.</p>
+<p>Second, because there are fewer facets, we can use <code>facet_grid()</code> to align the facets vertically. This vertical alignment makes it easier to compare the distributions of values because of all facets now share a common x-axis.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-tufte-2001" class="csl-entry">
+Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. 2nd ed. Cheshire, Connecticut: Graphics Press.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ggplot2-basics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="general-strategy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/data-vis/edit/master/discrete-continuous.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

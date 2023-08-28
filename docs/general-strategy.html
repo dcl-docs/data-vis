@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 General strategy | Data Visualization</title>
+  <meta name="description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 General strategy | Data Visualization" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-data-vis.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="github-repo" content="dcl-docs/data-vis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 General strategy | Data Visualization" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman" />
+
+
+<meta name="date" content="2021-07-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="discrete-continuous.html"/>
+<link rel="next" href="distributions.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Data Visualization</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i>How to read this book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-data"><i class="fa fa-check"></i>Code and data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i>Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html"><i class="fa fa-check"></i><b>1</b> ggplot2 basics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#additional-information"><i class="fa fa-check"></i><b>1.1</b> Additional information</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#pipes-and-aesthetics"><i class="fa fa-check"></i><b>1.1.1</b> Pipes and aesthetics</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#facet-syntax"><i class="fa fa-check"></i><b>1.1.2</b> Facet syntax</a></li>
+<li class="chapter" data-level="1.1.3" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>1.1.3</b> The grammar of graphics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="discrete-continuous.html"><a href="discrete-continuous.html"><i class="fa fa-check"></i><b>2</b> Discrete-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#introduction"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coordinate-systems"><i class="fa fa-check"></i><b>2.2</b> Coordinate systems</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coord_fixed"><i class="fa fa-check"></i><b>2.2.1</b> <code>coord_fixed()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#zooming"><i class="fa fa-check"></i><b>2.2.2</b> Zooming</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#one-discrete-category"><i class="fa fa-check"></i><b>2.3</b> One discrete category</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#effective-bar-plots"><i class="fa fa-check"></i><b>2.3.1</b> Effective bar plots</a></li>
+<li class="chapter" data-level="2.3.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#geom_bar"><i class="fa fa-check"></i><b>2.3.2</b> <code>geom_bar()</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#bars-vs.-dots"><i class="fa fa-check"></i><b>2.3.3</b> Bars vs. dots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="discrete-continuous.html"><a href="discrete-continuous.html#two-discrete-categories"><i class="fa fa-check"></i><b>2.4</b> Two discrete categories</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#color-and-facets"><i class="fa fa-check"></i><b>2.4.1</b> Color and facets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="general-strategy.html"><a href="general-strategy.html"><i class="fa fa-check"></i><b>3</b> General strategy</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="general-strategy.html"><a href="general-strategy.html#the-goals-of-visualization"><i class="fa fa-check"></i><b>3.1</b> The goals of visualization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="general-strategy.html"><a href="general-strategy.html#two-types-of-plots"><i class="fa fa-check"></i><b>3.1.1</b> Two types of plots</a></li>
+<li class="chapter" data-level="3.1.2" data-path="general-strategy.html"><a href="general-strategy.html#encoding-and-decoding"><i class="fa fa-check"></i><b>3.1.2</b> Encoding and decoding</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="general-strategy.html"><a href="general-strategy.html#perception"><i class="fa fa-check"></i><b>3.2</b> Perception</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="general-strategy.html"><a href="general-strategy.html#encodings"><i class="fa fa-check"></i><b>3.2.1</b> Encodings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="general-strategy.html"><a href="general-strategy.html#strategies"><i class="fa fa-check"></i><b>3.3</b> Strategies</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="general-strategy.html"><a href="general-strategy.html#set-goals"><i class="fa fa-check"></i><b>3.3.1</b> Set goals</a></li>
+<li class="chapter" data-level="3.3.2" data-path="general-strategy.html"><a href="general-strategy.html#go-for-quantity"><i class="fa fa-check"></i><b>3.3.2</b> Go for quantity</a></li>
+<li class="chapter" data-level="3.3.3" data-path="general-strategy.html"><a href="general-strategy.html#look-at-your-plots"><i class="fa fa-check"></i><b>3.3.3</b> Look at your plots</a></li>
+<li class="chapter" data-level="3.3.4" data-path="general-strategy.html"><a href="general-strategy.html#iterate"><i class="fa fa-check"></i><b>3.3.4</b> Iterate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="distributions.html"><a href="distributions.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="distributions.html"><a href="distributions.html#mechanics"><i class="fa fa-check"></i><b>4.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="distributions.html"><a href="distributions.html#layering"><i class="fa fa-check"></i><b>4.2.1</b> Layering</a></li>
+<li class="chapter" data-level="4.2.2" data-path="distributions.html"><a href="distributions.html#theme"><i class="fa fa-check"></i><b>4.2.2</b> <code>theme()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="distributions.html"><a href="distributions.html#one-distribution"><i class="fa fa-check"></i><b>4.3</b> One distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="distributions.html"><a href="distributions.html#multiple-distributions"><i class="fa fa-check"></i><b>4.4</b> Multiple distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-continuous.html"><a href="continuous-continuous.html"><i class="fa fa-check"></i><b>5</b> Continuous-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#introduction-2"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#mechanics-1"><i class="fa fa-check"></i><b>5.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#annotations"><i class="fa fa-check"></i><b>5.2.1</b> Annotations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#log-scales"><i class="fa fa-check"></i><b>5.2.2</b> Log scales</a></li>
+<li class="chapter" data-level="5.2.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#continuous-color-scales"><i class="fa fa-check"></i><b>5.2.3</b> Continuous color scales</a></li>
+<li class="chapter" data-level="5.2.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#size-scales"><i class="fa fa-check"></i><b>5.2.4</b> Size scales</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#two-continuous-variables"><i class="fa fa-check"></i><b>5.3</b> Two continuous variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#overplotting"><i class="fa fa-check"></i><b>5.3.1</b> Overplotting</a></li>
+<li class="chapter" data-level="5.3.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#smoothing"><i class="fa fa-check"></i><b>5.3.2</b> Smoothing</a></li>
+<li class="chapter" data-level="5.3.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#paired-data"><i class="fa fa-check"></i><b>5.3.3</b> Paired data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#three-continuous-variables"><i class="fa fa-check"></i><b>5.4</b> Three continuous variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="time-series.html"><a href="time-series.html"><i class="fa fa-check"></i><b>6</b> Time series</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="time-series.html"><a href="time-series.html#mechanics-2"><i class="fa fa-check"></i><b>6.1</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="time-series.html"><a href="time-series.html#datetime-scales"><i class="fa fa-check"></i><b>6.1.1</b> Date/time scales</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="time-series.html"><a href="time-series.html#trends"><i class="fa fa-check"></i><b>6.2</b> Trends</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="time-series.html"><a href="time-series.html#one-response-variable"><i class="fa fa-check"></i><b>6.2.1</b> One response variable</a></li>
+<li class="chapter" data-level="6.2.2" data-path="time-series.html"><a href="time-series.html#distributions-over-time"><i class="fa fa-check"></i><b>6.2.2</b> Distributions over time</a></li>
+<li class="chapter" data-level="6.2.3" data-path="time-series.html"><a href="time-series.html#two-response-variables"><i class="fa fa-check"></i><b>6.2.3</b> Two response variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="time-series.html"><a href="time-series.html#short-term-fluctuations"><i class="fa fa-check"></i><b>6.3</b> Short-term fluctuations</a></li>
+<li class="chapter" data-level="6.4" data-path="time-series.html"><a href="time-series.html#individual-values"><i class="fa fa-check"></i><b>6.4</b> Individual values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Visualization</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="general-strategy" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> General strategy</h1>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="general-strategy.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb43-2"><a href="general-strategy.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dcldata)</span></code></pre></div>
+<div id="the-goals-of-visualization" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> The goals of visualization</h2>
+<div id="two-types-of-plots" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Two types of plots</h3>
+<p><code>buildings</code> contains data on some of the tallest buildings in the world. <code>buildings_10</code> includes just the 10 tallest.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="general-strategy.html#cb44-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="ot">&lt;-</span></span>
+<span id="cb44-2"><a href="general-strategy.html#cb44-2" aria-hidden="true" tabindex="-1"></a>  buildings <span class="sc">%&gt;%</span> </span>
+<span id="cb44-3"><a href="general-strategy.html#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(height, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p>You might be curious to know which buildings are the tallest and how tall they are.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="general-strategy.html#cb45-1" aria-hidden="true" tabindex="-1"></a>buildings_10</span>
+<span id="cb45-2"><a href="general-strategy.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 10 x 6</span></span>
+<span id="cb45-3"><a href="general-strategy.html#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   building                  city         country             height floors  year</span></span>
+<span id="cb45-4"><a href="general-strategy.html#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                     &lt;chr&gt;        &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb45-5"><a href="general-strategy.html#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Burj Khalifa              Dubai        United Arab Emirat…   2717    163  2010</span></span>
+<span id="cb45-6"><a href="general-strategy.html#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Shanghai Tower            Shanghai     China                 2073    128  2015</span></span>
+<span id="cb45-7"><a href="general-strategy.html#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Abraj Al-Bait Clock Tower Mecca        Saudi Arabia          1971    120  2012</span></span>
+<span id="cb45-8"><a href="general-strategy.html#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Ping An Finance Center    Shenzhen     China                 1965    115  2017</span></span>
+<span id="cb45-9"><a href="general-strategy.html#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Lotte World Tower         Seoul        South Korea           1819    123  2016</span></span>
+<span id="cb45-10"><a href="general-strategy.html#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 One World Trade Center    New York Ci… United States         1776     94  2014</span></span>
+<span id="cb45-11"><a href="general-strategy.html#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 4 more rows</span></span></code></pre></div>
+<p>It’s difficult to extract meaningful insights from tables. A visualization will be more helpful.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="general-strategy.html#cb46-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a href="general-strategy.html#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-3"><a href="general-strategy.html#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb46-4"><a href="general-strategy.html#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You can now see that Burj Khalifa is the tallest by several hundred feet. No other buildings come close.</p>
+<p>Visualizations are a great way to explore data, and you’ll often use visualizations as a way to learn about a data set. We’ll call these visualizations <em>exploratory data analysis (EDA) plots</em>.</p>
+<p>Exploratory data analysis is the process of investigating your data. In EDA, you ask questions about your data, try to answer those questions, and then use what you find to reformulate your existing questions or ask new ones. Visualization is just one tool for EDA.</p>
+<p>After doing some EDA, you might want to share what you learn with someone else. Plots made during EDA are generally made very quickly. They may need some fine-tuning before they can be useful to other people. We’ll call plots you make to share information with others <em>presentation plots</em>.</p>
+<p>Polishing touches like labels, titles, legend position, etc. matter more for presentation than EDA because your audience may have no prior experience with your data.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="general-strategy.html#cb47-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="general-strategy.html#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="general-strategy.html#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb47-4"><a href="general-strategy.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb47-5"><a href="general-strategy.html#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb47-6"><a href="general-strategy.html#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Height (feet)&quot;</span>,</span>
+<span id="cb47-7"><a href="general-strategy.html#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Building name&quot;</span>,</span>
+<span id="cb47-8"><a href="general-strategy.html#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Heights of the world&#39;s 10 tallest buildings&quot;</span></span>
+<span id="cb47-9"><a href="general-strategy.html#cb47-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The purpose of an EDA plot is different from the purpose of a presentation plot. You construct EDA plots for <em>yourself</em> to help you answer questions. Before you run your ggplot2 code, you won’t know what the plot will tell you. EDA plots are also meant to be quick, and you don’t need to worry about perfecting details. You create presentation plots for <em>others</em>. The purpose of a presentation plot is to transfer an idea about the data from your own mind to the minds of others as effectively as possible. Where EDA plots are quick, presentation plots are <em>slow</em>. Clear and focused visualizations take time and lots of iteration.</p>
+</div>
+<div id="encoding-and-decoding" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Encoding and decoding</h3>
+<p>Data is not visual by default. Our <code>buildings_10</code> data is just a collection of associated values.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="general-strategy.html#cb48-1" aria-hidden="true" tabindex="-1"></a>buildings_10</span>
+<span id="cb48-2"><a href="general-strategy.html#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 10 x 6</span></span>
+<span id="cb48-3"><a href="general-strategy.html#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   building              city        country          height_ft floors year </span></span>
+<span id="cb48-4"><a href="general-strategy.html#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                 &lt;chr&gt;       &lt;chr&gt;                &lt;dbl&gt;  &lt;int&gt; &lt;chr&gt;</span></span>
+<span id="cb48-5"><a href="general-strategy.html#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Burj Khalifa          Dubai       United Arab Emi…      2717    163 2010 </span></span>
+<span id="cb48-6"><a href="general-strategy.html#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Shanghai Tower        Shanghai    China                 2073    128 2015 </span></span>
+<span id="cb48-7"><a href="general-strategy.html#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Abraj Al-Bait Clock … Mecca       Saudi Arabia          1971    120 2012 </span></span>
+<span id="cb48-8"><a href="general-strategy.html#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Ping An Finance Cent… Shenzhen    China                 1965    115 2017 </span></span>
+<span id="cb48-9"><a href="general-strategy.html#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Lotte World Tower     Seoul       South Korea           1819    123 2016 </span></span>
+<span id="cb48-10"><a href="general-strategy.html#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 One World Trade Cent… New York C… United States         1776    104 2014 </span></span>
+<span id="cb48-11"><a href="general-strategy.html#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 4 more rows</span></span></code></pre></div>
+<p>When you visualize data, you <em>encode</em> these values into visual elements. In the <em>ggplot2 basics</em> chapter, you learned about the grammar of graphics. The grammar of graphics describes a way to build up plots by specifying aesthetic mappings, geoms, coordinate systems, and other plot elements. These plot elements control how your data is encoded into visual elements.</p>
+<p>For example, consider our <code>buildings_10</code> visualization. We chose to visualize two variables: <code>building</code> and <code>height</code>. There are many ways to visually encode these variables. We could have drawn pictures of each building and added a label to each picture indicating the height. We could have used <code>geom_col()</code> to encode <code>height</code> with bar length. Instead, we chose to use <code>geom_point()</code>, encoding <code>height</code> by the position of a dot along the x-axis and <code>building</code> by position along the y-axis.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="general-strategy.html#cb49-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb49-2"><a href="general-strategy.html#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-3"><a href="general-strategy.html#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb49-4"><a href="general-strategy.html#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The result of encoding information into visual elements is a visual display. To extract insights about the data from this display, you have to <em>decode</em> the visual elements. Say you want to understand which building is the tallest. To decode the above visualization, you have to perceive the pattern of the dots and notice that one is the furthest to the right. Then, you have to connect that far right dot to its label and read the label in order to understand that Burj Khalifa is the tallest building.</p>
+<p>The conception of visualization as a process of encoding and decoding comes from William S. Cleveland <span class="citation">(<a href="#ref-cleveland-1985" role="doc-biblioref">Cleveland and McGill 1985</a>)</span>. Cleveland emphasized that a plot is only successful if the <em>decoding</em> process goes well. You can create a visually stunning plot, but if no one can decode the visual elements back into the realm of the data, the visualization has failed.</p>
+<p>Whether you are creating an EDA or presentation plot, you have to choose your encodings carefully. In EDA, different encodings provide different viewpoints into your data. Some choices of encodings will show you nothing. Others will lead to profound discoveries.</p>
+<p>For example, recall our 100-meter dash plots from the previous chapter. When we use <code>geom_bar()</code>, we encode time with length.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="general-strategy.html#cb50-1" aria-hidden="true" tabindex="-1"></a>example_sprint <span class="sc">%&gt;%</span> </span>
+<span id="cb50-2"><a href="general-strategy.html#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">fct_reorder</span>(name, <span class="sc">-</span>time)) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-3"><a href="general-strategy.html#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> name)) <span class="sc">+</span></span>
+<span id="cb50-4"><a href="general-strategy.html#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This plot communicates that Usain Bolt won, but it was pretty close. When we encode time with position using <code>geom_point()</code>, we get a different picture.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="general-strategy.html#cb51-1" aria-hidden="true" tabindex="-1"></a>example_sprint <span class="sc">%&gt;%</span> </span>
+<span id="cb51-2"><a href="general-strategy.html#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">fct_reorder</span>(name, <span class="sc">-</span>time)) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-3"><a href="general-strategy.html#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> name)) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="general-strategy.html#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>A choice of encodings could affect how you explore and understand the <code>example_sprint</code> data.</p>
+<p>In a presentation plot, encoding information in visual elements is a way to transfer ideas about the data from your mind to the minds of others. You should choose your encodings so that the decoding process is easy for your audience. Ideally, as little information as possible should be lost in the decoding process. Your audience should come away with the same understanding of the data as you started with.</p>
+<p>You’ve already seen plenty of examples of presentation plots in which decoding fails. For example, here’s a bar plot version of <code>buildings_10</code> plot where the buildings are in alphabetical order.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="general-strategy.html#cb52-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb52-2"><a href="general-strategy.html#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="general-strategy.html#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb52-4"><a href="general-strategy.html#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Say the idea you wished to transfer from your mind to the minds of others is the ranking of the buildings (i.e., the tallest is Burj Khalifa, then Shanghai Tower, etc.). The decoding process doesn’t totally fail, but it goes poorly. As we said earlier, it’s hard to compare unordered amounts. Using bars instead of dots also makes comparisons between the buildings more difficult.</p>
+<p>The human visual system is responsible for the decoding process. If an encoding doesn’t work well with the visual system, decoding will fail. Next, we’ll discuss which encodings the human visual system can decode accurately, and which cause it trouble.</p>
+</div>
+</div>
+<div id="perception" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Perception</h2>
+<div id="encodings" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Encodings</h3>
+<p>When you encode a <em>continuous</em> variable (like building height), it’s important to be able to both estimate magnitudes and judge differences. We’ve already discussed a couple of encodings that make it easy for humans to do both these tasks: length and position.</p>
+<p>Here, <code>geom_point()</code> encodes building height with position.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="general-strategy.html#cb53-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb53-2"><a href="general-strategy.html#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb53-3"><a href="general-strategy.html#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="general-strategy.html#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>And <code>geom_col()</code> encodes height with length.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="general-strategy.html#cb54-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="general-strategy.html#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-3"><a href="general-strategy.html#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="general-strategy.html#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Notice how much harder the task becomes if we encode height with color.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="general-strategy.html#cb55-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb55-2"><a href="general-strategy.html#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-3"><a href="general-strategy.html#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> building, <span class="at">color =</span> height)) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="general-strategy.html#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb55-5"><a href="general-strategy.html#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb55-6"><a href="general-strategy.html#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb55-7"><a href="general-strategy.html#cb55-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb55-8"><a href="general-strategy.html#cb55-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb55-9"><a href="general-strategy.html#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb55-10"><a href="general-strategy.html#cb55-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You can still tell that Burj Khalifa is the tallest, but its exact height is difficult to estimate. Encoding with color also makes it much harder to compare buildings. Lotte World Tower and One World Trade Center appear almost identical.</p>
+<p>Encoding height with size causes similar problems.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="general-strategy.html#cb56-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="general-strategy.html#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-3"><a href="general-strategy.html#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> building, <span class="at">size =</span> height)) <span class="sc">+</span></span>
+<span id="cb56-4"><a href="general-strategy.html#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb56-5"><a href="general-strategy.html#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb56-6"><a href="general-strategy.html#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb56-7"><a href="general-strategy.html#cb56-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb56-8"><a href="general-strategy.html#cb56-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb56-9"><a href="general-strategy.html#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb56-10"><a href="general-strategy.html#cb56-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>To quantify these observations, Cleveland and McGill (<span class="citation"><a href="#ref-cleveland-1985" role="doc-biblioref">Cleveland and McGill</a> (<a href="#ref-cleveland-1985" role="doc-biblioref">1985</a>)</span>) designed an experiment to test how accurately humans can decode different encodings of <em>continuous data</em>. The results of their experiment led the following ranking (from best to worst) of encodings:</p>
+<ol style="list-style-type: decimal">
+<li>Position along a common scale (i.e., placing elements along a common axis)</li>
+<li>Position along identical but nonaligned scales (i.e., placing elements along a common axis, but on different facets)</li>
+<li>Length</li>
+<li>Angle</li>
+<li>Slope</li>
+<li>Area</li>
+<li>Volume</li>
+<li>Density</li>
+<li>Color saturation (i.e., the intensity/purity of a color)</li>
+<li>Color hue (blue, green, red, etc.) <span class="citation">(<a href="#ref-cleveland-1985" role="doc-biblioref">Cleveland and McGill 1985</a>)</span></li>
+</ol>
+<p>This ranking is only for <em>continuous</em> variables (again, we’re using continuous in the ggplot2 sense, not the mathematical one). Color hue may not be a very good way to encode a continuous variable, but it can be very useful for discrete ones.</p>
+<p>You will often want to plot multiple continuous variables, and so will need to use multiple encodings. Loosely rank the variables you wish to visualize from most important to least important. Encode the most important variables with encodings from the top of the list, moving to less accurate encodings only when necessary.</p>
+<p>For example, above you saw how size is not a good choice for encoding height. However, if we want to visualize <code>building</code>, <code>height</code>, and <code>floors</code> on the same plot, we’ll need to use three encodings.</p>
+<p><code>building</code> is a discrete variable, and so Cleveland and McGill’s ranking does not apply. Let’s say we’re committed to putting <code>building</code> on an axis. Now, there’s only one open axis, so we can only encode either <code>height</code> or <code>floors</code> with position. <code>height</code> is probably more important, so let’s encode <code>height</code> with position. This gives us the plot from earlier.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="general-strategy.html#cb57-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb57-2"><a href="general-strategy.html#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb57-3"><a href="general-strategy.html#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb57-4"><a href="general-strategy.html#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We still need to encode <code>floors</code>. The next element in the ranking is “Position along identical but nonaligned scales.” This would require faceting. It doesn’t really make sense to facet by any of the variables, so we move to the next element which is <code>length</code>. Length also won’t work (extending the dots into lines corresponding to the number of floors would seem to imply that floors are in the same units as <code>height</code>). Angle isn’t a good option either. We then arrive at area, which could work.</p>
+<p>We’ll use the <code>size</code> argument of <code>geom_point()</code>, which by default scales the <em>areas</em> of the circles according to the data.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="general-strategy.html#cb58-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb58-2"><a href="general-strategy.html#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height)) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-3"><a href="general-strategy.html#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> building, <span class="at">size =</span> floors)) <span class="sc">+</span></span>
+<span id="cb58-4"><a href="general-strategy.html#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This plot is OK. You may not be able to tell exactly how many floors each building has, but you can immediately see that One World Trade Center is an outlier.</p>
+<p>If this were an EDA plot, you might further investigate this discovery about One World Trade Center by directly plotting the <code>height</code> to <code>floors</code> ratio.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="general-strategy.html#cb59-1" aria-hidden="true" tabindex="-1"></a>buildings_10 <span class="sc">%&gt;%</span> </span>
+<span id="cb59-2"><a href="general-strategy.html#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">building =</span> <span class="fu">fct_reorder</span>(building, height <span class="sc">/</span> floors)) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-3"><a href="general-strategy.html#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span>  height <span class="sc">/</span> floors, <span class="at">y =</span> building)) <span class="sc">+</span></span>
+<span id="cb59-4"><a href="general-strategy.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>If the goal is to show the <code>height</code> to <code>floors</code> ratio, this plot is much better. By encoding the ratio with position only, instead of position and size, it’s now clear that both One World Trade Center <em>and</em> Lotte World Tower are unusual. Lotte World Tower has very short floors and One World Trade Center has very tall floors.</p>
+<p>Creating new variables can often lead to better insights than plotting several variables at once. If your plot uses several continuous variables, ask yourself if there’s a more direct way to measure the relationship that you’re curious about.</p>
+</div>
+</div>
+<div id="strategies" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Strategies</h2>
+<p>A basic understanding of human perception is important to visualization, but is only one tool in your data visualization toolbox. Effective visualization also takes clear thinking, creativity, and continual improvement.</p>
+<p>Here are four practical strategies to keep in mind when creating visualizations. In <em>Discrete-continuous relationships</em> and later chapters, we talk about strategies for specific types of plots. The following strategies apply to <em>all</em> visualizations.</p>
+<div id="set-goals" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Set goals</h3>
+<p>Setting goals for visualizations forces you to think clearly about a visualization’s purpose. For EDA plots, your goals will typically be questions (e.g., “What’s the tallest building?”). For presentation plots, your goals revolve around conveying specific information to your audience.</p>
+<p>Setting clear goals allows you to evaluate the effectiveness of your visualizations. Recall how, in the <em>Discrete-continuous relationships</em> chapter, we started off with two goals for our Utah languages visualization and then used those goals to evaluate various plots.</p>
+<p>Goals can also help you focus. Data sets often have too many interesting features to explore or present in a single visualization. Setting intentional goals can helpfully narrow the scope of your plots.</p>
+</div>
+<div id="go-for-quantity" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Go for quantity</h3>
+<p>Once you have some goals in mind, create a bunch of plots that try to meet those goals. Luckily, ggplot2 and RStudio make it easy to quickly make many different kinds of plots.</p>
+<p>In EDA, creating multiple plots allows you to more fully explore a question. Each plot is a slightly different window into the data. You can use the combination of all these plots to reach a more comprehensive understanding of the data.</p>
+<p>(Note that quantity of <em>questions</em> is also important during EDA, but for now we’re only talking about answering one question at a time.)</p>
+<p>If you’re creating a presentation plot, thinking of many different plots can free you from the common trap of committing too early to a single idea. It also allows you to compare the strengths and weaknesses of various approaches.</p>
+<p>If you’re new to visualization, it can be difficult to come up with multiple ideas for a single goal. Your stockpile of visualization ideas is likely still small. One way to grow this stockpile, besides creating visualizations, is to <em>consume</em> a lot of visualizations. Scanning the geoms section of the ggplot2 cheat sheet can also help spark new ideas.</p>
+</div>
+<div id="look-at-your-plots" class="section level3" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Look at your plots</h3>
+<p>Look at your plots and try to notice your reactions to them. Ask yourself, “What’s easy to see? What patterns jump out? What information is obscured?”</p>
+<p>Learning how to notice which features are obvious and what are not takes practice, and knowing how to fix problems you find can be difficult. Try to notice weaknesses of your plots even if you’re unsure how to fix those weaknesses.</p>
+<p>Sometimes, your visual system will immediately let you know when decoding is failing (e.g., with the overlapping labels). In other cases, the decoding process may succeed for you, but fail for others new to the data. For example, the following is an attempt to show that China has a lot of tall buildings. If you’ve been staring at this plot all day, it might become obvious to you that China has the most buildings in the data.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="general-strategy.html#cb60-1" aria-hidden="true" tabindex="-1"></a>buildings <span class="sc">%&gt;%</span> </span>
+<span id="cb60-2"><a href="general-strategy.html#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> height, <span class="at">y =</span> country)) <span class="sc">+</span></span>
+<span id="cb60-3"><a href="general-strategy.html#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb60-4"><a href="general-strategy.html#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>However, this discovery isn’t obvious to first time viewers.</p>
+<p>Try to imagine seeing your plots for the first time. Think about what you would notice if you didn’t already know what you should be looking for, and ask yourself if that’s really what you want viewers to notice.</p>
+<p>For the above example, if the goal is to highlight the <em>number</em> of buildings in each country, it would be much better to eliminate <code>height</code> and just plot the number of buildings.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="general-strategy.html#cb61-1" aria-hidden="true" tabindex="-1"></a>buildings <span class="sc">%&gt;%</span> </span>
+<span id="cb61-2"><a href="general-strategy.html#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country =</span> <span class="fu">fct_infreq</span>(country) <span class="sc">%&gt;%</span> <span class="fu">fct_rev</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb61-3"><a href="general-strategy.html#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> country)) <span class="sc">+</span></span>
+<span id="cb61-4"><a href="general-strategy.html#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<p><img src="general-strategy_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>It’s now much more obvious that China has more tall buildings than any other country in the data. You can also tell that the United Arab Emirates has quite a few more tall buildings than the U.S.</p>
+</div>
+<div id="iterate" class="section level3" number="3.3.4">
+<h3><span class="header-section-number">3.3.4</span> Iterate</h3>
+<p>Your first attempt at a visualization will almost never be your best attempt. You shouldn’t expect to know, before plotting, the best way to visualize a given data set, and so iteration is critical. Once you have your goals in mind and have carefully looked at your visualizations, you can begin to iterate, fixing problems and emphasizing the relationships you wish to show.</p>
+<p>Keep in mind that iteration can take time. You may not be able to come up with a better alternative to a plot immediately. It’s often helpful to take a break from a difficult visualization problem, allow your mind time to work on the problem in the background, and return later on.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-cleveland-1985" class="csl-entry">
+Cleveland, William S., and Robert McGill. 1985. <span>“Graphical Perception and Graphical Methods for Analyzing Scientific Data.”</span> <em>American Association for the Advancement of Science</em> 229 (4716): 828–33.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="discrete-continuous.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/data-vis/edit/master/general-strategy.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

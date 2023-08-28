@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 ggplot2 basics | Data Visualization</title>
+  <meta name="description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 ggplot2 basics | Data Visualization" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-data-vis.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="github-repo" content="dcl-docs/data-vis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 ggplot2 basics | Data Visualization" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman" />
+
+
+<meta name="date" content="2021-07-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="discrete-continuous.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Data Visualization</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i>How to read this book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-data"><i class="fa fa-check"></i>Code and data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i>Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html"><i class="fa fa-check"></i><b>1</b> ggplot2 basics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#additional-information"><i class="fa fa-check"></i><b>1.1</b> Additional information</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#pipes-and-aesthetics"><i class="fa fa-check"></i><b>1.1.1</b> Pipes and aesthetics</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#facet-syntax"><i class="fa fa-check"></i><b>1.1.2</b> Facet syntax</a></li>
+<li class="chapter" data-level="1.1.3" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>1.1.3</b> The grammar of graphics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="discrete-continuous.html"><a href="discrete-continuous.html"><i class="fa fa-check"></i><b>2</b> Discrete-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#introduction"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coordinate-systems"><i class="fa fa-check"></i><b>2.2</b> Coordinate systems</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coord_fixed"><i class="fa fa-check"></i><b>2.2.1</b> <code>coord_fixed()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#zooming"><i class="fa fa-check"></i><b>2.2.2</b> Zooming</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#one-discrete-category"><i class="fa fa-check"></i><b>2.3</b> One discrete category</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#effective-bar-plots"><i class="fa fa-check"></i><b>2.3.1</b> Effective bar plots</a></li>
+<li class="chapter" data-level="2.3.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#geom_bar"><i class="fa fa-check"></i><b>2.3.2</b> <code>geom_bar()</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#bars-vs.-dots"><i class="fa fa-check"></i><b>2.3.3</b> Bars vs. dots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="discrete-continuous.html"><a href="discrete-continuous.html#two-discrete-categories"><i class="fa fa-check"></i><b>2.4</b> Two discrete categories</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#color-and-facets"><i class="fa fa-check"></i><b>2.4.1</b> Color and facets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="general-strategy.html"><a href="general-strategy.html"><i class="fa fa-check"></i><b>3</b> General strategy</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="general-strategy.html"><a href="general-strategy.html#the-goals-of-visualization"><i class="fa fa-check"></i><b>3.1</b> The goals of visualization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="general-strategy.html"><a href="general-strategy.html#two-types-of-plots"><i class="fa fa-check"></i><b>3.1.1</b> Two types of plots</a></li>
+<li class="chapter" data-level="3.1.2" data-path="general-strategy.html"><a href="general-strategy.html#encoding-and-decoding"><i class="fa fa-check"></i><b>3.1.2</b> Encoding and decoding</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="general-strategy.html"><a href="general-strategy.html#perception"><i class="fa fa-check"></i><b>3.2</b> Perception</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="general-strategy.html"><a href="general-strategy.html#encodings"><i class="fa fa-check"></i><b>3.2.1</b> Encodings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="general-strategy.html"><a href="general-strategy.html#strategies"><i class="fa fa-check"></i><b>3.3</b> Strategies</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="general-strategy.html"><a href="general-strategy.html#set-goals"><i class="fa fa-check"></i><b>3.3.1</b> Set goals</a></li>
+<li class="chapter" data-level="3.3.2" data-path="general-strategy.html"><a href="general-strategy.html#go-for-quantity"><i class="fa fa-check"></i><b>3.3.2</b> Go for quantity</a></li>
+<li class="chapter" data-level="3.3.3" data-path="general-strategy.html"><a href="general-strategy.html#look-at-your-plots"><i class="fa fa-check"></i><b>3.3.3</b> Look at your plots</a></li>
+<li class="chapter" data-level="3.3.4" data-path="general-strategy.html"><a href="general-strategy.html#iterate"><i class="fa fa-check"></i><b>3.3.4</b> Iterate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="distributions.html"><a href="distributions.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="distributions.html"><a href="distributions.html#mechanics"><i class="fa fa-check"></i><b>4.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="distributions.html"><a href="distributions.html#layering"><i class="fa fa-check"></i><b>4.2.1</b> Layering</a></li>
+<li class="chapter" data-level="4.2.2" data-path="distributions.html"><a href="distributions.html#theme"><i class="fa fa-check"></i><b>4.2.2</b> <code>theme()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="distributions.html"><a href="distributions.html#one-distribution"><i class="fa fa-check"></i><b>4.3</b> One distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="distributions.html"><a href="distributions.html#multiple-distributions"><i class="fa fa-check"></i><b>4.4</b> Multiple distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-continuous.html"><a href="continuous-continuous.html"><i class="fa fa-check"></i><b>5</b> Continuous-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#introduction-2"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#mechanics-1"><i class="fa fa-check"></i><b>5.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#annotations"><i class="fa fa-check"></i><b>5.2.1</b> Annotations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#log-scales"><i class="fa fa-check"></i><b>5.2.2</b> Log scales</a></li>
+<li class="chapter" data-level="5.2.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#continuous-color-scales"><i class="fa fa-check"></i><b>5.2.3</b> Continuous color scales</a></li>
+<li class="chapter" data-level="5.2.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#size-scales"><i class="fa fa-check"></i><b>5.2.4</b> Size scales</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#two-continuous-variables"><i class="fa fa-check"></i><b>5.3</b> Two continuous variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#overplotting"><i class="fa fa-check"></i><b>5.3.1</b> Overplotting</a></li>
+<li class="chapter" data-level="5.3.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#smoothing"><i class="fa fa-check"></i><b>5.3.2</b> Smoothing</a></li>
+<li class="chapter" data-level="5.3.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#paired-data"><i class="fa fa-check"></i><b>5.3.3</b> Paired data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#three-continuous-variables"><i class="fa fa-check"></i><b>5.4</b> Three continuous variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="time-series.html"><a href="time-series.html"><i class="fa fa-check"></i><b>6</b> Time series</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="time-series.html"><a href="time-series.html#mechanics-2"><i class="fa fa-check"></i><b>6.1</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="time-series.html"><a href="time-series.html#datetime-scales"><i class="fa fa-check"></i><b>6.1.1</b> Date/time scales</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="time-series.html"><a href="time-series.html#trends"><i class="fa fa-check"></i><b>6.2</b> Trends</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="time-series.html"><a href="time-series.html#one-response-variable"><i class="fa fa-check"></i><b>6.2.1</b> One response variable</a></li>
+<li class="chapter" data-level="6.2.2" data-path="time-series.html"><a href="time-series.html#distributions-over-time"><i class="fa fa-check"></i><b>6.2.2</b> Distributions over time</a></li>
+<li class="chapter" data-level="6.2.3" data-path="time-series.html"><a href="time-series.html#two-response-variables"><i class="fa fa-check"></i><b>6.2.3</b> Two response variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="time-series.html"><a href="time-series.html#short-term-fluctuations"><i class="fa fa-check"></i><b>6.3</b> Short-term fluctuations</a></li>
+<li class="chapter" data-level="6.4" data-path="time-series.html"><a href="time-series.html#individual-values"><i class="fa fa-check"></i><b>6.4</b> Individual values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Visualization</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ggplot2-basics" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> ggplot2 basics</h1>
+<p>The following sections from the data visualization chapter of <em>R for Data Science (R4DS)</em> will introduce you to the basics of plotting with ggplot2.</p>
+<ul>
+<li><a href="https://r4ds.had.co.nz/data-visualisation.html#introduction-1">Introduction</a></li>
+<li><a href="https://r4ds.had.co.nz/data-visualisation.html#first-steps">First steps</a></li>
+<li><a href="https://r4ds.had.co.nz/data-visualisation.html#aesthetic-mappings">Aesthetic mappings</a></li>
+<li><a href="https://r4ds.had.co.nz/data-visualisation.html#common-problems">Common problems</a></li>
+<li><a href="https://r4ds.had.co.nz/data-visualisation.html#facets">Facets</a></li>
+<li><a href="https://r4ds.had.co.nz/data-visualisation.html#geometric-objects">Geometric objects</a></li>
+</ul>
+<p>Clear labelling is crucial when presenting your plots to others. The following section in <em>R4DS</em> introduces you to the <code>labs()</code> function, which allows you to edit the title, subtitle, caption, axes labels, and legend labels of your plots.</p>
+<ul>
+<li><a href="https://r4ds.had.co.nz/graphics-for-communication.html#label">Label</a></li>
+</ul>
+<p>ggplot2 and the Tidyverse consist of many functions. <a href="https://www.rstudio.com/resources/cheatsheets/">Cheat sheets</a> are an excellent resource for understanding the different purposes of the most-used functions and for finding the right ones for a given task. As you learn new functions, it’s a good idea to locate them on the relevant cheat sheet to see how they fit in. This will help you to find them later. The functions covered above can be found on</p>
+<ul>
+<li><a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">Data Visualization with ggplot2</a></li>
+</ul>
+<p>in the sections</p>
+<ul>
+<li>Basics</li>
+<li>Geoms</li>
+<li>Faceting</li>
+<li>Labels</li>
+</ul>
+<div id="additional-information" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Additional information</h2>
+<div id="pipes-and-aesthetics" class="section level3" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> Pipes and aesthetics</h3>
+<p>The above sections of <em>R4DS</em> create plots with code that looks like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="ggplot2-basics.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb6-2"><a href="ggplot2-basics.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy))</span></code></pre></div>
+<p>We instead recommend creating this plot with the following code.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="ggplot2-basics.html#cb7-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="ggplot2-basics.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="ggplot2-basics.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p>There are two differences. First, we’ve used <code>%&gt;%</code>, which is called a <em>pipe</em>. The pipe takes the dataset <code>mpg</code> and provides it to the first argument of <code>ggplot()</code>, which is <code>data</code>. The concept of pipes is covered later in <em>R4DS</em>, but is useful enough to introduce here. Pipes make it easier to see which dataset is being plotted. They also allow you to easily manipulate the data before plotting. For example, you might want to apply <code>filter()</code> to the data before plotting.</p>
+<p>Second, we’ve moved the aesthetics from <code>geom_point()</code> into <code>ggplot()</code>. In general, your plots will contain more than one geom. We recommend specifying the aesthetics that are shared by all of the plot’s geoms in <code>ggplot()</code> and specifying the aesthetics unique to a single geom in that geom call.</p>
+</div>
+<div id="facet-syntax" class="section level3" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> Facet syntax</h3>
+<p>As you saw in <em>R4DS</em>, you can use <code>facet_grid()</code> and <code>facet_wrap()</code> to split a single plot into many.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="ggplot2-basics.html#cb8-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="ggplot2-basics.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="ggplot2-basics.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb8-4"><a href="ggplot2-basics.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> class)</span></code></pre></div>
+<p><img src="ggplot2-basics_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The syntax for <code>facet_grid()</code> and <code>facet_wrap()</code> has been updated, however. Instead of using <code>~</code>, you specify the faceting variable inside the helper function <code>vars()</code>.</p>
+<p>For <code>facet_wrap()</code>, all you have to do is replace <code>~</code> with <code>vars()</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="ggplot2-basics.html#cb9-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="ggplot2-basics.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb9-3"><a href="ggplot2-basics.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb9-4"><a href="ggplot2-basics.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(class))</span></code></pre></div>
+<p><img src="ggplot2-basics_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You still use the <code>nrow</code> and <code>ncol</code> arguments of <code>facet_wrap()</code> to control the number of rows and columns.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="ggplot2-basics.html#cb10-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="ggplot2-basics.html#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb10-3"><a href="ggplot2-basics.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="ggplot2-basics.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(class), <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="ggplot2-basics_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>facet_grid()</code> now has two arguments,<code>rows</code> and <code>cols</code>, that define the rows and columns of the grid.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="ggplot2-basics.html#cb11-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="ggplot2-basics.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb11-3"><a href="ggplot2-basics.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb11-4"><a href="ggplot2-basics.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">rows =</span> <span class="fu">vars</span>(year), <span class="at">cols =</span> <span class="fu">vars</span>(class))</span></code></pre></div>
+<p><img src="ggplot2-basics_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Again, you need to wrap the variable names in the helper function <code>vars()</code>.</p>
+</div>
+<div id="the-grammar-of-graphics" class="section level3" number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> The grammar of graphics</h3>
+<p>Building a ggplot2 plot is similar to building a sentence with a specified form, like “determiner noun verb” (e.g., “The cat slept.”). Just like each “determiner noun verb” sentence is composed of three parts of speech, each ggplot2 plot is composed of various plot elements. Take a look at the code for the faceted plot that we made above. We specified the following four plot elements to create the plot.</p>
+<ul>
+<li>Data (<code>mpg</code>)</li>
+<li>Geom(s) (<code>geom_point()</code>)</li>
+<li>Aesthetic mappings (<code>x = displ, y = hwy</code>)</li>
+<li>Faceting scheme (<code>facet_grid()</code>)</li>
+</ul>
+<p>There are actually four more elements at work in the background. These are:</p>
+<ul>
+<li>Statistical transformation</li>
+<li>Position adjustment</li>
+<li>Coordinate system</li>
+<li>Scales <span class="citation">(<a href="#ref-wickham-2010" role="doc-biblioref">Wickham 2010</a>)</span></li>
+</ul>
+<p>(Don’t worry too much about these four right now. You’ll learn about them in later chapters.)</p>
+<p>To construct a “determiner noun verb” sentence, you choose a determiner, a noun, and a verb. You then slot each word into its respective spot in the sentence. Similarly, to construct a ggplot2 plot, you specify the different plot elements: the data, geom, aesthetic mappings, etc. This idea is called the <em>grammar of graphics</em>, and is incredibly powerful. Just like you can specify <em>any</em> “determiner noun verb” sentence by picking different combinations of determiners, nouns, and verbs, you can specify <em>any</em> plot by picking different combinations of the eight plot elements.</p>
+<p>Although each ggplot2 plot contains all of the eight elements, you’ve seen that you won’t always need to specify each of the eight. The following plot only specifies three (data, geom, aesthetic mappings).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="ggplot2-basics.html#cb12-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="ggplot2-basics.html#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb12-3"><a href="ggplot2-basics.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="ggplot2-basics_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>ggplot()</code> helpfully takes care of the remaining five elements by using defaults (default coordinate system, scales, faceting scheme, etc.).</p>
+<p>There are also a couple of plot elements not technically part of the grammar of graphics. These are:</p>
+<ul>
+<li>Theme</li>
+<li>Labels</li>
+</ul>
+<p>You already learned about labels and the <code>labs()</code> function. Themes control components of plots not related to the actually data being plotted, including the appearance of grid lines, the size of the axis labelling text, the background color, the placement of legends, and many other elements.</p>
+<p>Each ggplot2 plot comes with a default theme (gray background, white gridlines, etc.). To change these defaults, you adjust the arguments of the <code>theme()</code> function. You don’t need to worry about <code>theme()</code> right now. We’ll talk about using <code>theme()</code> and adjusting different theme elements in subsequent chapters as they become relevant.</p>
+<p>We recommend that you construct your ggplot2 plots by using the ordering specified by the following template.</p>
+<pre eval="FALSE"><code>&lt;DATA&gt; %&gt;% 
+  ggplot(mapping = aes(&lt;MAPPINGS&gt;)) + 
+  &lt;GEOMS&gt; +
+  &lt;FACET_FUNCTION&gt; + 
+  &lt;COORDINATE_FUNCTION&gt; +
+  &lt;SCALE_FUNCTIONS&gt; + 
+  &lt;GUIDES&gt; +
+  &lt;THEME&gt; +
+  &lt;LABELS&gt;</code></pre>
+<p>As we said earlier, we recommend putting the mappings that are common to all geoms in <code>ggplot()</code> and those unique to a single geom in that geom call. Position adjustments and statistical transformations are usually unique to a geom. When you need to use them, specify them in the geom call. You’ll see an example of a position adjustment in the next chapter.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-wickham-2010" class="csl-entry">
+Wickham, Hadley. 2010. <span>“A Layered Grammar of Graphics.”</span> <em>Journal of Computational and Graphical Statistics</em> 19 (1): 3–28.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="discrete-continuous.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/data-vis/edit/master/ggplot2-basics.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

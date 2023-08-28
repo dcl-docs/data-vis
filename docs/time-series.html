@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>6 Time series | Data Visualization</title>
+  <meta name="description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="6 Time series | Data Visualization" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="github-repo" content="dcl-docs/data-vis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6 Time series | Data Visualization" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman" />
+
+
+<meta name="date" content="2021-07-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="continuous-continuous.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Data Visualization</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i>How to read this book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-data"><i class="fa fa-check"></i>Code and data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i>Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html"><i class="fa fa-check"></i><b>1</b> ggplot2 basics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#additional-information"><i class="fa fa-check"></i><b>1.1</b> Additional information</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#pipes-and-aesthetics"><i class="fa fa-check"></i><b>1.1.1</b> Pipes and aesthetics</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#facet-syntax"><i class="fa fa-check"></i><b>1.1.2</b> Facet syntax</a></li>
+<li class="chapter" data-level="1.1.3" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>1.1.3</b> The grammar of graphics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="discrete-continuous.html"><a href="discrete-continuous.html"><i class="fa fa-check"></i><b>2</b> Discrete-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#introduction"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coordinate-systems"><i class="fa fa-check"></i><b>2.2</b> Coordinate systems</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coord_fixed"><i class="fa fa-check"></i><b>2.2.1</b> <code>coord_fixed()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#zooming"><i class="fa fa-check"></i><b>2.2.2</b> Zooming</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#one-discrete-category"><i class="fa fa-check"></i><b>2.3</b> One discrete category</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#effective-bar-plots"><i class="fa fa-check"></i><b>2.3.1</b> Effective bar plots</a></li>
+<li class="chapter" data-level="2.3.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#geom_bar"><i class="fa fa-check"></i><b>2.3.2</b> <code>geom_bar()</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#bars-vs.-dots"><i class="fa fa-check"></i><b>2.3.3</b> Bars vs. dots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="discrete-continuous.html"><a href="discrete-continuous.html#two-discrete-categories"><i class="fa fa-check"></i><b>2.4</b> Two discrete categories</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#color-and-facets"><i class="fa fa-check"></i><b>2.4.1</b> Color and facets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="general-strategy.html"><a href="general-strategy.html"><i class="fa fa-check"></i><b>3</b> General strategy</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="general-strategy.html"><a href="general-strategy.html#the-goals-of-visualization"><i class="fa fa-check"></i><b>3.1</b> The goals of visualization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="general-strategy.html"><a href="general-strategy.html#two-types-of-plots"><i class="fa fa-check"></i><b>3.1.1</b> Two types of plots</a></li>
+<li class="chapter" data-level="3.1.2" data-path="general-strategy.html"><a href="general-strategy.html#encoding-and-decoding"><i class="fa fa-check"></i><b>3.1.2</b> Encoding and decoding</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="general-strategy.html"><a href="general-strategy.html#perception"><i class="fa fa-check"></i><b>3.2</b> Perception</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="general-strategy.html"><a href="general-strategy.html#encodings"><i class="fa fa-check"></i><b>3.2.1</b> Encodings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="general-strategy.html"><a href="general-strategy.html#strategies"><i class="fa fa-check"></i><b>3.3</b> Strategies</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="general-strategy.html"><a href="general-strategy.html#set-goals"><i class="fa fa-check"></i><b>3.3.1</b> Set goals</a></li>
+<li class="chapter" data-level="3.3.2" data-path="general-strategy.html"><a href="general-strategy.html#go-for-quantity"><i class="fa fa-check"></i><b>3.3.2</b> Go for quantity</a></li>
+<li class="chapter" data-level="3.3.3" data-path="general-strategy.html"><a href="general-strategy.html#look-at-your-plots"><i class="fa fa-check"></i><b>3.3.3</b> Look at your plots</a></li>
+<li class="chapter" data-level="3.3.4" data-path="general-strategy.html"><a href="general-strategy.html#iterate"><i class="fa fa-check"></i><b>3.3.4</b> Iterate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="distributions.html"><a href="distributions.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="distributions.html"><a href="distributions.html#mechanics"><i class="fa fa-check"></i><b>4.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="distributions.html"><a href="distributions.html#layering"><i class="fa fa-check"></i><b>4.2.1</b> Layering</a></li>
+<li class="chapter" data-level="4.2.2" data-path="distributions.html"><a href="distributions.html#theme"><i class="fa fa-check"></i><b>4.2.2</b> <code>theme()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="distributions.html"><a href="distributions.html#one-distribution"><i class="fa fa-check"></i><b>4.3</b> One distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="distributions.html"><a href="distributions.html#multiple-distributions"><i class="fa fa-check"></i><b>4.4</b> Multiple distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-continuous.html"><a href="continuous-continuous.html"><i class="fa fa-check"></i><b>5</b> Continuous-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#introduction-2"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#mechanics-1"><i class="fa fa-check"></i><b>5.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#annotations"><i class="fa fa-check"></i><b>5.2.1</b> Annotations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#log-scales"><i class="fa fa-check"></i><b>5.2.2</b> Log scales</a></li>
+<li class="chapter" data-level="5.2.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#continuous-color-scales"><i class="fa fa-check"></i><b>5.2.3</b> Continuous color scales</a></li>
+<li class="chapter" data-level="5.2.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#size-scales"><i class="fa fa-check"></i><b>5.2.4</b> Size scales</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#two-continuous-variables"><i class="fa fa-check"></i><b>5.3</b> Two continuous variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#overplotting"><i class="fa fa-check"></i><b>5.3.1</b> Overplotting</a></li>
+<li class="chapter" data-level="5.3.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#smoothing"><i class="fa fa-check"></i><b>5.3.2</b> Smoothing</a></li>
+<li class="chapter" data-level="5.3.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#paired-data"><i class="fa fa-check"></i><b>5.3.3</b> Paired data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#three-continuous-variables"><i class="fa fa-check"></i><b>5.4</b> Three continuous variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="time-series.html"><a href="time-series.html"><i class="fa fa-check"></i><b>6</b> Time series</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="time-series.html"><a href="time-series.html#mechanics-2"><i class="fa fa-check"></i><b>6.1</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="time-series.html"><a href="time-series.html#datetime-scales"><i class="fa fa-check"></i><b>6.1.1</b> Date/time scales</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="time-series.html"><a href="time-series.html#trends"><i class="fa fa-check"></i><b>6.2</b> Trends</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="time-series.html"><a href="time-series.html#one-response-variable"><i class="fa fa-check"></i><b>6.2.1</b> One response variable</a></li>
+<li class="chapter" data-level="6.2.2" data-path="time-series.html"><a href="time-series.html#distributions-over-time"><i class="fa fa-check"></i><b>6.2.2</b> Distributions over time</a></li>
+<li class="chapter" data-level="6.2.3" data-path="time-series.html"><a href="time-series.html#two-response-variables"><i class="fa fa-check"></i><b>6.2.3</b> Two response variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="time-series.html"><a href="time-series.html#short-term-fluctuations"><i class="fa fa-check"></i><b>6.3</b> Short-term fluctuations</a></li>
+<li class="chapter" data-level="6.4" data-path="time-series.html"><a href="time-series.html#individual-values"><i class="fa fa-check"></i><b>6.4</b> Individual values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Visualization</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="time-series" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> Time series<a href="time-series.html#time-series" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="time-series.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="time-series.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dcldata)</span></code></pre></div>
+<p>In the last chapter, we visualized the relationship between per capita GDP and life expectancy. You might have wondered how time fits into that association. In this chapter, we’ll explore life expectancy and GDP over time.</p>
+<p>The following <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">ggplot2 cheat sheet</a> sections will be helpful for this chapter:</p>
+<ul>
+<li>Geoms
+<ul>
+<li><code>geom_path()</code></li>
+</ul></li>
+<li>Scales</li>
+</ul>
+<p>The lubridate package is a helpful tool for working with dates. We’ll use some lubridate functions throughout the chapter. Take a look at the <a href="https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf">lubridate cheat sheet</a> if you’re not already familiar with the package.</p>
+<p>Not all time series are alike. In some situations, you’ll be interested in a long-term trend, but in others you’ll want to highlight short-term changes or even just individual values. In this chapter, we’ll cover various strategies for dealing with these different scenarios.</p>
+<p>First, we’ll talk about the mechanics of date scales, which are useful for time series.</p>
+<div id="mechanics-2" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Mechanics<a href="time-series.html#mechanics-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="datetime-scales" class="section level3 hasAnchor" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Date/time scales<a href="time-series.html#datetime-scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sometimes, your time series data will include detailed date or time information stored as a date, time, or date-time. For example, the <code>nycflights13::flights</code> variable <code>time_hour</code> is a date-time.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="time-series.html#cb2-1" aria-hidden="true" tabindex="-1"></a>nycflights13<span class="sc">::</span>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="time-series.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(time_hour)</span>
+<span id="cb2-3"><a href="time-series.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 336,776 × 1</span></span>
+<span id="cb2-4"><a href="time-series.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   time_hour          </span></span>
+<span id="cb2-5"><a href="time-series.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dttm&gt;             </span></span>
+<span id="cb2-6"><a href="time-series.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2013-01-01 05:00:00</span></span>
+<span id="cb2-7"><a href="time-series.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2013-01-01 05:00:00</span></span>
+<span id="cb2-8"><a href="time-series.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 2013-01-01 05:00:00</span></span>
+<span id="cb2-9"><a href="time-series.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2013-01-01 05:00:00</span></span>
+<span id="cb2-10"><a href="time-series.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2013-01-01 06:00:00</span></span>
+<span id="cb2-11"><a href="time-series.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2013-01-01 05:00:00</span></span>
+<span id="cb2-12"><a href="time-series.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 336,770 more rows</span></span></code></pre></div>
+<p>When you map <code>time_hour</code> to an aesthetic, ggplot2 uses <code>scale_*_datetime()</code>, the scale function for date-times. There is also <code>scale_*_date()</code> for dates and <code>scale_*_time()</code> for times. The date- and time-specific scale functions are useful because they create meaningful breaks and labels.</p>
+<p><code>flights_0101_0102</code> contains data on the number of flights per hour on January 1st and January 2nd, 2013.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="time-series.html#cb3-1" aria-hidden="true" tabindex="-1"></a>flights_0101_0102 <span class="ot">&lt;-</span></span>
+<span id="cb3-2"><a href="time-series.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  nycflights13<span class="sc">::</span>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="time-series.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">==</span> <span class="dv">1</span>, day <span class="sc">&lt;=</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="time-series.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">time_hour =</span> <span class="fu">floor_date</span>(time_hour, <span class="st">&quot;hour&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="time-series.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_flights =</span> <span class="fu">n</span>())</span>
+<span id="cb3-6"><a href="time-series.html#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="time-series.html#cb3-7" aria-hidden="true" tabindex="-1"></a>flights_0101_0102</span>
+<span id="cb3-8"><a href="time-series.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 38 × 2</span></span>
+<span id="cb3-9"><a href="time-series.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   time_hour           num_flights</span></span>
+<span id="cb3-10"><a href="time-series.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dttm&gt;                    &lt;int&gt;</span></span>
+<span id="cb3-11"><a href="time-series.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2013-01-01 05:00:00           6</span></span>
+<span id="cb3-12"><a href="time-series.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2013-01-01 06:00:00          52</span></span>
+<span id="cb3-13"><a href="time-series.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 2013-01-01 07:00:00          49</span></span>
+<span id="cb3-14"><a href="time-series.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2013-01-01 08:00:00          58</span></span>
+<span id="cb3-15"><a href="time-series.html#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2013-01-01 09:00:00          56</span></span>
+<span id="cb3-16"><a href="time-series.html#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2013-01-01 10:00:00          39</span></span>
+<span id="cb3-17"><a href="time-series.html#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 32 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="time-series.html#cb4-1" aria-hidden="true" tabindex="-1"></a>flights_0101_0102 <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="time-series.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time_hour, num_flights)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="time-series.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Just like with the other scale functions, you can change the breaks using the <code>breaks</code> argument. <code>scale_*_date()</code> and <code>scale_*_datetime()</code> also include a <code>date_breaks</code> argument that allows you to supply the breaks in date-time units, like “1 month”, “6 years”, or “2 hours.”</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="time-series.html#cb5-1" aria-hidden="true" tabindex="-1"></a>flights_0101_0102 <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="time-series.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time_hour, num_flights)) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="time-series.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb5-4"><a href="time-series.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;6 hours&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="time-series.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="sc">-</span><span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">0</span>))</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Similarly, you can change the labels using the <code>labels</code> argument, but <code>scale_*_date()</code> and <code>scale_*_datetime()</code> also include a <code>date_labels</code> function made for working with dates. <code>date_labels</code> takes the same formatting strings as functions like <code>ymd()</code> and <code>as_datetime()</code>. You can see a list of all formatting strings at <code>?strptime</code>.</p>
+<p>We’ll use <code>date_labels</code> to format <code>time_hour</code> so that it doesn’t take up as much space.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="time-series.html#cb6-1" aria-hidden="true" tabindex="-1"></a>flights_0101_0102 <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="time-series.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time_hour, num_flights)) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="time-series.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb6-4"><a href="time-series.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;6 hours&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%a %I %p&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="trends" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Trends<a href="time-series.html#trends" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="one-response-variable" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> One response variable<a href="time-series.html#one-response-variable" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>gm_combined</code> is the same Gapminder data you saw in the previous chapter. Previously, we investigated how life expectancy is associated with per capita GDP. Now, we’ll ask a more obvious question: how has life expectancy changed over time?</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="time-series.html#cb7-1" aria-hidden="true" tabindex="-1"></a>gm_combined</span>
+<span id="cb7-2"><a href="time-series.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2,562 × 7</span></span>
+<span id="cb7-3"><a href="time-series.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   iso_a3 name        region  year population gdp_per_capita life_expectancy</span></span>
+<span id="cb7-4"><a href="time-series.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;  &lt;dbl&gt;      &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;</span></span>
+<span id="cb7-5"><a href="time-series.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 afg    Afghanistan Asia    1950    7752118           1040            32.0</span></span>
+<span id="cb7-6"><a href="time-series.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 afg    Afghanistan Asia    1955    8270581           1131            35.1</span></span>
+<span id="cb7-7"><a href="time-series.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 afg    Afghanistan Asia    1960    8996351           1213            38.6</span></span>
+<span id="cb7-8"><a href="time-series.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 afg    Afghanistan Asia    1965    9938414           1190            42.2</span></span>
+<span id="cb7-9"><a href="time-series.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 afg    Afghanistan Asia    1970   11126123           1183            45.8</span></span>
+<span id="cb7-10"><a href="time-series.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 afg    Afghanistan Asia    1975   12590286           1211            46.3</span></span>
+<span id="cb7-11"><a href="time-series.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2,556 more rows</span></span></code></pre></div>
+<p>First, let’s just look at a single country: South Africa.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="time-series.html#cb8-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="time-series.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  gm_combined <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="time-series.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;South Africa&quot;</span>)</span>
+<span id="cb8-4"><a href="time-series.html#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="time-series.html#cb8-5" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="time-series.html#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="time-series.html#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Adding <code>geom_line()</code> will make it easier to connect the dots and see the trend.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="time-series.html#cb9-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="time-series.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="time-series.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-4"><a href="time-series.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>It looks like life expectancy started to fall around the time apartheid ended. We can add a reference line to check our hypothesis.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="time-series.html#cb10-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="time-series.html#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="time-series.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb10-4"><a href="time-series.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb10-5"><a href="time-series.html#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1994</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We could remove the points and just use a line, but the points are helpful indicators of the actual data. Generally, the more points you have, the less important it is to keep the points. For example, the following plot shows life expectancy for South Africa using the <code>gm_life_expectancy</code>, which contains yearly data. We’ve also filtered the data to only include the years 1800 to 2015, because the data after 2015 is based on projections.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="time-series.html#cb11-1" aria-hidden="true" tabindex="-1"></a>south_africa_le <span class="ot">&lt;-</span></span>
+<span id="cb11-2"><a href="time-series.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  gm_life_expectancy <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="time-series.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;South Africa&quot;</span>, year <span class="sc">&lt;=</span> <span class="dv">2015</span>)</span>
+<span id="cb11-4"><a href="time-series.html#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="time-series.html#cb11-5" aria-hidden="true" tabindex="-1"></a>south_africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="time-series.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="time-series.html#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb11-8"><a href="time-series.html#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-9"><a href="time-series.html#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1994</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The points are so close together that they form their own line, and so removing <code>geom_point()</code> doesn’t really affect the appearance of the plot.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="time-series.html#cb12-1" aria-hidden="true" tabindex="-1"></a>south_africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="time-series.html#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="time-series.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb12-4"><a href="time-series.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1994</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Including points is important, however, if your data is irregularly distributed. For example, say our data only included two points between 1800 and 1950, but was yearly after 1950. In this situation, it would be important to use both points and lines to show the discrepancy in the amount of data.</p>
+<p>There are two major dips in life expectancy in our plot. The first is the result of the 1918 influenza pandemic. The second, as we already pointed out, started around the end of apartheid. One hypothesis for this dip is that data reporting procedures changed when the South African government changed. Maybe the apartheid government systematically under-sampled non-white groups who may have had lower life expectancies. Another hypothesis is that changes in government led to general upheaval, which somehow affected life expectancy.</p>
+<p>To further investigate, we’ll compare South Africa to its neighbors during this time period.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="time-series.html#cb13-1" aria-hidden="true" tabindex="-1"></a>southern_africa_countries <span class="ot">&lt;-</span></span>
+<span id="cb13-2"><a href="time-series.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  gm_life_expectancy <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="time-series.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb13-4"><a href="time-series.html#cb13-4" aria-hidden="true" tabindex="-1"></a>    name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;South Africa&quot;</span>, <span class="st">&quot;Swaziland&quot;</span> ,<span class="st">&quot;Lesotho&quot;</span>, <span class="st">&quot;Botswana&quot;</span>)</span>
+<span id="cb13-5"><a href="time-series.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="time-series.html#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">1980</span>, year <span class="sc">&lt;=</span> <span class="dv">2015</span>)</span>
+<span id="cb13-7"><a href="time-series.html#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="time-series.html#cb13-8" aria-hidden="true" tabindex="-1"></a>southern_africa_countries <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="time-series.html#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">fct_reorder2</span>(name, year, life_expectancy)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-10"><a href="time-series.html#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="time-series.html#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1994</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="time-series.html#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-13"><a href="time-series.html#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.justification =</span> <span class="st">&quot;top&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>When you have multiple time series, adding <code>geom_line()</code> makes it easier to group each series together.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="time-series.html#cb14-1" aria-hidden="true" tabindex="-1"></a> southern_africa_countries <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="time-series.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">fct_reorder2</span>(name, year, life_expectancy)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="time-series.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="time-series.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1994</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="time-series.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb14-6"><a href="time-series.html#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-7"><a href="time-series.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.justification =</span> <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In the previous chapter, you learned how to reorder and align legends to make it easier to match lines with labels. Directly labeling the lines makes it even easier to connect a line with its label.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="time-series.html#cb15-1" aria-hidden="true" tabindex="-1"></a>southern_africa_countries <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="time-series.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">color =</span> name)) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="time-series.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1994</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="time-series.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb15-5"><a href="time-series.html#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb15-6"><a href="time-series.html#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb15-7"><a href="time-series.html#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> name),</span>
+<span id="cb15-8"><a href="time-series.html#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> southern_africa_countries <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2015</span>),</span>
+<span id="cb15-9"><a href="time-series.html#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb15-10"><a href="time-series.html#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb15-11"><a href="time-series.html#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb15-12"><a href="time-series.html#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="fl">0.5</span></span>
+<span id="cb15-13"><a href="time-series.html#cb15-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-14"><a href="time-series.html#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb15-15"><a href="time-series.html#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1980</span>, <span class="dv">2020</span>)) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We removed the legend by using <code>guides(color = "none")</code>.</p>
+<p>Interestingly, all four countries experienced similar declines in the early 1990s. This suggests that South Africa’s decline was not related to the end of apartheid. Next, we might ask if this dip occurred in all of Africa, which brings us to the next section: visualizing distributions over time.</p>
+</div>
+<div id="distributions-over-time" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Distributions over time<a href="time-series.html#distributions-over-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can join <code>gm_life_expectancy</code> with <code>gm_countries</code> to look at all countries in Africa.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="time-series.html#cb16-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="ot">&lt;-</span></span>
+<span id="cb16-2"><a href="time-series.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  gm_life_expectancy <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="time-series.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gm_countries, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;iso_a3&quot;</span>, <span class="st">&quot;name&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="time-series.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb16-5"><a href="time-series.html#cb16-5" aria-hidden="true" tabindex="-1"></a>    region_gm4 <span class="sc">==</span> <span class="st">&quot;africa&quot;</span>,</span>
+<span id="cb16-6"><a href="time-series.html#cb16-6" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&gt;=</span> <span class="dv">1980</span>,</span>
+<span id="cb16-7"><a href="time-series.html#cb16-7" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">2015</span></span>
+<span id="cb16-8"><a href="time-series.html#cb16-8" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb16-9"><a href="time-series.html#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="time-series.html#cb16-10" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb16-11"><a href="time-series.html#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(name) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-12"><a href="time-series.html#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">n_distinct</span>()</span>
+<span id="cb16-13"><a href="time-series.html#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 54</span></span></code></pre></div>
+<p>There are 54
+countries listed under the “Africa” region in the data.</p>
+<p>Plotting all the data at once is messy, but you can see that many countries experienced the same dip in the 1990s. You can also see that the countries with high life expectancies didn’t experience at dip at all, and that many countries experienced dramatic downward spikes due to single events.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="time-series.html#cb17-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="time-series.html#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">group =</span> name)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="time-series.html#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>One of these downward spikes is the Rwandan genocide.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="time-series.html#cb18-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="time-series.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">group =</span> name)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="time-series.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="time-series.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> africa_le <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Rwanda&quot;</span>), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="time-series.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> africa_le <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Rwanda&quot;</span>, year <span class="sc">==</span> <span class="dv">1994</span>)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="time-series.html#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb18-7"><a href="time-series.html#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> year),</span>
+<span id="cb18-8"><a href="time-series.html#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> africa_le <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Rwanda&quot;</span>, year <span class="sc">==</span> <span class="dv">1994</span>), </span>
+<span id="cb18-9"><a href="time-series.html#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb18-10"><a href="time-series.html#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="fl">0.5</span></span>
+<span id="cb18-11"><a href="time-series.html#cb18-11" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Another is the Libyan Civil War.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="time-series.html#cb19-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="time-series.html#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">group =</span> name)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="time-series.html#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="time-series.html#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> africa_le <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Libya&quot;</span>), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="time-series.html#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> africa_le <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Libya&quot;</span>, year <span class="sc">==</span> <span class="dv">2011</span>)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="time-series.html#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb19-7"><a href="time-series.html#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> year),</span>
+<span id="cb19-8"><a href="time-series.html#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> africa_le <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Libya&quot;</span>, year <span class="sc">==</span> <span class="dv">2011</span>), </span>
+<span id="cb19-9"><a href="time-series.html#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb19-10"><a href="time-series.html#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="fl">0.5</span></span>
+<span id="cb19-11"><a href="time-series.html#cb19-11" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Highlighting specific lines of interest is a useful way to compare select values to the rest of the data. We could try highlighting the subset of countries in southern Africa that we looked at earlier.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="time-series.html#cb20-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="time-series.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">group =</span> name)) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="time-series.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="time-series.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> southern_africa_countries, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You can see that the countries we highlighted weren’t the only ones that experienced the dip in the 1990s.</p>
+<p>To get a sense of the trend for all of Africa, we could add a smooth line.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="time-series.html#cb21-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="time-series.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="time-series.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> name), <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="time-series.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You can see a slight dip around the 1990s. However, this smooth line doesn’t capture the amount of variation in trends. Africa is a massive continent. Maybe dividing it up further will be more informative.</p>
+<p>We can use <code>region_gm8</code> to compare North Africa to Sub-Saharan Africa.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="time-series.html#cb22-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="time-series.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">color =</span> region_gm8, <span class="at">group =</span> name)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="time-series.html#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Most of the data lies between 40 and 80 years. We’ll use <code>coord_cartesian()</code> to zoom in on this region.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="time-series.html#cb23-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="time-series.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">color =</span> region_gm8, <span class="at">group =</span> name)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="time-series.html#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb23-4"><a href="time-series.html#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">80</span>))</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Individual lines are now easier to see. There aren’t very many countries in North Africa, but they all have relatively high life expectancies. All of the countries that experienced a severe dip in life expectancy in the 1990s are in Sub-Saharan Africa.</p>
+<p>Now, we can try a smooth line for each region.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="time-series.html#cb24-1" aria-hidden="true" tabindex="-1"></a>africa_le <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="time-series.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">color =</span> region_gm8)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="time-series.html#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="time-series.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">80</span>))</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>There’s a sharp contrast between North Africa and Sub-Saharan Africa. The dip in Sub-Saharan African life expectancies is likely due the <a href="https://ourworldindata.org/grapher/share-of-the-population-infected-with-hiv?year=1995">HIV/AIDS pandemic</a>, which affected most of Sub-Saharan Africa severely, but was particularly bad in the southern countries that we looked at earlier.</p>
+<p>In other situations, you may want to use the techniques covered in the <em>Distributions</em> chapter. For example, you might be curious how the distribution of life expectancies for African countries has changed over time. Box plots are a good option.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="time-series.html#cb25-1" aria-hidden="true" tabindex="-1"></a>gm_life_expectancy <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="time-series.html#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gm_countries, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;iso_a3&quot;</span>, <span class="st">&quot;name&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="time-series.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(region_gm4 <span class="sc">==</span> <span class="st">&quot;africa&quot;</span>, year <span class="sc">&lt;=</span> <span class="dv">2015</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-4"><a href="time-series.html#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">median_le =</span> <span class="fu">median</span>(life_expectancy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-5"><a href="time-series.html#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, life_expectancy, <span class="at">group =</span> <span class="fu">cut_width</span>(year, <span class="dv">10</span>))) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="time-series.html#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> median_le), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="time-series.html#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb25-8"><a href="time-series.html#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1800</span>, <span class="dv">2000</span>, <span class="dv">25</span>))</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="two-response-variables" class="section level3 hasAnchor" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> Two response variables<a href="time-series.html#two-response-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>So far, we’ve encoded time as position along the x-axis and a response variable, <code>life_expectancy</code>, along the y-axis. What if we want to encode a second response variable? It would be interesting to see how both life expectancy and per capita GDP have changed over time.</p>
+<p><code>geom_path()</code> is a useful way to represent a time series with two response variables. Unlike <code>geom_line()</code>, which connects points in the order they appear along the x-axis, <code>geom_path()</code> connects points in the order they appear in the data. We can use this feature of <code>geom_path()</code> to represent a time series without actually plotting time along an axis.</p>
+<p>Here, we’ve plotted <code>gdp_per_capita</code> and <code>life_expectancy</code> for South Africa using <code>geom_path()</code>. We arranged the data by year so that the earliest years are plotted first.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="time-series.html#cb26-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="time-series.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="time-series.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="time-series.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb26-5"><a href="time-series.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stamp</span>(<span class="st">&quot;Bad&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>To read a <code>geom_path()</code> plot, you follow the line’s path through the plot space, but you can’t currently tell which end of the line is the starting point. We’ll add a dot to the end of the line indicating the endpoint.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="time-series.html#cb27-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="time-series.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="time-series.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="time-series.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb27-5"><a href="time-series.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> south_africa <span class="sc">%&gt;%</span> <span class="fu">slice_max</span>(year))</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Sometimes, you’ll want to plot individual points as well as the path line. We’ll make the last point bigger to indicate that it’s the endpoint.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="time-series.html#cb28-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="time-series.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="time-series.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="time-series.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb28-5"><a href="time-series.html#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb28-6"><a href="time-series.html#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> south_africa <span class="sc">%&gt;%</span> <span class="fu">slice_max</span>(year), <span class="at">size =</span> <span class="fl">2.5</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now, it’s clear that the line starts in the lower left corner. Both life expectancy and per capita GDP increased until around $11000. Then, life expectancy continued to grow, but per capita GDP shrank. Around $9025, this trend reversed. Life expectancy fell when per capita GDP increased. Finally, both started increasing again.</p>
+<p>You still can’t match points on the path to specific years. Labeling inflection points is helpful.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="time-series.html#cb29-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="time-series.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="time-series.html#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="time-series.html#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb29-5"><a href="time-series.html#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb29-6"><a href="time-series.html#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> south_africa <span class="sc">%&gt;%</span> <span class="fu">slice_max</span>(year), <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="time-series.html#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb29-8"><a href="time-series.html#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> year),</span>
+<span id="cb29-9"><a href="time-series.html#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> south_africa <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1950</span>, <span class="dv">1980</span>, <span class="dv">1995</span>, <span class="dv">2005</span>, <span class="dv">2015</span>)), </span>
+<span id="cb29-10"><a href="time-series.html#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="sc">-</span><span class="dv">250</span></span>
+<span id="cb29-11"><a href="time-series.html#cb29-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In 1980, per capita GDP started going down, but life expectancy kept increasing. As a response to apartheid, the United States and other countries imposed <a href="https://en.wikipedia.org/wiki/Comprehensive_Anti-Apartheid_Act">sanctions against South Africa in the 1980s</a>. The <a href="https://en.wikipedia.org/wiki/Disinvestment_from_South_Africa#Economic_effects">campaign to divest from South Africa</a> also gathered speed in the 1980s. Both the sanctions and the divestment campaign likely caused the per capita capita GDP to drop. Notice that the trend reversed in 1995.</p>
+<p>We can also use <code>alpha</code> to encode <code>year</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="time-series.html#cb30-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="time-series.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="time-series.html#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy, <span class="at">alpha =</span> year)) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="time-series.html#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb30-5"><a href="time-series.html#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Directly labeling points instead of using a legend makes the plot easier to decode. At a minimum, you should label the starting and ending points.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="time-series.html#cb31-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="time-series.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="time-series.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="time-series.html#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> year)) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="time-series.html#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> year)) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="time-series.html#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb31-7"><a href="time-series.html#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> year),</span>
+<span id="cb31-8"><a href="time-series.html#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> south_africa <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">n</span>())), </span>
+<span id="cb31-9"><a href="time-series.html#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="sc">-</span><span class="dv">250</span></span>
+<span id="cb31-10"><a href="time-series.html#cb31-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="time-series.html#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">alpha =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-31-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Again, labeling inflection points is helpful.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="time-series.html#cb32-1" aria-hidden="true" tabindex="-1"></a>south_africa <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="time-series.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="time-series.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gdp_per_capita, life_expectancy)) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="time-series.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> year)) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="time-series.html#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> year)) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="time-series.html#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb32-7"><a href="time-series.html#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> year),</span>
+<span id="cb32-8"><a href="time-series.html#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> south_africa <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1950</span>, <span class="dv">1980</span>, <span class="dv">1995</span>, <span class="dv">2005</span>, <span class="dv">2015</span>)), </span>
+<span id="cb32-9"><a href="time-series.html#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_x =</span> <span class="sc">-</span><span class="dv">250</span></span>
+<span id="cb32-10"><a href="time-series.html#cb32-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-11"><a href="time-series.html#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">alpha =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="short-term-fluctuations" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Short-term fluctuations<a href="time-series.html#short-term-fluctuations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the mechanics section of this chapter, you saw the following plot.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="time-series.html#cb33-1" aria-hidden="true" tabindex="-1"></a>flights_0101_0102 <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="time-series.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time_hour, num_flights)) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="time-series.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb33-4"><a href="time-series.html#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;6 hours&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%a %I %p&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You might wonder why we used <code>geom_col()</code> to represent a time series. Here’s the same plot using <code>geom_line()</code> and <code>geom_point()</code>.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="time-series.html#cb34-1" aria-hidden="true" tabindex="-1"></a>flights_0101_0102 <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="time-series.html#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time_hour, num_flights)) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="time-series.html#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb34-4"><a href="time-series.html#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb34-5"><a href="time-series.html#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;6 hours&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%a %I %p&quot;</span>)</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>From both plots, you can see that most flights occur in the early morning and around 4pm, but notice that we’re actually treating time like a discrete variable in this situation. We’ve counted the number of flights for each hour, and so it’s useful to be able to connect a number of flights with a specific hour. Columns make it easier to connect numbers of flights to specific hours.</p>
+<p>Vertical segment plots using <code>geom_segment()</code> can also be helpful for some time series data. Say we want to understand what the first week in January looked like.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="time-series.html#cb35-1" aria-hidden="true" tabindex="-1"></a>flights_week_1 <span class="ot">&lt;-</span></span>
+<span id="cb35-2"><a href="time-series.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  nycflights13<span class="sc">::</span>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="time-series.html#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">week</span>(time_hour) <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-4"><a href="time-series.html#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">time_hour =</span> <span class="fu">floor_date</span>(time_hour, <span class="st">&quot;hour&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-5"><a href="time-series.html#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num_flights =</span> <span class="fu">n</span>())</span></code></pre></div>
+<p><code>geom_point()</code> and <code>geom_line()</code> produce the following plot.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="time-series.html#cb36-1" aria-hidden="true" tabindex="-1"></a>flights_week_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="time-series.html#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time_hour, <span class="at">y =</span> num_flights)) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="time-series.html#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb36-4"><a href="time-series.html#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb36-5"><a href="time-series.html#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;1 day&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%a&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-36-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>You can see that each day is shaped similarly. However, you can’t tell that there are actually no flights for a couple hours each night.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="time-series.html#cb37-1" aria-hidden="true" tabindex="-1"></a>flights_week_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="time-series.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb37-3"><a href="time-series.html#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb37-4"><a href="time-series.html#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> time_hour, <span class="at">xend =</span> time_hour, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> num_flights)</span>
+<span id="cb37-5"><a href="time-series.html#cb37-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="time-series.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;1 day&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%a&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-37-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>geom_segment()</code> does a better job of showing the gaps between days. Segments also make it easier to perceive each day as a group to compare against the others. Another advantage of <code>geom_segment()</code> is that we can use <code>color</code> to encode a categorical variable.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="time-series.html#cb38-1" aria-hidden="true" tabindex="-1"></a>flights_week_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="time-series.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">am_pm =</span> <span class="fu">if_else</span>(<span class="fu">am</span>(time_hour), <span class="st">&quot;AM&quot;</span>, <span class="st">&quot;PM&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="time-series.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb38-4"><a href="time-series.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb38-5"><a href="time-series.html#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb38-6"><a href="time-series.html#cb38-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> time_hour,</span>
+<span id="cb38-7"><a href="time-series.html#cb38-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">xend =</span> time_hour,</span>
+<span id="cb38-8"><a href="time-series.html#cb38-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="dv">0</span>,</span>
+<span id="cb38-9"><a href="time-series.html#cb38-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yend =</span> num_flights,</span>
+<span id="cb38-10"><a href="time-series.html#cb38-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> am_pm</span>
+<span id="cb38-11"><a href="time-series.html#cb38-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb38-12"><a href="time-series.html#cb38-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb38-13"><a href="time-series.html#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_datetime</span>(<span class="at">date_breaks =</span> <span class="st">&quot;1 day&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%a&quot;</span>) </span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-38-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In this case, there’s no long-term trend we’re interested in. Instead, we want to understand short-term fluctuations, and we care about individual values. In these situations, <code>geom_col()</code> and <code>geom_segment()</code> are good options.</p>
+</div>
+<div id="individual-values" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Individual values<a href="time-series.html#individual-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sometimes, you’ll want to display time on the x-axis like a time series, but you won’t actually care about displaying any kind of trend.</p>
+<p>The <code>famines</code> dataset from dcldata tracks major famines across time.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="time-series.html#cb39-1" aria-hidden="true" tabindex="-1"></a>famines</span>
+<span id="cb39-2"><a href="time-series.html#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 77 × 6</span></span>
+<span id="cb39-3"><a href="time-series.html#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   location   iso_a3 region year_start year_end deaths_estimate</span></span>
+<span id="cb39-4"><a href="time-series.html#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;           &lt;dbl&gt;</span></span>
+<span id="cb39-5"><a href="time-series.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Ireland    irl    Europe       1846     1852         1000000</span></span>
+<span id="cb39-6"><a href="time-series.html#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 India      ind    Asia         1860     1861         2000000</span></span>
+<span id="cb39-7"><a href="time-series.html#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Cape Verde cpv    Africa       1863     1867           30000</span></span>
+<span id="cb39-8"><a href="time-series.html#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 India      ind    Asia         1866     1867          961043</span></span>
+<span id="cb39-9"><a href="time-series.html#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Finland    fin    Europe       1868     1868          100000</span></span>
+<span id="cb39-10"><a href="time-series.html#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 India      ind    Asia         1868     1870         1500000</span></span>
+<span id="cb39-11"><a href="time-series.html#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 71 more rows</span></span></code></pre></div>
+<p>There’s no obvious relationship between time and deaths due to famines.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="time-series.html#cb40-1" aria-hidden="true" tabindex="-1"></a>famines <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="time-series.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year_start, deaths_estimate)) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="time-series.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb40-4"><a href="time-series.html#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>()</span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-40-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Even though there’s no trend, this data is still interesting if you’re curious about individual famines.</p>
+<p>The above plot only uses the <code>start</code> date, but we also have the length of the famines. We can treat the x-axis as representing year generally and encode the length of a line as the length of the famine.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="time-series.html#cb41-1" aria-hidden="true" tabindex="-1"></a>famines <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="time-series.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(deaths_estimate)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="time-series.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year_start, deaths_estimate)) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="time-series.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb41-5"><a href="time-series.html#cb41-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xend =</span> year_end, <span class="at">yend =</span> deaths_estimate, <span class="at">color =</span> region),</span>
+<span id="cb41-6"><a href="time-series.html#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb41-7"><a href="time-series.html#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lineend =</span> <span class="st">&quot;round&quot;</span></span>
+<span id="cb41-8"><a href="time-series.html#cb41-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-9"><a href="time-series.html#cb41-9" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(</span>
+<span id="cb41-10"><a href="time-series.html#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">0.5</span> <span class="sc">*</span> (year_start <span class="sc">+</span> year_end), <span class="at">label =</span> location),</span>
+<span id="cb41-11"><a href="time-series.html#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">2.3</span>,</span>
+<span id="cb41-12"><a href="time-series.html#cb41-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">212</span></span>
+<span id="cb41-13"><a href="time-series.html#cb41-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb41-14"><a href="time-series.html#cb41-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb41-15"><a href="time-series.html#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb41-16"><a href="time-series.html#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span id="cb41-17"><a href="time-series.html#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Please use `linewidth` instead.</span></span>
+<span id="cb41-18"><a href="time-series.html#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb41-19"><a href="time-series.html#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span id="cb41-20"><a href="time-series.html#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; generated.</span></span></code></pre></div>
+<p><img src="time-series_files/figure-html/unnamed-chunk-41-1.png" width="768" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="continuous-continuous.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/data-vis/edit/master/time-series.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

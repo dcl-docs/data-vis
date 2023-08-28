@@ -1,0 +1,102 @@
+---
+knitr: bookdown::render_book
+title: "Data Visualization"
+author: "Sara Altman, Bill Behrman"
+date: "2021-07-02"
+description: "This book is a practical introduction to creating effective visualizations using ggplot2."
+url: 'https\://dcl-data-vis.stanford.edu'
+github-repo: dcl-docs/data-vis
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: references.bib
+link-citations: true
+---
+
+# Welcome {-}
+
+This book is a practical introduction to creating effective visualizations using ggplot2. There are many excellent resources for learning ggplot2, including the following:
+
+* Hadley Wickham and Garrett Grolemund's [R for Data Science](https://r4ds.had.co.nz/) (R4DS)
+* The [ggplot2 website](https://ggplot2.tidyverse.org/)
+* RStudio's [Data visualization with ggplot2](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) cheat sheet
+
+We intend this book as a _complement_ to these resources, building on what they teach about ggplot2, and we will link to them often.
+
+_R4DS_, the website, and the cheat sheet mostly cover the _mechanics_ of ggplot2. They teach you how to build plots in ggplot2, but the practice of creating effective visualizations is generally outside their scope. There is also a wealth of resources devoted to teaching effective visualization techniques, which we call visualization _wisdom_. These resources include:
+
+* William Cleveland's books and papers, including [The Elements of Graphing Data](https://books.google.com/books?id=KMsZAQAAIAAJ)
+* Edward Tufte's books, including [The Visual Display of Quantitative Information](https://books.google.com/books?id=GTd5oQEACAAJ)
+* Claus Wilke's [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
+
+Our goal is to combine ggplot2 mechanics and visualization wisdom into a single book. We hope readers come away with a solid grounding in ggplot2 and the ability to create effective visualizations for common situations. We can't cover all types of visualizations, or all possible strategies for visualizing a given relationship. Instead, we hope to introduce readers to a way of thinking about data visualization that will help them approach and construct effective visualizations. 
+
+## How to read this book {-}
+
+### Code and data {-}
+
+You can easily copy the code in this book by hovering over a chunk and then clicking the copy button that appears in the upper-right corner.
+
+Every dataset we use is contained in an R package, making it easy to follow along and replicate our examples. Many of the datasets are in our own [dcldata package](https://github.com/dcl-docs/dcldata). To install dcldata, copy the following code and paste it into RStudio.
+
+
+```r
+# You can copy this code with the copy button!
+# First, install remotes if you don't already have it:
+# install.packages("remotes")
+remotes::install_github("dcl-docs/dcldata")
+```
+
+To access the datasets, load the relevant package
+
+
+```r
+library(dcldata)
+```
+
+and then call the dataset by name.
+
+
+```r
+anscombe_1
+#>    x_1     y
+#> 1   10  8.04
+#> 2    8  6.95
+#> 3   13  7.64
+#> 4    9  8.81
+#> 5   11  8.33
+#> 6   14  9.90
+#> 7    6  7.24
+#> 8    4  4.25
+#> 9   12 10.84
+#> 10   7  4.82
+#> 11   5  5.68
+```
+
+All datasets have accompanying documentation, which you can find with the `?` operator.
+
+
+```r
+?anscombe_1
+```
+
+You can also view the names of all datasets in a given package with the `data()` function.
+
+
+```r
+data(package = "dcldata")
+```
+
+### Organization {-}
+
+This book is organized thematically, with each chapter building upon the previous ones, and we recommend reading the chapters in order. For the most part, each chapter discusses a category of visualization (e.g., time series, distributions) and contains both ggplot2 mechanics and visualization wisdom. We've woven ggplot2 mechanics through the book so that readers quickly learn the most important skills, and then acquire more advanced skills as they become relevant to the visualization tasks at hand.
+
+An advantage of the thematic approach is that readers just starting out with both ggplot2 and data visualization can simultaneously learn how to create plots in ggplot2 and how to make those plots effective. The thematic organization also enables readers to use the book as a visualization category reference. For example, if you know you want to visualize a distribution, you can go to the _Distributions_ chapter and remind yourself of the various strategies. 
+
+A disadvantage of this organization is that the book does not function well as a reference for looking up ggplot2 mechanics (e.g., if you forget how scales work and try to refer back to the relevant section). The ggplot2 cheat sheet is a better resource for looking up mechanics, and we mention relevant sections so that readers can familiarize themselves with the cheat sheet for later use. 
+
+
+## An evolving book {-}
+
+This book is not intended to be static. Starting in January 2019, we use this book to teach data visualization in the Stanford [Data Challenge Lab](https://datalab.stanford.edu/challenge-lab) (DCL) course. The DCL functions as a testing ground for educational materials, as our students give us routine feedback on what they read and do in the course. We use this feedback to constantly improve our materials, including this book. The [source for the book](https://github.com/dcl-docs/data-vis) is also available on GitHub where we welcome suggestions for improvements.
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/). 

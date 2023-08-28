@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Data Visualization</title>
+  <meta name="description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Data Visualization" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-data-vis.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  <meta name="github-repo" content="dcl-docs/data-vis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Data Visualization" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to creating effective visualizations using ggplot2." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman" />
+
+
+<meta name="date" content="2021-07-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="ggplot2-basics.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Data Visualization</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i>How to read this book</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-data"><i class="fa fa-check"></i>Code and data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i>Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html"><i class="fa fa-check"></i><b>1</b> ggplot2 basics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#additional-information"><i class="fa fa-check"></i><b>1.1</b> Additional information</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#pipes-and-aesthetics"><i class="fa fa-check"></i><b>1.1.1</b> Pipes and aesthetics</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#facet-syntax"><i class="fa fa-check"></i><b>1.1.2</b> Facet syntax</a></li>
+<li class="chapter" data-level="1.1.3" data-path="ggplot2-basics.html"><a href="ggplot2-basics.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>1.1.3</b> The grammar of graphics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="discrete-continuous.html"><a href="discrete-continuous.html"><i class="fa fa-check"></i><b>2</b> Discrete-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#introduction"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coordinate-systems"><i class="fa fa-check"></i><b>2.2</b> Coordinate systems</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#coord_fixed"><i class="fa fa-check"></i><b>2.2.1</b> <code>coord_fixed()</code></a></li>
+<li class="chapter" data-level="2.2.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#zooming"><i class="fa fa-check"></i><b>2.2.2</b> Zooming</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#one-discrete-category"><i class="fa fa-check"></i><b>2.3</b> One discrete category</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#effective-bar-plots"><i class="fa fa-check"></i><b>2.3.1</b> Effective bar plots</a></li>
+<li class="chapter" data-level="2.3.2" data-path="discrete-continuous.html"><a href="discrete-continuous.html#geom_bar"><i class="fa fa-check"></i><b>2.3.2</b> <code>geom_bar()</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="discrete-continuous.html"><a href="discrete-continuous.html#bars-vs.-dots"><i class="fa fa-check"></i><b>2.3.3</b> Bars vs. dots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="discrete-continuous.html"><a href="discrete-continuous.html#two-discrete-categories"><i class="fa fa-check"></i><b>2.4</b> Two discrete categories</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="discrete-continuous.html"><a href="discrete-continuous.html#color-and-facets"><i class="fa fa-check"></i><b>2.4.1</b> Color and facets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="general-strategy.html"><a href="general-strategy.html"><i class="fa fa-check"></i><b>3</b> General strategy</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="general-strategy.html"><a href="general-strategy.html#the-goals-of-visualization"><i class="fa fa-check"></i><b>3.1</b> The goals of visualization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="general-strategy.html"><a href="general-strategy.html#two-types-of-plots"><i class="fa fa-check"></i><b>3.1.1</b> Two types of plots</a></li>
+<li class="chapter" data-level="3.1.2" data-path="general-strategy.html"><a href="general-strategy.html#encoding-and-decoding"><i class="fa fa-check"></i><b>3.1.2</b> Encoding and decoding</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="general-strategy.html"><a href="general-strategy.html#perception"><i class="fa fa-check"></i><b>3.2</b> Perception</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="general-strategy.html"><a href="general-strategy.html#encodings"><i class="fa fa-check"></i><b>3.2.1</b> Encodings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="general-strategy.html"><a href="general-strategy.html#strategies"><i class="fa fa-check"></i><b>3.3</b> Strategies</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="general-strategy.html"><a href="general-strategy.html#set-goals"><i class="fa fa-check"></i><b>3.3.1</b> Set goals</a></li>
+<li class="chapter" data-level="3.3.2" data-path="general-strategy.html"><a href="general-strategy.html#go-for-quantity"><i class="fa fa-check"></i><b>3.3.2</b> Go for quantity</a></li>
+<li class="chapter" data-level="3.3.3" data-path="general-strategy.html"><a href="general-strategy.html#look-at-your-plots"><i class="fa fa-check"></i><b>3.3.3</b> Look at your plots</a></li>
+<li class="chapter" data-level="3.3.4" data-path="general-strategy.html"><a href="general-strategy.html#iterate"><i class="fa fa-check"></i><b>3.3.4</b> Iterate</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="distributions.html"><a href="distributions.html"><i class="fa fa-check"></i><b>4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="distributions.html"><a href="distributions.html#introduction-1"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="distributions.html"><a href="distributions.html#mechanics"><i class="fa fa-check"></i><b>4.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="distributions.html"><a href="distributions.html#layering"><i class="fa fa-check"></i><b>4.2.1</b> Layering</a></li>
+<li class="chapter" data-level="4.2.2" data-path="distributions.html"><a href="distributions.html#theme"><i class="fa fa-check"></i><b>4.2.2</b> <code>theme()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="distributions.html"><a href="distributions.html#one-distribution"><i class="fa fa-check"></i><b>4.3</b> One distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="distributions.html"><a href="distributions.html#multiple-distributions"><i class="fa fa-check"></i><b>4.4</b> Multiple distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-continuous.html"><a href="continuous-continuous.html"><i class="fa fa-check"></i><b>5</b> Continuous-continuous relationships</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#introduction-2"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#mechanics-1"><i class="fa fa-check"></i><b>5.2</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#annotations"><i class="fa fa-check"></i><b>5.2.1</b> Annotations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#log-scales"><i class="fa fa-check"></i><b>5.2.2</b> Log scales</a></li>
+<li class="chapter" data-level="5.2.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#continuous-color-scales"><i class="fa fa-check"></i><b>5.2.3</b> Continuous color scales</a></li>
+<li class="chapter" data-level="5.2.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#size-scales"><i class="fa fa-check"></i><b>5.2.4</b> Size scales</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#two-continuous-variables"><i class="fa fa-check"></i><b>5.3</b> Two continuous variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="continuous-continuous.html"><a href="continuous-continuous.html#overplotting"><i class="fa fa-check"></i><b>5.3.1</b> Overplotting</a></li>
+<li class="chapter" data-level="5.3.2" data-path="continuous-continuous.html"><a href="continuous-continuous.html#smoothing"><i class="fa fa-check"></i><b>5.3.2</b> Smoothing</a></li>
+<li class="chapter" data-level="5.3.3" data-path="continuous-continuous.html"><a href="continuous-continuous.html#paired-data"><i class="fa fa-check"></i><b>5.3.3</b> Paired data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="continuous-continuous.html"><a href="continuous-continuous.html#three-continuous-variables"><i class="fa fa-check"></i><b>5.4</b> Three continuous variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="time-series.html"><a href="time-series.html"><i class="fa fa-check"></i><b>6</b> Time series</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="time-series.html"><a href="time-series.html#mechanics-2"><i class="fa fa-check"></i><b>6.1</b> Mechanics</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="time-series.html"><a href="time-series.html#datetime-scales"><i class="fa fa-check"></i><b>6.1.1</b> Date/time scales</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="time-series.html"><a href="time-series.html#trends"><i class="fa fa-check"></i><b>6.2</b> Trends</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="time-series.html"><a href="time-series.html#one-response-variable"><i class="fa fa-check"></i><b>6.2.1</b> One response variable</a></li>
+<li class="chapter" data-level="6.2.2" data-path="time-series.html"><a href="time-series.html#distributions-over-time"><i class="fa fa-check"></i><b>6.2.2</b> Distributions over time</a></li>
+<li class="chapter" data-level="6.2.3" data-path="time-series.html"><a href="time-series.html#two-response-variables"><i class="fa fa-check"></i><b>6.2.3</b> Two response variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="time-series.html"><a href="time-series.html#short-term-fluctuations"><i class="fa fa-check"></i><b>6.3</b> Short-term fluctuations</a></li>
+<li class="chapter" data-level="6.4" data-path="time-series.html"><a href="time-series.html#individual-values"><i class="fa fa-check"></i><b>6.4</b> Individual values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Visualization</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Data Visualization</h1>
+<p class="author"><em>Sara Altman, Bill Behrman</em></p>
+<p class="date" style="margin-top: 1.5em;"><em>2021-07-02</em></p>
+</div>
+<div id="welcome" class="section level1 unnumbered">
+<h1>Welcome</h1>
+<p>This book is a practical introduction to creating effective visualizations using ggplot2. There are many excellent resources for learning ggplot2, including the following:</p>
+<ul>
+<li>Hadley Wickham and Garrett Grolemund’s <a href="https://r4ds.had.co.nz/">R for Data Science</a> (R4DS)</li>
+<li>The <a href="https://ggplot2.tidyverse.org/">ggplot2 website</a></li>
+<li>RStudio’s <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">Data visualization with ggplot2</a> cheat sheet</li>
+</ul>
+<p>We intend this book as a <em>complement</em> to these resources, building on what they teach about ggplot2, and we will link to them often.</p>
+<p><em>R4DS</em>, the website, and the cheat sheet mostly cover the <em>mechanics</em> of ggplot2. They teach you how to build plots in ggplot2, but the practice of creating effective visualizations is generally outside their scope. There is also a wealth of resources devoted to teaching effective visualization techniques, which we call visualization <em>wisdom</em>. These resources include:</p>
+<ul>
+<li>William Cleveland’s books and papers, including <a href="https://books.google.com/books?id=KMsZAQAAIAAJ">The Elements of Graphing Data</a></li>
+<li>Edward Tufte’s books, including <a href="https://books.google.com/books?id=GTd5oQEACAAJ">The Visual Display of Quantitative Information</a></li>
+<li>Claus Wilke’s <a href="https://serialmentor.com/dataviz/">Fundamentals of Data Visualization</a></li>
+</ul>
+<p>Our goal is to combine ggplot2 mechanics and visualization wisdom into a single book. We hope readers come away with a solid grounding in ggplot2 and the ability to create effective visualizations for common situations. We can’t cover all types of visualizations, or all possible strategies for visualizing a given relationship. Instead, we hope to introduce readers to a way of thinking about data visualization that will help them approach and construct effective visualizations.</p>
+<div id="how-to-read-this-book" class="section level2 unnumbered">
+<h2>How to read this book</h2>
+<div id="code-and-data" class="section level3 unnumbered">
+<h3>Code and data</h3>
+<p>You can easily copy the code in this book by hovering over a chunk and then clicking the copy button that appears in the upper-right corner.</p>
+<p>Every dataset we use is contained in an R package, making it easy to follow along and replicate our examples. Many of the datasets are in our own <a href="https://github.com/dcl-docs/dcldata">dcldata package</a>. To install dcldata, copy the following code and paste it into RStudio.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can copy this code with the copy button!</span></span>
+<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># First, install remotes if you don&#39;t already have it:</span></span>
+<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;remotes&quot;)</span></span>
+<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dcl-docs/dcldata&quot;</span>)</span></code></pre></div>
+<p>To access the datasets, load the relevant package</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dcldata)</span></code></pre></div>
+<p>and then call the dataset by name.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a>anscombe_1</span>
+<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    x_1     y</span></span>
+<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   10  8.04</span></span>
+<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    8  6.95</span></span>
+<span id="cb3-5"><a href="index.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   13  7.64</span></span>
+<span id="cb3-6"><a href="index.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    9  8.81</span></span>
+<span id="cb3-7"><a href="index.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5   11  8.33</span></span>
+<span id="cb3-8"><a href="index.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6   14  9.90</span></span>
+<span id="cb3-9"><a href="index.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7    6  7.24</span></span>
+<span id="cb3-10"><a href="index.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8    4  4.25</span></span>
+<span id="cb3-11"><a href="index.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9   12 10.84</span></span>
+<span id="cb3-12"><a href="index.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10   7  4.82</span></span>
+<span id="cb3-13"><a href="index.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11   5  5.68</span></span></code></pre></div>
+<p>All datasets have accompanying documentation, which you can find with the <code>?</code> operator.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a>?anscombe_1</span></code></pre></div>
+<p>You can also view the names of all datasets in a given package with the <code>data()</code> function.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">&quot;dcldata&quot;</span>)</span></code></pre></div>
+</div>
+<div id="organization" class="section level3 unnumbered">
+<h3>Organization</h3>
+<p>This book is organized thematically, with each chapter building upon the previous ones, and we recommend reading the chapters in order. For the most part, each chapter discusses a category of visualization (e.g., time series, distributions) and contains both ggplot2 mechanics and visualization wisdom. We’ve woven ggplot2 mechanics through the book so that readers quickly learn the most important skills, and then acquire more advanced skills as they become relevant to the visualization tasks at hand.</p>
+<p>An advantage of the thematic approach is that readers just starting out with both ggplot2 and data visualization can simultaneously learn how to create plots in ggplot2 and how to make those plots effective. The thematic organization also enables readers to use the book as a visualization category reference. For example, if you know you want to visualize a distribution, you can go to the <em>Distributions</em> chapter and remind yourself of the various strategies.</p>
+<p>A disadvantage of this organization is that the book does not function well as a reference for looking up ggplot2 mechanics (e.g., if you forget how scales work and try to refer back to the relevant section). The ggplot2 cheat sheet is a better resource for looking up mechanics, and we mention relevant sections so that readers can familiarize themselves with the cheat sheet for later use.</p>
+</div>
+</div>
+<div id="an-evolving-book" class="section level2 unnumbered">
+<h2>An evolving book</h2>
+<p>This book is not intended to be static. Starting in January 2019, we use this book to teach data visualization in the Stanford <a href="https://datalab.stanford.edu/challenge-lab">Data Challenge Lab</a> (DCL) course. The DCL functions as a testing ground for educational materials, as our students give us routine feedback on what they read and do in the course. We use this feedback to constantly improve our materials, including this book. The <a href="https://github.com/dcl-docs/data-vis">source for the book</a> is also available on GitHub where we welcome suggestions for improvements.</p>
+<p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="ggplot2-basics.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/data-vis/edit/master/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
